@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.board.service.impl.BoardWriteMapper">
+	
+	<resultMap id="boardWrite" type="egovframework.coing.board.vo.BoardWriteVO">
+		<result property="bwrId" column="BWR_ID"/>
+		<result property="brdId" column="BRD_ID"/>
+		<result property="bwrGroupNo" column="BWR_GROUP_NO"/>
+		<result property="bwrDepthNo" column="BWR_DEPTH_NO"/>
+		<result property="bwrOrderNo" column="BWR_ORDER_NO"/>
+		<result property="bwrStartDt" column="BWR_START_DT"/>
+		<result property="bwrEndDt" column="BWR_END_DT"/>
+		<result property="bwrCategoryId" column="BWR_CATEGORY_ID"/>
+		<result property="bwrProgressId" column="BWR_PROGRESS_ID"/>
+		<result property="bwrDeptId" column="BWR_DEPT_ID"/>
+		<result property="bwrNoticeYn" column="BWR_NOTICE_YN"/>
+		<result property="bwrSecretYn" column="BWR_SECRET_YN"/>
+		<result property="bwrHtmlYn" column="BWR_HTML_YN"/>
+		<result property="bwrSubject" column="BWR_SUBJECT"/>
+		<result property="bwrContent" column="BWR_CONTENT"/>
+		<result property="bwrUserId" column="BWR_USER_ID"/>
+		<result property="bwrPassword" column="BWR_PASSWORD"/>
+		<result property="bwrName" column="BWR_NAME"/>
+		<result property="bwrEmail" column="BWR_EMAIL"/>
+		<result property="bwrEmailYn" column="BWR_EMAIL_YN"/>
+		<result property="bwrHomepage" column="BWR_HOMEPAGE"/>
+		<result property="bwrTel" column="BWR_TEL"/>
+		<result property="bwrHp" column="BWR_HP"/>
+		<result property="bwrHpYn" column="BWR_HP_YN"/>
+		<result property="bwrZipcode" column="BWR_ZIPCODE"/>
+		<result property="bwrAddress1" column="BWR_ADDRESS1"/>
+		<result property="bwrAddress2" column="BWR_ADDRESS2"/>
+		<result property="bwrHits" column="BWR_HITS"/>
+		<result property="bwrUploadCnt" column="BWR_UPLOAD_CNT"/>
+		<result property="bwrRealnameId" column="BWR_REALNAME_ID"/>
+		<result property="bwrPersonId" column="BWR_PERSON_ID"/>
+		<result property="bwrRegDttm" column="BWR_REG_DTTM"/>
+		<result property="bwrRegId" column="BWR_REG_ID"/>
+		<result property="bwrRegIp" column="BWR_REG_IP"/>
+		<result property="bwrUpdtDttm" column="BWR_UPDT_DTTM"/>
+		<result property="bwrUpdtId" column="BWR_UPDT_ID"/>
+		<result property="bwrUpdtIp" column="BWR_UPDT_IP"/>
+		<result property="bwrDelYn" column="BWR_DEL_YN"/>
+		<result property="bwrDelDttm" column="BWR_DEL_DTTM"/>
+		<result property="bwrDelId" column="BWR_DEL_ID"/>
+		<result property="bwrDelIp" column="BWR_DEL_IP"/>
+		<result property="bwrDelMemo" column="BWR_DEL_MEMO"/>
+		<result property="bwrData01" column="BWR_DATA01"/>
+		<result property="bwrData02" column="BWR_DATA02"/>
+		<result property="bwrData03" column="BWR_DATA03"/>
+		<result property="bwrData04" column="BWR_DATA04"/>
+		<result property="bwrData05" column="BWR_DATA05"/>
+		<result property="bwrData06" column="BWR_DATA06"/>
+		<result property="bwrData07" column="BWR_DATA07"/>
+		<result property="bwrData08" column="BWR_DATA08"/>
+		<result property="bwrData09" column="BWR_DATA09"/>
+		<result property="bwrData10" column="BWR_DATA10"/>
+	</resultMap>
+	
+	<resultMap id="boardInfo" type="egovframework.coing.board.vo.BoardInfoVO">
+		<result property="brdId" column="BRD_ID"/>
+		<result property="brdName" column="BRD_NAME"/>
+		<result property="brdSummary" column="BRD_SUMMARY"/>
+		<result property="brdSkin" column="BRD_SKIN"/>
+		<result property="brdSubjectLen" column="BRD_SUBJECT_LEN"/>
+		<result property="brdPermitRead" column="BRD_PERMIT_READ"/>
+		<result property="brdLimitRead" column="BRD_LIMIT_READ"/>
+		<result property="brdRealnameReadYn" column="BRD_REALNAME_READ_YN"/>
+		<result property="brdPermitWrite" column="BRD_PERMIT_WRITE"/>
+		<result property="brdLimitWrite" column="BRD_LIMIT_WRITE"/>
+		<result property="brdRealnameWriteYn" column="BRD_REALNAME_WRITE_YN"/>
+		<result property="brdPermitReply" column="BRD_PERMIT_REPLY"/>
+		<result property="brdLimitReply" column="BRD_LIMIT_REPLY"/>
+		<result property="brdRealnameReplyYn" column="BRD_REALNAME_REPLY_YN"/>
+		<result property="brdPermitComment" column="BRD_PERMIT_COMMENT"/>
+		<result property="brdLimitComment" column="BRD_LIMIT_COMMENT"/>
+		<result property="brdRealnameCommentYn" column="BRD_REALNAME_COMMENT_YN"/>
+		<result property="brdPermitUpload" column="BRD_PERMIT_UPLOAD"/>
+		<result property="brdLimitUpload" column="BRD_LIMIT_UPLOAD"/>
+		<result property="brdRealnameUploadYn" column="BRD_REALNAME_UPLOAD_YN"/>
+		<result property="brdPermitDownload" column="BRD_PERMIT_DOWNLOAD"/>
+		<result property="brdLimitDownload" column="BRD_LIMIT_DOWNLOAD"/>
+		<result property="brdRealnameDownloadYn" column="BRD_REALNAME_DOWNLOAD_YN"/>
+		<result property="brdPermitNotice" column="BRD_PERMIT_NOTICE"/>
+		<result property="brdLimitNotice" column="BRD_LIMIT_NOTICE"/>
+		<result property="brdPermitEditor" column="BRD_PERMIT_EDITOR"/>
+		<result property="brdLimitEditor" column="BRD_LIMIT_EDITOR"/>
+		<result property="brdRealnameEditorYn" column="BRD_REALNAME_EDITOR_YN"/>
+		<result property="brdNewPeriod" column="BRD_NEW_PERIOD"/>
+		<result property="brdPerPage" column="BRD_PER_PAGE"/>
+		<result property="brdHeadHtml" column="BRD_HEAD_HTML"/>
+		<result property="brdTailHtml" column="BRD_TAIL_HTML"/>
+		<result property="brdWriteBtnYn" column="BRD_WRITE_BTN_YN"/>
+		<result property="brdNoticeYn" column="BRD_NOTICE_YN"/>
+		<result property="brdEditorYn" column="BRD_EDITOR_YN"/>
+		<result property="brdReplyYn" column="BRD_REPLY_YN"/>
+		<result property="brdCommentYn" column="BRD_COMMENT_YN"/>
+		<result property="brdCommentReplyYn" column="BRD_COMMENT_REPLY_YN"/>
+		<result property="brdPeriodYn" column="BRD_PERIOD_YN"/>
+		<result property="brdCategoryYn" column="BRD_CATEGORY_YN"/>
+		<result property="brdProgressYn" column="BRD_PROGRESS_YN"/>
+		<result property="brdSecretAt" column="BRD_SECRET_AT"/>
+		<result property="brdViewDelYn" column="BRD_VIEW_DEL_YN"/>
+		<result property="brdRestoreYn" column="BRD_RESTORE_YN"/>
+		<result property="brdMyselfYn" column="BRD_MYSELF_YN"/>
+		<result property="brdRssYn" column="BRD_RSS_YN"/>
+		<result property="brdHidenameYn" column="BRD_HIDENAME_YN"/>
+		<result property="brdPrivacyClause" column="BRD_PRIVACY_CLAUSE"/>
+		<result property="brdUploadYn" column="BRD_UPLOAD_YN"/>
+		<result property="brdUploadCnt" column="BRD_UPLOAD_CNT"/>
+		<result property="brdUploadSize" column="BRD_UPLOAD_SIZE"/>
+		<result property="brdUploadExt" column="BRD_UPLOAD_EXT"/>
+		<result property="brdIpGubun" column="BRD_IP_GUBUN"/>
+		<result property="brdCheckIp" column="BRD_CHECK_IP"/>
+		<result property="brdIdGubun" column="BRD_ID_GUBUN"/>
+		<result property="brdCheckId" column="BRD_CHECK_ID"/>
+		<result property="brdLimitWordYn" column="BRD_LIMIT_WORD_YN"/>
+		<result property="brdLimitWord" column="BRD_LIMIT_WORD"/>
+		<result property="brdUseYn" column="BRD_USE_YN"/>
+		<result property="brdRegDttm" column="BRD_REG_DTTM"/>
+		<result property="brdRegId" column="BRD_REG_ID"/>
+		<result property="brdRegIp" column="BRD_REG_IP"/>
+		<result property="brdUpdtDttm" column="BRD_UPDT_DTTM"/>
+		<result property="brdUpdtId" column="BRD_UPDT_ID"/>
+		<result property="brdUpdtIp" column="BRD_UPDT_IP"/>
+	</resultMap>
+	
+	
+	
+	<sql id="boardWriteListWhere">
+		<if test='brdId != null and brdId != ""'>
+			AND  A.BRD_ID = #{brdId}			
+		</if>
+		<if test='bwrCategoryId > 0'>
+			AND  A.BWR_CATEGORY_ID = #{bwrCategoryId}			
+		</if>
+		<if test='bwrProgressId > 0'>
+			AND  A.BWR_PROGRESS_ID = #{bwrProgressId}			
+		</if>		
+					
+		<if test='searchMode != null and searchMode == "MYSELF"'>
+			<if test='bwrUserId != null and bwrUserId != ""'>
+			AND  A.BWR_USER_ID = #{bwrUserId}			
+			</if>
+			<if test='bwrRealnameId != null and bwrRealnameId != ""'>
+			AND  A.BWR_REALNAME_ID = #{bwrRealnameId}			
+			</if>
+		</if>
+		
+		<if test='searchPeriodYn == "Y"'>
+			AND  (CURDATE() BETWEEN BWR_START_DT AND BWR_END_DT)			
+		</if>
+		<if test='bwrNoticeYn != null and bwrNoticeYn != ""'>
+			AND  A.BWR_NOTICE_YN = #{bwrNoticeYn}			
+		</if>
+		<if test='bwrSecretYn != null and bwrSecretYn != ""'>
+		   AND  A.BWR_SECRET_YN	= #{bwrSecretYn}
+		</if>
+		<if test='bwrDelYn != null and bwrDelYn != ""'>
+		   AND  A.BWR_DEL_YN = #{bwrDelYn}
+		</if>
+		<if test='bwrData01 != null and bwrData01 != ""'>AND A.BWR_DATA01 = #{bwrData01}</if>
+		<if test='bwrData02 != null and bwrData02 != ""'>AND A.BWR_DATA02 = #{bwrData02}</if>
+		<if test='bwrData03 != null and bwrData03 != ""'>AND A.BWR_DATA03 = #{bwrData03}</if>
+		<if test='bwrData04 != null and bwrData04 != ""'>AND A.BWR_DATA04 = #{bwrData04}</if>
+		<if test='bwrData05 != null and bwrData05 != ""'>AND A.BWR_DATA05 = #{bwrData05}</if>
+		<if test='bwrData06 != null and bwrData06 != ""'>AND A.BWR_DATA06 = #{bwrData06}</if>
+		<if test='bwrData07 != null and bwrData07 != ""'>AND A.BWR_DATA07 = #{bwrData07}</if>
+		<if test='bwrData08 != null and bwrData08 != ""'>AND A.BWR_DATA08 = #{bwrData08}</if>
+		<if test='bwrData09 != null and bwrData09 != ""'>AND A.BWR_DATA09 = #{bwrData09}</if>
+		<if test='bwrData10 != null and bwrData10 != ""'>AND A.BWR_DATA10 = #{bwrData10}</if>
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+				<when test='searchCondition == "bwrSubjectContent"'>AND (A.BWR_SUBJECT LIKE CONCAT ('%', #{searchKeyword}, '%') OR A.BWR_SUBJECT LIKE CONCAT ('%', #{searchKeyword}, '%'))</when>
+		    	<when test='searchCondition == "bwrSubject"'>AND A.BWR_SUBJECT LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+				<when test='searchCondition == "bwrContent"'>AND A.BWR_CONTENT LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "bwrName"'>AND A.BWR_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+				<when test='searchCondition == "bwrUserId"'>AND A.BWR_USER_ID LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>		
+	</sql>
+	
+	<sql id="boardWriteFields">
+				A.BWR_ID
+			 ,  A.BRD_ID
+			 ,  A.BWR_GROUP_NO
+			 ,  A.BWR_DEPTH_NO
+			 ,  A.BWR_ORDER_NO
+			 ,  A.BWR_CATEGORY_ID
+			 ,  IF(BWR_CATEGORY_ID &gt; 0, (SELECT BCA_TITLE FROM COING_BOARD_CATEGORY WHERE BCA_ID = A.BWR_CATEGORY_ID AND BRD_ID = A.BRD_ID AND BCA_TYPE = 'C' AND BCA_USE_YN = 'Y' AND BCA_DEL_YN = 'N'), '') AS bwrCategoryNm
+			 ,  A.BWR_PROGRESS_ID
+			 ,  IF(BWR_PROGRESS_ID &gt; 0, (SELECT BCA_TITLE FROM COING_BOARD_CATEGORY WHERE BCA_ID = A.BWR_PROGRESS_ID AND BRD_ID = A.BRD_ID AND BCA_TYPE = 'P' AND BCA_USE_YN = 'Y' AND BCA_DEL_YN = 'N'), '') AS bwrProgressNm
+			 ,  A.BWR_DEPT_ID
+			 ,  A.BWR_START_DT
+			 ,  A.BWR_END_DT
+			 ,  A.BWR_NOTICE_YN
+			 ,  A.BWR_SECRET_YN
+			 ,  A.BWR_SUBJECT
+			 ,  A.BWR_CONTENT
+			 ,  A.BWR_USER_ID
+			 ,  A.BWR_NAME
+			 ,  A.BWR_EMAIL
+			 ,  A.BWR_HITS
+			 ,  A.BWR_UPLOAD_CNT
+			 ,  IF(A.BWR_UPLOAD_CNT &gt; 0, (SELECT BFI_TNAME1 FROM COING_BOARD_FILE WHERE BRD_ID = A.BRD_ID AND BWR_ID = A.BWR_ID AND BFI_IMAGE_YN = 'Y' AND BFI_DEL_YN = 'N' ORDER BY BFI_NO ASC LIMIT 1), '') AS bwrThumbFile
+			 ,  A.BWR_REALNAME_ID
+			 ,  A.BWR_PERSON_ID
+			 ,  A.BWR_REG_DTTM
+			 ,  A.BWR_REG_ID
+			 ,  A.BWR_DEL_YN
+			 ,  A.BWR_DEL_MEMO
+			 ,  A.BWR_DATA01
+			 ,  A.BWR_DATA02
+			 ,  A.BWR_DATA03
+			 ,  A.BWR_DATA04
+			 ,  A.BWR_DATA05
+			 ,  A.BWR_DATA06
+			 ,  A.BWR_DATA07
+			 ,  A.BWR_DATA08
+			 ,  A.BWR_DATA09
+			 ,  A.BWR_DATA10
+			 ,  DATEDIFF(NOW(), A.BWR_REG_DTTM) bwrRegDttmDiff
+	</sql>
+	
+	
+	<select id="selectBoardWriteListCnt" parameterType="siteInfoVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_BOARD_WRITE A
+		 WHERE  1=1
+				<include refid="boardWriteListWhere" />
+	</select>
+	
+
+	<select id="selectBoardWriteListAll" parameterType="boardWriteVO" resultMap="boardWrite">
+		SELECT  A.BWR_ID
+			 ,  A.BRD_ID
+			 ,  A.BWR_GROUP_NO
+			 ,  A.BWR_DEPTH_NO
+			 ,  A.BWR_ORDER_NO
+			 ,  A.BWR_CATEGORY_ID
+			 ,  A.BWR_PROGRESS_ID
+			 ,  A.BWR_DEPT_ID			 
+			 ,  A.BWR_START_DT
+			 ,  A.BWR_END_DT			 
+			 ,  A.BWR_NOTICE_YN
+			 ,  A.BWR_SECRET_YN
+			 ,  A.BWR_HTML_YN
+			 ,  A.BWR_SUBJECT
+			 ,  A.BWR_CONTENT
+			 ,  A.BWR_USER_ID
+			 ,  A.BWR_PASSWORD
+			 ,  A.BWR_NAME
+			 ,  A.BWR_EMAIL
+			 ,  A.BWR_EMAIL_YN
+			 ,  A.BWR_HOMEPAGE
+			 ,  A.BWR_TEL
+			 ,  A.BWR_HP
+			 ,  A.BWR_HP_YN
+			 ,  A.BWR_ZIPCODE
+			 ,  A.BWR_ADDRESS1
+			 ,  A.BWR_ADDRESS2
+			 ,  A.BWR_HITS
+			 ,  A.BWR_UPLOAD_CNT
+			 ,  A.BWR_REALNAME_ID
+			 ,  A.BWR_PERSON_ID
+			 ,  A.BWR_REG_DTTM
+			 ,  A.BWR_REG_ID
+			 ,  A.BWR_REG_IP
+			 ,  A.BWR_UPDT_DTTM
+			 ,  A.BWR_UPDT_ID
+			 ,  A.BWR_UPDT_IP
+			 ,  A.BWR_DEL_YN
+			 ,  A.BWR_DEL_DTTM
+			 ,  A.BWR_DEL_ID
+			 ,  A.BWR_DEL_IP
+			 ,  A.BWR_DEL_MEMO
+			 ,  A.BWR_DATA01
+			 ,  A.BWR_DATA02
+			 ,  A.BWR_DATA03
+			 ,  A.BWR_DATA04
+			 ,  A.BWR_DATA05
+			 ,  A.BWR_DATA06
+			 ,  A.BWR_DATA07
+			 ,  A.BWR_DATA08
+			 ,  A.BWR_DATA09
+			 ,  A.BWR_DATA10
+			 ,  B.BRD_NAME AS brdName
+		  FROM  COING_BOARD_WRITE A
+		 INNER  JOIN  COING_BOARD_INFO B ON (A.BRD_ID = B.BRD_ID)
+	  ORDER BY  A.BWR_REG_DTTM DESC
+	  	 LIMIT  10
+	</select>
+	
+	<select id="selectBoardWriteList" parameterType="boardWriteVO" resultMap="boardWrite">
+		SELECT  A.BWR_ID
+			 ,  A.BRD_ID
+			 ,  A.BWR_GROUP_NO
+			 ,  A.BWR_DEPTH_NO
+			 ,  A.BWR_ORDER_NO
+			 ,  A.BWR_CATEGORY_ID
+			 ,  A.BWR_PROGRESS_ID
+			 ,  A.BWR_DEPT_ID			 
+			 ,  A.BWR_START_DT
+			 ,  A.BWR_END_DT			 
+			 ,  A.BWR_NOTICE_YN
+			 ,  A.BWR_SECRET_YN
+			 ,  A.BWR_HTML_YN
+			 ,  A.BWR_SUBJECT
+			 ,  A.BWR_CONTENT
+			 ,  A.BWR_USER_ID
+			 ,  A.BWR_PASSWORD
+			 ,  A.BWR_NAME
+			 ,  A.BWR_EMAIL
+			 ,  A.BWR_EMAIL_YN
+			 ,  A.BWR_HOMEPAGE
+			 ,  A.BWR_TEL
+			 ,  A.BWR_HP
+			 ,  A.BWR_HP_YN
+			 ,  A.BWR_ZIPCODE
+			 ,  A.BWR_ADDRESS1
+			 ,  A.BWR_ADDRESS2
+			 ,  A.BWR_HITS
+			 ,  A.BWR_UPLOAD_CNT
+			 ,  A.BWR_REALNAME_ID
+			 ,  A.BWR_PERSON_ID
+			 ,  A.BWR_REG_DTTM
+			 ,  A.BWR_REG_ID
+			 ,  A.BWR_REG_IP
+			 ,  A.BWR_UPDT_DTTM
+			 ,  A.BWR_UPDT_ID
+			 ,  A.BWR_UPDT_IP
+			 ,  A.BWR_DEL_YN
+			 ,  A.BWR_DEL_DTTM
+			 ,  A.BWR_DEL_ID
+			 ,  A.BWR_DEL_IP
+			 ,  A.BWR_DEL_MEMO
+			 ,  A.BWR_DATA01
+			 ,  A.BWR_DATA02
+			 ,  A.BWR_DATA03
+			 ,  A.BWR_DATA04
+			 ,  A.BWR_DATA05
+			 ,  A.BWR_DATA06
+			 ,  A.BWR_DATA07
+			 ,  A.BWR_DATA08
+			 ,  A.BWR_DATA09
+			 ,  A.BWR_DATA10
+			 ,  B.BRD_NAME
+		  FROM  COING_BOARD_WRITE A
+		 LEFT  JOIN  COING_BOARD_INFO B ON (A.BRD_ID = B.BRD_ID)
+	  ORDER BY  A.BWR_REG_DTTM DESC
+	  	 LIMIT  10
+	</select>
+	
+	
+	
+	<select id="selectBoardWriteListHits" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  A.BWR_ID
+			 ,  A.BRD_ID
+			 ,  A.BWR_GROUP_NO
+			 ,  A.BWR_DEPTH_NO
+			 ,  A.BWR_ORDER_NO
+			 ,  A.BWR_CATEGORY_ID
+			 ,  A.BWR_PROGRESS_ID
+			 ,  A.BWR_DEPT_ID			 
+			 ,  A.BWR_START_DT
+			 ,  A.BWR_END_DT			 
+			 ,  A.BWR_NOTICE_YN
+			 ,  A.BWR_SECRET_YN
+			 ,  A.BWR_HTML_YN
+			 ,  A.BWR_SUBJECT
+			 ,  A.BWR_CONTENT
+			 ,  A.BWR_USER_ID
+			 ,  A.BWR_PASSWORD
+			 ,  A.BWR_NAME
+			 ,  A.BWR_EMAIL
+			 ,  A.BWR_EMAIL_YN
+			 ,  A.BWR_HOMEPAGE
+			 ,  A.BWR_TEL
+			 ,  A.BWR_HP
+			 ,  A.BWR_HP_YN
+			 ,  A.BWR_ZIPCODE
+			 ,  A.BWR_ADDRESS1
+			 ,  A.BWR_ADDRESS2
+			 ,  A.BWR_HITS
+			 ,  A.BWR_UPLOAD_CNT
+			 ,  A.BWR_REALNAME_ID
+			 ,  A.BWR_PERSON_ID
+			 ,  A.BWR_REG_DTTM
+			 ,  A.BWR_REG_ID
+			 ,  A.BWR_REG_IP
+			 ,  A.BWR_UPDT_DTTM
+			 ,  A.BWR_UPDT_ID
+			 ,  A.BWR_UPDT_IP
+			 ,  A.BWR_DEL_YN
+			 ,  A.BWR_DEL_DTTM
+			 ,  A.BWR_DEL_ID
+			 ,  A.BWR_DEL_IP
+			 ,  A.BWR_DEL_MEMO
+			 ,  A.BWR_DATA01
+			 ,  A.BWR_DATA02
+			 ,  A.BWR_DATA03
+			 ,  A.BWR_DATA04
+			 ,  A.BWR_DATA05
+			 ,  A.BWR_DATA06
+			 ,  A.BWR_DATA07
+			 ,  A.BWR_DATA08
+			 ,  A.BWR_DATA09
+			 ,  A.BWR_DATA10
+			 ,  B.BRD_NAME
+		  FROM  COING_BOARD_WRITE A
+	INNER JOIN  COING_BOARD_INFO B ON (A.BRD_ID = B.BRD_ID)
+	  ORDER BY  A.BWR_HITS DESC
+	  LIMIT 10
+	  <!--BY MYSQL -->
+	  <!-- LIMIT 10 -->
+	  <!--BY ORACLE-->
+	  <!--ROWNUM 10 -->
+	</select>
+	
+		
+</mapper>

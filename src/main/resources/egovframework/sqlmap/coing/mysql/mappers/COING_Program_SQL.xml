@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.ProgramMapper">
+
+	<resultMap id="program" type="egovframework.coing.cmm.vo.ProgramVO">
+		<result property="prgId" column="PRG_ID"/>
+		<result property="prgName" column="PRG_NAME"/>
+		<result property="prgUrl" column="PRG_URL"/>
+		<result property="prgOrderNo" column="PRG_ORDER_NO"/>
+		<result property="prgUseYn" column="PRG_USE_YN"/>
+		<result property="prgRegDttm" column="PRG_REG_DTTM"/>
+		<result property="prgRegId" column="PRG_REG_ID"/>
+		<result property="prgRegIp" column="PRG_REG_IP"/>
+		<result property="prgUpdtDttm" column="PRG_UPDT_DTTM"/>
+		<result property="prgUpdtId" column="PRG_UPDT_ID"/>
+		<result property="prgUpdtIp" column="PRG_UPDT_IP"/>
+	</resultMap>
+
+	<sql id="programListWhere">
+		AND  A.PRG_DEL_YN = 'N'
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "prgName"'>AND A.PRG_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+		<if test='prgUseYn != null and prgUseYn != ""'>
+			AND  A.PRG_USE_YN = #{prgUseYn}			
+		</if>		
+	</sql>
+
+	<select id="selectProgramListCnt" parameterType="programVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_PROGRAM A
+		 WHERE  1=1
+		 		<include refid="programListWhere" />
+	</select>
+
+
+	<select id="selectProgramList" parameterType="programVO" resultMap="program">
+		SELECT  A.PRG_ID
+			 ,  A.PRG_NAME
+			 ,  A.PRG_URL
+			 ,  A.PRG_ORDER_NO
+			 ,  A.PRG_USE_YN
+			 ,  A.PRG_REG_DTTM
+			 ,  A.PRG_REG_ID
+			 ,  A.PRG_REG_IP
+		  FROM  COING_PROGRAM A
+		 WHERE  1=1
+		 		<include refid="programListWhere" />
+	  ORDER BY  A.PRG_ORDER_NO ASC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+
+	<select id="selectProgramListAll" parameterType="programVO" resultMap="program">
+		SELECT  A.PRG_ID
+			 ,  A.PRG_NAME
+			 ,  A.PRG_URL
+			 ,  A.PRG_ORDER_NO
+			 ,  A.PRG_USE_YN
+			 ,  A.PRG_REG_DTTM
+			 ,  A.PRG_REG_ID
+			 ,  A.PRG_REG_IP
+		  FROM  COING_PROGRAM A
+		 WHERE  1=1
+		 		<include refid="programListWhere" />
+	  ORDER BY  A.PRG_ORDER_NO ASC
+	</select>
+
+
+	<select id="selectProgram" parameterType="programVO" resultMap="program">
+		SELECT  A.PRG_ID
+			 ,  A.PRG_NAME
+			 ,  A.PRG_URL
+			 ,  A.PRG_ORDER_NO
+			 ,  A.PRG_USE_YN
+			 ,  A.PRG_REG_DTTM
+			 ,  A.PRG_REG_ID
+			 ,  A.PRG_REG_IP
+			 ,  A.PRG_UPDT_DTTM
+			 ,  A.PRG_UPDT_ID
+			 ,  A.PRG_UPDT_IP
+		  FROM  COING_PROGRAM A
+		 WHERE  A.PRG_ID = #{prgId}
+		   AND  A.PRG_DEL_YN ='N'
+	</select>
+
+
+	<insert id="insertProgram">
+		INSERT
+		  INTO  COING_PROGRAM
+		     (  PRG_ID
+		     ,  PRG_NAME
+		     ,  PRG_URL
+		     ,  PRG_ORDER_NO
+		     ,  PRG_USE_YN
+		     ,  PRG_REG_DTTM
+		     ,  PRG_REG_ID
+		     ,  PRG_REG_IP
+		     ,  PRG_DEL_YN
+		     )
+		VALUES
+		     (  #{prgId}
+			 ,  #{prgName, jdbcType=VARCHAR}
+			 ,  #{prgUrl, jdbcType=VARCHAR}
+			 ,  #{prgOrderNo}
+			 ,  #{prgUseYn, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  #{prgRegId, jdbcType=VARCHAR}
+			 ,  #{prgRegIp, jdbcType=VARCHAR}
+			 ,  'N'
+		     )
+	</insert>
+
+
+	<update id="updateProgram">
+		UPDATE  COING_PROGRAM
+		   SET  PRG_NAME = #{prgName, jdbcType=VARCHAR}
+		     ,  PRG_URL = #{prgUrl, jdbcType=VARCHAR}
+		     ,  PRG_ORDER_NO = #{prgOrderNo}
+		     ,  PRG_USE_YN = #{prgUseYn, jdbcType=VARCHAR}
+		     ,  PRG_UPDT_DTTM = NOW()
+		     ,  PRG_UPDT_ID = #{prgUpdtId, jdbcType=VARCHAR}
+		     ,  PRG_UPDT_IP = #{prgUpdtIp, jdbcType=VARCHAR}
+		 WHERE  PRG_ID = #{prgId}
+		   AND  PRG_DEL_YN ='N'
+	</update>
+
+
+	<update id="deleteProgram">
+		UPDATE  COING_PROGRAM
+		   SET  PRG_DEL_YN = 'Y'
+			 ,  PRG_DEL_DTTM = NOW()
+			 ,  PRG_DEL_ID = #{prgDelId, jdbcType=VARCHAR}
+			 ,  PRG_DEL_IP = #{prgDelIp, jdbcType=VARCHAR}
+		 WHERE  PRG_ID = #{prgId}
+		   AND  PRG_DEL_YN ='N'	
+	</update>
+
+
+</mapper>

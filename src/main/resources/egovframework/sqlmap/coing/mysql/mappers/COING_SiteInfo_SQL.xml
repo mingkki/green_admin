@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.site.service.impl.SiteInfoMapper">
+
+	<resultMap id="siteInfo" type="egovframework.coing.site.vo.SiteInfoVO">
+		<result property="sinId" column="SIN_ID"/>
+		<result property="sinTitle" column="SIN_TITLE"/>
+		<result property="sinName" column="SIN_NAME"/>
+		<result property="sinDomain" column="SIN_DOMAIN"/>
+		<result property="sinLang" column="SIN_LANG"/>
+		<result property="sinTheme" column="SIN_THEME"/>
+		<result property="sinLayout" column="SIN_LAYOUT"/>		
+		<result property="sinDescription" column="SIN_DESCRIPTION"/>
+		<result property="sinKeyword" column="SIN_KEYWORD"/>
+		<result property="sinPermitView" column="SIN_PERMIT_VIEW"/>
+		<result property="sinPermitViewGubun" column="SIN_PERMIT_VIEW_GUBUN"/>
+		<result property="sinLimitView" column="SIN_LIMIT_VIEW"/>
+		<result property="sinChargeNm" column="SIN_CHARGE_NM"/>
+		<result property="sinChargeTel" column="SIN_CHARGE_TEL"/>		
+		<result property="sinChargeEmail" column="SIN_CHARGE_EMAIL"/>
+		<result property="sinTel" column="SIN_TEL"/>
+		<result property="sinFax" column="SIN_FAX"/>
+		<result property="sinZipcd" column="SIN_ZIPCD"/>
+		<result property="sinAddress1" column="SIN_ADDRESS1"/>
+		<result property="sinAddress2" column="SIN_ADDRESS2"/>
+		<result property="sinMapLat" column="SIN_MAP_LAT"/>
+		<result property="sinMapLng" column="SIN_MAP_LNG"/>
+		<result property="sinCopyright" column="SIN_COPYRIGHT"/>
+		<result property="sinHeadHtml" column="SIN_HEAD_HTML"/>
+		<result property="sinTailHtml" column="SIN_TAIL_HTML"/>
+		<result property="sinOrderNo" column="SIN_ORDER_NO"/>		
+		<result property="sinIpGubun" column="SIN_IP_GUBUN"/>
+		<result property="sinCheckIp" column="SIN_CHECK_IP"/>		
+		<result property="sinUseYn" column="SIN_USE_YN"/>
+		<result property="sinRegDttm" column="SIN_REG_DTTM"/>
+		<result property="sinRegId" column="SIN_REG_ID"/>
+		<result property="sinRegIp" column="SIN_REG_IP"/>
+		<result property="sinUpdtDttm" column="SIN_UPDT_DTTM"/>
+		<result property="sinUpdtId" column="SIN_UPDT_ID"/>
+		<result property="sinUpdtIp" column="SIN_UPDT_IP"/>	
+	</resultMap>
+
+
+	<sql id="siteInfoListWhere">
+		AND  A.SIN_DEL_YN = 'N'
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "sinName"'>AND A.SIN_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+		<if test='sinUseYn != null and sinUseYn != ""'>
+			AND  A.SIN_USE_YN = #{sinUseYn}			
+		</if>		
+	</sql>
+	
+	
+	<select id="selectSiteInfoListCnt" parameterType="siteInfoVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_SITE_INFO A
+		 WHERE  1=1
+				<include refid="siteInfoListWhere" />
+	</select>
+
+
+	<select id="selectSiteInfoList" parameterType="siteInfoVO" resultMap="siteInfo">
+		SELECT  A.SIN_ID
+			 ,  A.SIN_TITLE
+			 ,  A.SIN_NAME
+			 ,  A.SIN_DOMAIN
+			 ,  A.SIN_LANG
+			 ,  (SELECT CDD_NAME FROM COING_CODE_DETAIL WHERE COD_ID = 'LANG' AND CDD_ID = A.SIN_LANG AND CDD_USE_YN = 'Y' AND CDD_DEL_YN = 'N') AS sinLangNm
+			 ,  A.SIN_THEME
+			 ,  A.SIN_LAYOUT
+			 ,  A.SIN_ORDER_NO
+			 ,  A.SIN_USE_YN
+			 ,  A.SIN_REG_DTTM
+			 ,  A.SIN_REG_ID
+			 ,  A.SIN_REG_IP
+		  FROM  COING_SITE_INFO A
+		 WHERE  1=1
+		   		<include refid="siteInfoListWhere" />
+	  ORDER BY  A.SIN_ORDER_NO ASC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+
+	<select id="selectSiteInfoListAll" parameterType="siteInfoVO" resultMap="siteInfo">
+		SELECT  A.SIN_ID
+			 ,  A.SIN_TITLE
+			 ,  A.SIN_NAME
+			 ,  A.SIN_DOMAIN
+			 ,  A.SIN_LANG
+			 ,  A.SIN_THEME
+			 ,  A.SIN_LAYOUT			 
+			 ,  A.SIN_ORDER_NO
+			 ,  A.SIN_USE_YN
+			 ,  A.SIN_REG_DTTM
+			 ,  A.SIN_REG_ID
+			 ,  A.SIN_REG_IP
+		  FROM  COING_SITE_INFO A
+		 WHERE  1=1
+		   		<include refid="siteInfoListWhere" />
+	  ORDER BY  A.SIN_ORDER_NO ASC
+	</select>
+
+
+	<select id="selectSiteInfo" parameterType="siteInfoVO" resultMap="siteInfo">
+		SELECT  A.SIN_ID
+			 ,  A.SIN_TITLE
+			 ,  A.SIN_NAME
+			 ,  A.SIN_DOMAIN
+			 ,  A.SIN_LANG
+			 ,  A.SIN_THEME
+			 ,  A.SIN_LAYOUT
+			 ,  A.SIN_DESCRIPTION
+			 ,  A.SIN_KEYWORD
+			 ,  A.SIN_PERMIT_VIEW
+			 ,  A.SIN_PERMIT_VIEW_GUBUN
+			 ,  A.SIN_LIMIT_VIEW
+			 ,  A.SIN_CHARGE_NM
+			 ,  A.SIN_CHARGE_TEL			 
+			 ,  A.SIN_CHARGE_EMAIL
+			 ,  A.SIN_TEL
+			 ,  A.SIN_FAX
+			 ,  A.SIN_ZIPCD
+			 ,  A.SIN_ADDRESS1
+			 ,  A.SIN_ADDRESS2
+			 ,  A.SIN_MAP_LAT
+			 ,  A.SIN_MAP_LNG
+			 ,  A.SIN_COPYRIGHT
+			 ,  A.SIN_HEAD_HTML
+			 ,  A.SIN_TAIL_HTML
+			 ,  A.SIN_ORDER_NO
+			 ,  A.SIN_IP_GUBUN
+			 ,  A.SIN_CHECK_IP
+			 ,  A.SIN_USE_YN
+			 ,  A.SIN_REG_DTTM
+			 ,  A.SIN_REG_ID
+			 ,  A.SIN_REG_IP
+			 ,  A.SIN_UPDT_DTTM
+			 ,  A.SIN_UPDT_ID
+			 ,  A.SIN_UPDT_IP
+		  FROM  COING_SITE_INFO A
+		 WHERE  A.SIN_ID = #{sinId}
+		   AND  A.SIN_DEL_YN = 'N'
+	</select>
+
+
+	<select id="checkSiteId" parameterType="siteInfoVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_SITE_INFO A
+		 WHERE  A.SIN_ID = #{sinId}
+	</select>
+	
+	<select id="checkSiteDomain" parameterType="siteInfoVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_SITE_INFO A
+		 WHERE  A.SIN_DOMAIN = #{sinDomain}
+		   AND  A.SIN_DEL_YN = 'N'
+	</select>
+	
+
+	<insert id="insertSiteInfo">
+		INSERT
+		  INTO  COING_SITE_INFO
+		     (  SIN_ID
+		     ,  SIN_TITLE
+		     ,  SIN_NAME
+		     ,  SIN_DOMAIN
+		     ,  SIN_LANG
+			 ,  SIN_THEME
+			 ,  SIN_LAYOUT		
+			 ,  SIN_DESCRIPTION
+			 ,  SIN_KEYWORD
+			 ,  SIN_PERMIT_VIEW
+			 ,  SIN_PERMIT_VIEW_GUBUN
+			 ,  SIN_LIMIT_VIEW
+			 ,  SIN_CHARGE_NM
+			 ,  SIN_CHARGE_TEL
+		     ,  SIN_CHARGE_EMAIL
+		     ,  SIN_TEL
+		     ,  SIN_FAX
+		     ,  SIN_ZIPCD
+		     ,  SIN_ADDRESS1
+		     ,  SIN_ADDRESS2
+		     ,  SIN_MAP_LAT
+		     ,  SIN_MAP_LNG
+		     ,  SIN_COPYRIGHT
+		     ,  SIN_HEAD_HTML
+		     ,  SIN_TAIL_HTML
+		     ,  SIN_ORDER_NO
+			 ,  SIN_IP_GUBUN
+			 ,  SIN_CHECK_IP		     
+		     ,  SIN_USE_YN
+		     ,  SIN_REG_DTTM
+		     ,  SIN_REG_ID
+		     ,  SIN_REG_IP
+		     ,  SIN_DEL_YN
+		     )
+		VALUES
+		     (  #{sinId}
+			 ,  #{sinTitle, jdbcType=VARCHAR}
+			 ,  #{sinName, jdbcType=VARCHAR}
+			 ,  #{sinDomain, jdbcType=VARCHAR}
+			 ,  #{sinLang, jdbcType=VARCHAR}
+			 ,  #{sinTheme, jdbcType=VARCHAR}
+			 ,  #{sinLayout, jdbcType=VARCHAR}
+			 ,  #{sinDescription, jdbcType=VARCHAR}
+			 ,  #{sinKeyword, jdbcType=VARCHAR}
+			 ,  #{sinPermitView}
+			 ,  #{sinPermitViewGubun}
+			 ,  #{sinLimitView, jdbcType=VARCHAR}
+			 ,  #{sinChargeNm, jdbcType=VARCHAR}
+			 ,  #{sinChargeTel, jdbcType=VARCHAR}
+			 ,  #{sinChargeEmail, jdbcType=VARCHAR}
+			 ,  #{sinTel, jdbcType=VARCHAR}
+			 ,  #{sinFax, jdbcType=VARCHAR}
+			 ,  #{sinZipcd, jdbcType=VARCHAR}
+			 ,  #{sinAddress1, jdbcType=VARCHAR}
+			 ,  #{sinAddress2, jdbcType=VARCHAR}
+			 ,  #{sinMapLat, jdbcType=VARCHAR}
+			 ,  #{sinMapLng, jdbcType=VARCHAR}
+			 ,  #{sinCopyright, jdbcType=VARCHAR}
+			 ,  #{sinHeadHtml, jdbcType=VARCHAR}
+			 ,  #{sinTailHtml, jdbcType=VARCHAR}
+			 ,  #{sinOrderNo}
+			 ,  #{sinIpGubun, jdbcType=VARCHAR}
+			 ,  #{sinCheckIp, jdbcType=VARCHAR}
+			 ,  #{sinUseYn, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  #{sinRegId, jdbcType=VARCHAR}
+			 ,  #{sinRegIp, jdbcType=VARCHAR}
+			 ,  'N'
+		     )
+	</insert>
+
+
+	<update id="updateSiteInfo">
+		UPDATE  COING_SITE_INFO
+		   SET  SIN_TITLE = #{sinTitle, jdbcType=VARCHAR}
+		     ,  SIN_NAME = #{sinName, jdbcType=VARCHAR}
+		     ,  SIN_DOMAIN = #{sinDomain, jdbcType=VARCHAR}
+		     ,  SIN_LANG = #{sinLang, jdbcType=VARCHAR}
+		     ,  SIN_THEME = #{sinTheme, jdbcType=VARCHAR}
+		     ,  SIN_LAYOUT = #{sinLayout, jdbcType=VARCHAR}
+		     ,  SIN_DESCRIPTION = #{sinDescription, jdbcType=VARCHAR}
+		     ,  SIN_KEYWORD = #{sinKeyword, jdbcType=VARCHAR}
+		     ,  SIN_PERMIT_VIEW = #{sinPermitView}
+		     ,  SIN_PERMIT_VIEW_GUBUN = #{sinPermitViewGubun}
+		     ,  SIN_LIMIT_VIEW = #{sinLimitView, jdbcType=VARCHAR}
+		     ,  SIN_CHARGE_NM = #{sinChargeNm, jdbcType=VARCHAR}
+		     ,  SIN_CHARGE_TEL = #{sinChargeTel, jdbcType=VARCHAR}
+		     ,  SIN_CHARGE_EMAIL = #{sinChargeEmail, jdbcType=VARCHAR}
+		     ,  SIN_TEL = #{sinTel, jdbcType=VARCHAR}
+		     ,  SIN_FAX = #{sinFax, jdbcType=VARCHAR}
+		     ,  SIN_ZIPCD = #{sinZipcd, jdbcType=VARCHAR}
+		     ,  SIN_ADDRESS1 = #{sinAddress1, jdbcType=VARCHAR}
+		     ,  SIN_ADDRESS2 = #{sinAddress2, jdbcType=VARCHAR}
+		     ,  SIN_MAP_LAT = #{sinMapLat, jdbcType=VARCHAR}
+		     ,  SIN_MAP_LNG = #{sinMapLng, jdbcType=VARCHAR}
+		     ,  SIN_COPYRIGHT = #{sinCopyright, jdbcType=VARCHAR}
+		     ,  SIN_HEAD_HTML = #{sinHeadHtml, jdbcType=VARCHAR}
+		     ,  SIN_TAIL_HTML = #{sinTailHtml, jdbcType=VARCHAR}
+		     ,  SIN_ORDER_NO = #{sinOrderNo}
+		     ,  SIN_IP_GUBUN = #{sinIpGubun, jdbcType=VARCHAR}
+		     ,  SIN_CHECK_IP = #{sinCheckIp, jdbcType=VARCHAR}
+		     ,  SIN_USE_YN = #{sinUseYn, jdbcType=VARCHAR}
+		     ,  SIN_UPDT_DTTM = NOW()
+		     ,  SIN_UPDT_ID = #{sinUpdtId, jdbcType=VARCHAR}
+		     ,  SIN_UPDT_IP = #{sinUpdtIp, jdbcType=VARCHAR}
+		 WHERE  SIN_ID = #{sinId}
+		   AND  SIN_DEL_YN = 'N'
+	</update>
+
+
+	<update id="deleteSiteInfo">
+		UPDATE  COING_SITE_INFO
+		   SET  SIN_DEL_YN = 'Y'
+			 ,  SIN_DEL_DTTM = NOW()
+			 ,  SIN_DEL_ID = #{sinDelId, jdbcType=VARCHAR}
+			 ,  SIN_DEL_IP = #{sinDelIp, jdbcType=VARCHAR}
+		 WHERE  SIN_ID = #{sinId}
+		   AND  SIN_DEL_YN = 'N'
+	</update>	
+	
+
+</mapper>

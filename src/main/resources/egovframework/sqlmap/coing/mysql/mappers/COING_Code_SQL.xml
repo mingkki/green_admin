@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.CodeMapper">
+
+	<resultMap id="code" type="egovframework.coing.cmm.vo.CodeVO">
+		<result property="codId" column="COD_ID"/>
+		<result property="codName" column="COD_NAME"/>
+		<result property="codContent" column="COD_CONTENT"/>
+		<result property="codUseYn" column="COD_USE_YN"/>
+		<result property="codRegDttm" column="COD_REG_DTTM"/>
+		<result property="codRegId" column="COD_REG_ID"/>
+		<result property="codRegIp" column="COD_REG_IP"/>
+		<result property="codUpdtDttm" column="COD_UPDT_DTTM"/>
+		<result property="codUpdtId" column="COD_UPDT_ID"/>
+		<result property="codUpdtIp" column="COD_UPDT_IP"/>	
+	</resultMap>
+
+	<resultMap id="codeDetail" type="egovframework.coing.cmm.vo.CodeDetailVO">
+		<result property="codId" column="COD_ID"/>
+		<result property="cddId" column="CDD_ID"/>
+		<result property="cddName" column="CDD_NAME"/>
+		<result property="cddContent" column="CDD_CONTENT"/>
+		<result property="cddData01" column="CDD_DATA01"/>
+		<result property="cddData02" column="CDD_DATA02"/>
+		<result property="cddData03" column="CDD_DATA03"/>
+		<result property="cddData04" column="CDD_DATA04"/>
+		<result property="cddData05" column="CDD_DATA05"/>
+		<result property="cddUseYn" column="CDD_USE_YN"/>
+		<result property="cddOrderNo" column="CDD_ORDER_NO"/>
+		<result property="cddRegDttm" column="CDD_REG_DTTM"/>
+		<result property="cddRegId" column="CDD_REG_ID"/>
+		<result property="cddRegIp" column="CDD_REG_IP"/>
+		<result property="cddUpdtDttm" column="CDD_UPDT_DTTM"/>
+		<result property="cddUpdtId" column="CDD_UPDT_ID"/>
+		<result property="cddUpdtIp" column="CDD_UPDT_IP"/>	
+	</resultMap>
+
+	<sql id="codeListWhere">
+		AND  A.COD_DEL_YN = 'N'
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "codId"'>AND A.COD_ID LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "codName"'>AND A.COD_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "codContent"'>AND A.COD_CONTENT LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+		<if test='codUseYn != null and codUseYn != ""'>
+			AND  A.COD_USE_YN = #{codUseYn}			
+		</if>		
+	</sql>
+
+	<select id="selectCodeListCnt" parameterType="codeVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_CODE A
+		 WHERE  1=1
+		 		<include refid="codeListWhere" />
+	</select>
+
+
+	<select id="selectCodeList" parameterType="codeVO" resultMap="code">
+		SELECT  A.COD_ID
+			 ,  A.COD_NAME
+			 ,  A.COD_CONTENT
+			 ,  A.COD_USE_YN
+			 ,  A.COD_REG_DTTM
+			 ,  A.COD_REG_ID
+			 ,  A.COD_REG_IP
+		  FROM  COING_CODE A
+		 WHERE  1=1
+		 		<include refid="codeListWhere" />
+	  ORDER BY  A.COD_REG_DTTM DESC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+
+	<select id="selectCodeListAll" parameterType="codeVO" resultMap="code">
+		SELECT  A.COD_ID
+			 ,  A.COD_NAME
+			 ,  A.COD_CONTENT
+			 ,  A.COD_USE_YN
+			 ,  A.COD_REG_DTTM
+			 ,  A.COD_REG_ID
+			 ,  A.COD_REG_IP
+		  FROM  COING_CODE A
+		 WHERE  1=1
+		 		<include refid="codeListWhere" />
+	  ORDER BY  A.COD_REG_DTTM ASC
+	</select>
+	
+
+	<select id="selectCode" parameterType="codeVO" resultMap="code">
+		SELECT  A.COD_ID
+			 ,  A.COD_NAME
+			 ,  A.COD_CONTENT
+			 ,  A.COD_USE_YN
+			 ,  A.COD_REG_DTTM
+			 ,  A.COD_REG_ID
+			 ,  A.COD_REG_IP
+			 ,  A.COD_UPDT_DTTM
+			 ,  A.COD_UPDT_ID
+			 ,  A.COD_UPDT_IP
+		  FROM  COING_CODE A
+		 WHERE  A.COD_ID = #{codId}
+		   AND  A.COD_DEL_YN ='N'
+	</select>
+
+
+	<select id="checkCodeId" parameterType="codeVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_CODE A
+		 WHERE  A.COD_ID = #{codId}
+	</select>
+	
+
+	<insert id="insertCode">
+		INSERT
+		  INTO  COING_CODE
+		     (  COD_ID
+		     ,  COD_NAME
+		     ,  COD_CONTENT
+		     ,  COD_USE_YN
+		     ,  COD_REG_DTTM
+		     ,  COD_REG_ID
+		     ,  COD_REG_IP
+		     ,  COD_DEL_YN
+		     )
+		VALUES
+		     (  #{codId}
+			 ,  #{codName, jdbcType=VARCHAR}
+			 ,  #{codContent, jdbcType=VARCHAR}
+			 ,  #{codUseYn, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  #{codRegId, jdbcType=VARCHAR}
+			 ,  #{codRegIp, jdbcType=VARCHAR}
+			 ,  'N'
+		     )
+	</insert>
+
+
+	<update id="updateCode">
+		UPDATE  COING_CODE
+		   SET  COD_NAME = #{codName, jdbcType=VARCHAR}
+		     ,  COD_CONTENT = #{codContent, jdbcType=VARCHAR}
+		     ,  COD_USE_YN = #{codUseYn, jdbcType=VARCHAR}
+		     ,  COD_UPDT_DTTM = NOW()
+		     ,  COD_UPDT_ID = #{codUpdtId, jdbcType=VARCHAR}
+		     ,  COD_UPDT_IP = #{codUpdtIp, jdbcType=VARCHAR}
+		 WHERE  COD_ID = #{codId}
+		   AND  COD_DEL_YN ='N'
+	</update>
+
+
+	<update id="deleteCode">
+		UPDATE  COING_CODE
+		   SET  COD_DEL_YN = 'Y'
+			 ,  COD_DEL_DTTM = NOW()
+			 ,  COD_DEL_ID = #{codDelId, jdbcType=VARCHAR}
+			 ,  COD_DEL_IP = #{codDelIp, jdbcType=VARCHAR}
+		 WHERE  COD_ID = #{codId}
+		   AND  COD_DEL_YN ='N'		 
+	</update>
+
+
+	<sql id="codeDetailListWhere">
+		AND  A.CDD_DEL_YN = 'N'
+		AND  B.COD_DEL_YN = 'N'
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "cddId"'>AND A.CDD_ID LIKE CONCAT ('%', #{searchKeyword}, '%')</when>			
+		    	<when test='searchCondition == "cddName"'>AND A.CDD_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "cddContent"'>AND A.CDD_CONTENT LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "codId"'>AND A.COD_ID LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "codName"'>AND B.COD_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+		<if test='searchCodId != null and searchCodId != ""'>
+			AND  A.COD_ID = #{searchCodId}
+		</if>
+		<if test='cddUseYn != null and cddUseYn != ""'>
+			AND  A.CDD_USE_YN = #{cddUseYn}
+		</if>
+	</sql>
+
+
+	<select id="selectCodeDetailListCnt" parameterType="codeDetailVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_CODE_DETAIL A
+		  	 ,  COING_CODE B
+		 WHERE  A.COD_ID = B.COD_ID
+				<include refid="codeDetailListWhere" />
+	</select>
+
+
+	<select id="selectCodeDetailList" parameterType="codeDetailVO" resultMap="codeDetail">
+		SELECT  A.COD_ID
+			 ,  B.COD_NAME AS codName
+			 ,  B.COD_CONTENT AS codContent
+			 ,  A.CDD_ID
+			 ,  A.CDD_NAME
+			 ,  A.CDD_CONTENT
+			 ,  A.CDD_DATA01
+			 ,  A.CDD_DATA02
+			 ,  A.CDD_DATA03
+			 ,  A.CDD_DATA04
+			 ,  A.CDD_DATA05
+			 ,  A.CDD_USE_YN
+			 ,  A.CDD_ORDER_NO
+			 ,  A.CDD_REG_DTTM
+			 ,  A.CDD_REG_ID
+			 ,  A.CDD_REG_IP
+		  FROM  COING_CODE_DETAIL A
+		  	 ,  COING_CODE B
+		 WHERE  A.COD_ID = B.COD_ID
+				<include refid="codeDetailListWhere" />
+	  ORDER BY  B.COD_REG_DTTM ASC, A.CDD_ORDER_NO ASC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+
+	<select id="selectCodeDetailListAll" parameterType="codeDetailVO" resultMap="codeDetail">
+		SELECT  A.COD_ID
+			 ,  B.COD_NAME AS codName
+			 ,  B.COD_CONTENT AS codContent
+			 ,  A.CDD_ID
+			 ,  A.CDD_NAME
+			 ,  A.CDD_CONTENT
+			 ,  A.CDD_DATA01
+			 ,  A.CDD_DATA02
+			 ,  A.CDD_DATA03
+			 ,  A.CDD_DATA04
+			 ,  A.CDD_DATA05
+			 ,  A.CDD_USE_YN
+			 ,  A.CDD_ORDER_NO
+			 ,  A.CDD_REG_DTTM
+			 ,  A.CDD_REG_ID
+			 ,  A.CDD_REG_IP
+		  FROM  COING_CODE_DETAIL A
+		  	 ,  COING_CODE B
+		 WHERE  A.COD_ID = B.COD_ID
+				<include refid="codeDetailListWhere" />
+	  ORDER BY  B.COD_REG_DTTM ASC, A.CDD_ORDER_NO ASC
+	</select>
+	
+
+	<select id="selectCodeDetailMaxOrderNo" parameterType="codeDetailVO" resultType="int">
+		SELECT  IFNULL(MAX(A.CDD_ORDER_NO),0)
+		  FROM  COING_CODE_DETAIL A
+		 WHERE  A.COD_ID = #{searchCodId}
+	</select>
+
+
+	<select id="checkCodeDetailId" parameterType="codeDetailVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_CODE_DETAIL A
+		 WHERE  A.COD_ID = #{codId}
+		   AND  A.CDD_ID = #{cddId}
+	</select>
+
+
+	<select id="selectCodeDetail" parameterType="codeDetailVO" resultMap="codeDetail">
+		SELECT  A.COD_ID
+			 ,  B.COD_NAME AS codName
+			 ,  B.COD_CONTENT AS codContent
+			 ,  A.CDD_ID
+			 ,  A.CDD_NAME
+			 ,  A.CDD_CONTENT
+			 ,  A.CDD_DATA01
+			 ,  A.CDD_DATA02
+			 ,  A.CDD_DATA03
+			 ,  A.CDD_DATA04
+			 ,  A.CDD_DATA05
+			 ,  A.CDD_USE_YN
+			 ,  A.CDD_ORDER_NO
+			 ,  A.CDD_REG_DTTM
+			 ,  A.CDD_REG_ID
+			 ,  A.CDD_REG_IP
+			 ,  A.CDD_UPDT_DTTM
+			 ,  A.CDD_UPDT_ID
+			 ,  A.CDD_UPDT_IP
+		  FROM  COING_CODE_DETAIL A
+		  	 ,  COING_CODE B
+		 WHERE  A.COD_ID = B.COD_ID
+		   AND  A.COD_ID = #{codId}		 
+		   AND  A.CDD_ID = #{cddId}
+		   AND  A.CDD_DEL_YN = 'N'
+		   AND  B.COD_DEL_YN = 'N'
+	</select>
+
+
+	<insert id="insertCodeDetail">
+		INSERT
+		  INTO  COING_CODE_DETAIL
+		     (  COD_ID
+		     ,  CDD_ID
+		     ,  CDD_NAME
+		     ,  CDD_CONTENT
+		     ,  CDD_DATA01
+		     ,  CDD_DATA02
+		     ,  CDD_DATA03
+		     ,  CDD_DATA04
+		     ,  CDD_DATA05
+		     ,  CDD_USE_YN
+		     ,  CDD_ORDER_NO
+		     ,  CDD_REG_DTTM
+		     ,  CDD_REG_ID
+		     ,  CDD_REG_IP
+		     ,  CDD_DEL_YN
+		     )
+		VALUES
+		     (  #{codId}
+			 ,  #{cddId}
+			 ,  #{cddName, jdbcType=VARCHAR}
+			 ,  #{cddContent, jdbcType=VARCHAR}
+			 ,  #{cddData01, jdbcType=VARCHAR}
+			 ,  #{cddData02, jdbcType=VARCHAR}
+			 ,  #{cddData03, jdbcType=VARCHAR}
+			 ,  #{cddData04, jdbcType=VARCHAR}
+			 ,  #{cddData05, jdbcType=VARCHAR}
+			 ,  #{cddUseYn, jdbcType=VARCHAR}
+			 ,  #{cddOrderNo}
+			 ,  NOW()
+			 ,  #{cddRegId, jdbcType=VARCHAR}
+			 ,  #{cddRegIp, jdbcType=VARCHAR}
+			 ,  'N'
+		     )
+	</insert>
+
+
+	<update id="updateCodeDetail">
+		UPDATE  COING_CODE_DETAIL
+		   SET  CDD_NAME = #{cddName, jdbcType=VARCHAR}
+		     ,  CDD_CONTENT = #{cddContent, jdbcType=VARCHAR}
+		     ,  CDD_DATA01 = #{cddData01, jdbcType=VARCHAR}
+		     ,  CDD_DATA02 = #{cddData02, jdbcType=VARCHAR}
+		     ,  CDD_DATA03 = #{cddData03, jdbcType=VARCHAR}
+		     ,  CDD_DATA04 = #{cddData04, jdbcType=VARCHAR}
+		     ,  CDD_DATA05 = #{cddData05, jdbcType=VARCHAR}
+		     ,  CDD_USE_YN = #{cddUseYn, jdbcType=VARCHAR}
+		     ,  CDD_ORDER_NO = #{cddOrderNo}
+		     ,  CDD_UPDT_DTTM = NOW()
+		     ,  CDD_UPDT_ID = #{cddUpdtId, jdbcType=VARCHAR}
+		     ,  CDD_UPDT_IP = #{cddUpdtIp, jdbcType=VARCHAR}
+		 WHERE  COD_ID = #{codId}
+		   AND  CDD_ID = #{cddId}
+		   AND  CDD_DEL_YN = 'N'
+	</update>
+
+
+	<update id="deleteCodeDetail">
+		UPDATE  COING_CODE_DETAIL
+		   SET  CDD_DEL_YN = 'Y'
+			 ,  CDD_DEL_DTTM = NOW()
+			 ,  CDD_DEL_ID = #{cddDelId, jdbcType=VARCHAR}
+			 ,  CDD_DEL_IP = #{cddDelIp, jdbcType=VARCHAR}
+		 WHERE  COD_ID = #{codId}
+		   AND  CDD_ID = #{cddId}
+		   AND  CDD_DEL_YN ='N'	
+	</update>
+
+
+</mapper>

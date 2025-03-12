@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.exchange.service.impl.ExchangeMapper">
+
+  <select id="selectAll" resultType="exchangeVO">
+    SELECT INTERFO_EXCHANGE.*
+         , COING_CODE_DETAIL.CDD_NAME AS emdNm
+      FROM INTERFO_EXCHANGE
+ LEFT JOIN COING_CODE_DETAIL ON INTERFO_EXCHANGE.EMD = COING_CODE_DETAIL.CDD_ID AND COING_CODE_DETAIL.COD_ID = 'EMD'
+    <where>
+      AND DEL_YN = 'N'
+    </where>
+  </select>
+
+  <select id="select" resultType="exchangeVO" parameterType="exchangeVO">
+    SELECT INTERFO_EXCHANGE.*
+         , COING_CODE_DETAIL.CDD_NAME AS emdNm
+      FROM INTERFO_EXCHANGE
+ LEFT JOIN COING_CODE_DETAIL ON INTERFO_EXCHANGE.EMD = COING_CODE_DETAIL.CDD_ID AND COING_CODE_DETAIL.COD_ID = 'EMD'
+     <where>
+        AND DEL_YN = 'N'
+     </where>
+  </select>
+  
+  <select id="count" resultType="int" parameterType="exchangeVO">
+    SELECT COUNT(*)
+      FROM INTERFO_EXCHANGE
+     <where>
+        AND DEL_YN = 'N'
+     </where>
+  </select>
+  
+  <select id="selectOne" resultType="exchangeVO">
+    SELECT INTERFO_EXCHANGE.*
+         , COING_CODE_DETAIL.CDD_NAME AS emdNm
+      FROM INTERFO_EXCHANGE
+ LEFT JOIN COING_CODE_DETAIL ON INTERFO_EXCHANGE.EMD = COING_CODE_DETAIL.CDD_ID AND COING_CODE_DETAIL.COD_ID = 'EMD'
+    <where>
+       AND DEL_YN = 'N'
+       AND ID = #{id}
+    </where>
+  </select>
+
+    <select id="selectExchangeList" resultType="exchangeVO">
+        SELECT  A.*
+        FROM  INTERFO_EXCHANGE A
+        WHERE  1=1
+        AND A.DEL_YN = 'N'
+        ORDER BY  A.ID ASC
+    </select>
+
+  
+  <insert id="insert" parameterType="exchangeVO">
+    INSERT INTO INTERFO_EXCHANGE
+    (
+      EMD
+    , PLACE
+    , ADDRESS
+    , OPEN
+    , CLOSE
+    , LAT
+    , LNG
+    )
+    VALUES
+    (
+      #{emd}
+    , #{place}
+    , #{address}
+    , #{open}
+    , #{close}
+    , #{lat}
+    , #{lng}
+    )
+  </insert>
+  
+  <update id="update" parameterType="exchangeVO">
+    UPDATE INTERFO_EXCHANGE
+       SET EMD = #{emd}
+         , PLACE = #{place}
+         , ADDRESS = #{address}
+         , OPEN = #{open}
+         , CLOSE = #{close}
+         , LAT = #{lat}
+         , LNG = #{lng}
+     WHERE ID = #{id}
+  </update>
+  
+  <update id="delete" parameterType="long">
+    UPDATE INTERFO_EXCHANGE
+       SET DEL_YN = 'Y'
+     WHERE ID = #{id}
+  </update>
+
+</mapper>

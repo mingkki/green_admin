@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.ImageMapper">
+
+	<resultMap id="imageInfo" type="egovframework.coing.cmm.vo.ImageInfoVO">
+		<result property="imgId" column="IMG_ID" />
+		<result property="imgTitle" column="IMG_TITLE" />
+		<result property="imgHits" column="IMG_HITS" />
+		<result property="imgUseYn" column="IMG_USE_YN" />
+		<result property="imgRegDttm" column="IMG_REG_DTTM" />
+		<result property="imgRegId" column="IMG_REG_ID" />
+		<result property="imgRegIp" column="IMG_REG_IP" />
+		<result property="imgUpdtDttm" column="IMG_UPDT_DTTM" />
+		<result property="imgUpdtId" column="IMG_UPDT_ID" />
+		<result property="imgUpdtIp" column="IMG_UPDT_IP" />
+	</resultMap>
+	
+	<resultMap id="imageFile" type="egovframework.coing.cmm.vo.ImageFileVO">
+		<result property="imgId" column="IMG_ID"/>
+		<result property="imfId" column="IMF_ID"/>
+		<result property="imfNo" column="IMF_NO"/>
+		<result property="imfName" column="IMF_NAME"/>
+		<result property="imfTname1" column="IMF_TNAME1"/>
+		<result property="imfTname2" column="IMF_TNAME2"/>
+		<result property="imfOname" column="IMF_ONAME"/>		
+		<result property="imfExt" column="IMF_EXT"/>
+		<result property="imfSize" column="IMF_SIZE"/>
+		<result property="imfDownCnt" column="IMF_DOWN_CNT"/>
+		<result property="imfMemo" column="IMF_MEMO"/>
+		<result property="imfRegDttm" column="IMF_REG_DTTM"/>
+		<result property="imfRegId" column="IMF_REG_ID"/>
+		<result property="imfRegIp" column="IMF_REG_IP"/>
+		<result property="imfUpdtDttm" column="IMF_UPDT_DTTM"/>
+		<result property="imfUpdtId" column="IMF_UPDT_ID"/>
+		<result property="imfUpdtIp" column="IMF_UPDT_IP"/>
+	</resultMap>	
+
+	<sql id="imageInfoListWhere">
+		AND  A.IMG_DEL_YN = 'N'
+		<if test='imgUseYn != null and imgUseYn != ""'>
+			AND  A.IMG_USE_YN = #{imgUseYn}			
+		</if>
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "imgTitle"'>AND A.IMG_TITLE LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+	</sql>
+
+
+	<select id="selectImageInfoListCnt" parameterType="imageInfoVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_IMAGE_INFO A
+		 WHERE  1=1
+				<include refid="imageInfoListWhere" />
+	</select>
+	
+
+	<select id="selectImageInfoList" parameterType="imageInfoVO" resultMap="imageInfo">
+		SELECT  A.IMG_ID
+			 ,  A.IMG_TITLE
+			 ,  A.IMG_USE_YN
+			 ,  A.IMG_HITS
+			 ,  A.IMG_REG_DTTM
+			 ,  A.IMG_REG_ID
+			 ,  A.IMG_REG_IP
+		  FROM  COING_IMAGE_INFO A
+		 WHERE  1=1
+		   		<include refid="imageInfoListWhere" />
+	  ORDER BY  A.IMG_ID DESC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+
+	<select id="selectImageInfo" parameterType="imageInfoVO" resultMap="imageInfo">
+		SELECT  A.IMG_ID
+			 ,  A.IMG_TITLE
+			 ,  A.IMG_USE_YN
+			 ,  A.IMG_HITS
+			 ,  A.IMG_REG_DTTM
+			 ,  A.IMG_REG_ID
+			 ,  A.IMG_REG_IP
+			 ,  A.IMG_UPDT_DTTM
+			 ,  A.IMG_UPDT_ID
+			 ,  A.IMG_UPDT_IP
+		  FROM  COING_IMAGE_INFO A
+		 WHERE  A.IMG_ID = #{imgId}
+		   AND  A.IMG_DEL_YN = 'N'
+	</select>
+
+
+	<insert id="insertImageInfo">
+		INSERT
+		  INTO  COING_IMAGE_INFO
+		     (  IMG_ID
+		     ,  IMG_TITLE
+		     ,  IMG_USE_YN
+		     ,  IMG_HITS
+		     ,  IMG_REG_DTTM
+		     ,  IMG_REG_ID
+		     ,  IMG_REG_IP
+		     ,  IMG_DEL_YN
+		     )
+		VALUES
+		     (  #{imgId}
+			 ,  #{imgTitle, jdbcType=VARCHAR}
+			 ,  #{imgUseYn, jdbcType=VARCHAR}
+			 ,  0
+			 ,  NOW()
+			 ,  #{imgRegId, jdbcType=VARCHAR}
+			 ,  #{imgRegIp, jdbcType=VARCHAR}
+			 ,  'N'
+		     )
+	</insert>
+
+
+	<update id="updateImageInfo">
+		UPDATE  COING_IMAGE_INFO
+		   SET  IMG_TITLE = #{imgTitle, jdbcType=VARCHAR}
+		     ,  IMG_USE_YN = #{imgUseYn, jdbcType=VARCHAR}
+		     ,  IMG_UPDT_DTTM = NOW()
+		     ,  IMG_UPDT_ID = #{imgUpdtId, jdbcType=VARCHAR}
+		     ,  IMG_UPDT_IP = #{imgUpdtIp, jdbcType=VARCHAR}
+		 WHERE  IMG_ID = #{imgId}
+		   AND  IMG_DEL_YN = 'N'
+	</update>
+
+
+	<update id="deleteImageInfo">
+		UPDATE  COING_IMAGE_INFO
+		   SET  IMG_DEL_YN = 'Y'
+			 ,  IMG_DEL_DTTM = NOW()
+			 ,  IMG_DEL_ID = #{imgDelId, jdbcType=VARCHAR}
+			 ,  IMG_DEL_IP = #{imgDelIp, jdbcType=VARCHAR}
+		 WHERE  IMG_ID = #{imgId}
+		   AND  IMG_DEL_YN = 'N'		 
+	</update>
+
+	<select id="selectImageFileList" parameterType="imageFileVO" resultMap="imageFile">
+		SELECT  A.IMG_ID
+			 ,  A.IMF_ID
+			 ,  A.IMF_NO
+			 ,  A.IMF_NAME
+			 ,  A.IMF_TNAME1
+			 ,  A.IMF_TNAME2
+			 ,  A.IMF_ONAME
+			 ,  A.IMF_EXT
+			 ,  A.IMF_SIZE
+			 ,  A.IMF_DOWN_CNT
+			 ,  A.IMF_MEMO
+			 ,  A.IMF_REG_DTTM
+			 ,  A.IMF_REG_ID
+			 ,  A.IMF_REG_IP
+			 ,  A.IMF_UPDT_DTTM
+			 ,  A.IMF_UPDT_ID
+			 ,  A.IMF_UPDT_IP
+		  FROM  COING_IMAGE_FILE A
+		 WHERE  A.IMG_ID = #{imgId}
+		   AND  A.IMF_DEL_YN = 'N'
+	  ORDER BY  A.IMF_NO ASC
+	</select>
+
+
+	<select id="selectImageFile" parameterType="imageFileVO" resultMap="imageFile">
+		SELECT  A.IMG_ID
+			 ,  A.IMF_ID
+			 ,  A.IMF_NO
+			 ,  A.IMF_NAME
+			 ,  A.IMF_TNAME1
+			 ,  A.IMF_TNAME2
+			 ,  A.IMF_ONAME
+			 ,  A.IMF_EXT
+			 ,  A.IMF_SIZE
+			 ,  A.IMF_DOWN_CNT
+			 ,  A.IMF_MEMO
+			 ,  A.IMF_REG_DTTM
+			 ,  A.IMF_REG_ID
+			 ,  A.IMF_REG_IP
+			 ,  A.IMF_UPDT_DTTM
+			 ,  A.IMF_UPDT_ID
+			 ,  A.IMF_UPDT_IP
+		  FROM  COING_IMAGE_FILE A
+		 WHERE  A.IMG_ID = #{imgId}
+		   AND  A.IMF_NO = #{imfNo}
+		   AND  A.IMF_DEL_YN = 'N'
+	</select>
+
+
+	<insert id="insertImageFile">
+		INSERT
+		  INTO  COING_IMAGE_FILE
+		     (  IMG_ID
+		     ,  IMF_ID
+		     ,  IMF_NO
+		     ,  IMF_NAME
+		     ,  IMF_TNAME1
+		     ,  IMF_TNAME2
+		     ,  IMF_ONAME
+		     ,  IMF_EXT
+		     ,  IMF_SIZE
+		     ,  IMF_DOWN_CNT
+		     ,  IMF_MEMO
+		     ,  IMF_REG_DTTM
+		     ,  IMF_REG_ID
+		     ,  IMF_REG_IP
+		     ,  IMF_DEL_YN
+		     )
+		VALUES
+		     (  #{imgId}
+			 ,  #{imfId}
+			 ,  #{imfNo}
+			 ,  #{imfName, jdbcType=VARCHAR}
+			 ,  #{imfTname1, jdbcType=VARCHAR}
+			 ,  #{imfTname2, jdbcType=VARCHAR}
+			 ,  #{imfOname, jdbcType=VARCHAR}
+			 ,  #{imfExt, jdbcType=VARCHAR}
+			 ,  #{imfSize}
+			 ,  #{imfDownCnt}
+			 ,  #{imfMemo, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  #{imfRegId, jdbcType=VARCHAR}
+			 ,  #{imfRegIp, jdbcType=VARCHAR}
+			 ,  'N'
+		     )
+	</insert>
+
+
+	<update id="updateImageFile">
+		UPDATE  COING_IMAGE_FILE
+		   SET  IMF_NAME = #{imfName, jdbcType=VARCHAR}
+		     ,  IMF_TNAME1 = #{imfTname1, jdbcType=VARCHAR}
+		     ,  IMF_TNAME2 = #{imfTname2, jdbcType=VARCHAR}
+		     ,  IMF_ONAME = #{imfOname, jdbcType=VARCHAR}
+		     ,  IMF_EXT = #{imfExt, jdbcType=VARCHAR}
+		     ,  IMF_SIZE = #{imfSize}
+		     ,  IMF_UPDT_DTTM = NOW()
+		     ,  IMF_UPDT_ID = #{imfUpdtId, jdbcType=VARCHAR}
+		     ,  IMF_UPDT_IP = #{imfUpdtIp, jdbcType=VARCHAR}
+		 WHERE  IMG_ID = #{imgId}
+		   AND  IMF_NO = #{imfNo}
+		   AND  IMF_DEL_YN = 'N'
+	</update>
+	
+	
+	<update id="updateImageFileMemo">
+		UPDATE  COING_IMAGE_FILE
+		   SET  IMF_MEMO = #{imfMemo, jdbcType=VARCHAR}
+		 WHERE  IMG_ID = #{imgId}
+		   AND  IMF_NO = #{imfNo}
+		   AND  IMF_DEL_YN = 'N'
+	</update>	
+
+
+	<update id="updateImageFileDelYn">
+		UPDATE  COING_IMAGE_FILE
+		   SET  IMF_DEL_YN = 'Y'
+		     ,  IMF_DEL_DTTM = NOW()
+		     ,  IMF_DEL_IP = #{imfDelIp, jdbcType=VARCHAR}
+		     ,  IMF_DEL_ID = #{imfDelId, jdbcType=VARCHAR}
+		 WHERE  IMG_ID = #{imgId}
+		   AND  IMF_NO = #{imfNo}
+		   AND  IMF_DEL_YN = 'N'
+	</update>
+	
+	
+	<update id="updateImageFileRebuildNo">
+		UPDATE  COING_IMAGE_FILE A, (SELECT @ROWNUM:=-1) B
+		   SET  A.IMF_NO = @ROWNUM:=@ROWNUM + 1 
+		 WHERE  A.IMG_ID = #{imgId}
+		   AND  A.IMF_DEL_YN = 'N'
+	</update>
+
+</mapper>

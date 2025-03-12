@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.LevelMapper">
+
+	<resultMap id="level" type="egovframework.coing.cmm.vo.LevelVO">
+		<result property="lvlId" column="LVL_ID" />
+		<result property="lvlName" column="LVL_NAME" />
+		<result property="lvlContent" column="LVL_CONTENT" />
+		<result property="lvlRegDttm" column="LVL_REG_DTTM" />
+		<result property="lvlRegId" column="LVL_REG_ID" />
+		<result property="lvlRegIp" column="LVL_REG_IP" />
+		<result property="lvlUpdtDttm" column="LVL_UPDT_DTTM" />
+		<result property="lvlUpdtId" column="LVL_UPDT_ID" />
+		<result property="lvlUpdtIp" column="LVL_UPDT_IP" />	
+	</resultMap>
+	
+	<select id="selectLevelList" parameterType="levelVO" resultMap="level">
+		SELECT  A.LVL_ID
+			 ,  A.LVL_NAME
+			 ,  A.LVL_CONTENT
+			 ,  A.LVL_REG_DTTM
+			 ,  A.LVL_REG_ID
+			 ,  A.LVL_REG_IP
+		  FROM  COING_LEVEL A
+		 WHERE  1=1
+	  ORDER BY  A.LVL_ID ASC
+	</select>
+
+
+	<select id="selectLevel" parameterType="levelVO" resultMap="level">
+		SELECT  A.LVL_ID
+			 ,  A.LVL_NAME
+			 ,  A.LVL_CONTENT
+			 ,  A.LVL_REG_DTTM
+			 ,  A.LVL_REG_ID
+			 ,  A.LVL_REG_IP
+			 ,  A.LVL_UPDT_DTTM
+			 ,  A.LVL_UPDT_ID
+			 ,  A.LVL_UPDT_IP
+		  FROM  COING_LEVEL A
+		 WHERE  A.LVL_ID = #{lvlId}
+	</select>
+
+
+	<insert id="insertLevel">
+		INSERT
+		  INTO  COING_LEVEL
+		     (  LVL_ID
+		     ,  LVL_NAME
+		     ,  LVL_CONTENT
+		     ,  LVL_REG_DTTM
+		     ,  LVL_REG_ID
+		     ,  LVL_REG_IP
+		     )
+		VALUES
+		     (  #{lvlId}
+			 ,  #{lvlName, jdbcType=VARCHAR}
+			 ,  #{lvlContent, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  #{lvlRegId, jdbcType=VARCHAR}
+			 ,  #{lvlRegIp, jdbcType=VARCHAR}
+		     )
+	</insert>
+
+
+	<update id="updateLevel">
+		UPDATE  COING_LEVEL
+		   SET  LVL_NAME = #{lvlName, jdbcType=VARCHAR}
+		     ,  LVL_CONTENT = #{lvlContent, jdbcType=VARCHAR}
+		     ,  LVL_UPDT_DTTM = NOW()
+		     ,  LVL_UPDT_ID = #{lvlUpdtId, jdbcType=VARCHAR}
+		     ,  LVL_UPDT_IP = #{lvlUpdtIp, jdbcType=VARCHAR}
+		 WHERE  LVL_ID = #{lvlId}
+	</update>
+
+
+	<delete id="deleteLevel">
+		DELETE  
+		  FROM  COING_LEVEL
+		 WHERE  LVL_ID = #{lvlId}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.CommonMapper">
+
+	<resultMap id="codeDetail" type="egovframework.coing.cmm.vo.CodeDetailVO">
+		<result property="codId" column="COD_ID"/>
+		<result property="cddId" column="CDD_ID"/>
+		<result property="cddName" column="CDD_NAME"/>
+		<result property="cddContent" column="CDD_CONTENT"/>
+		<result property="cddData01" column="CDD_DATA01"/>
+		<result property="cddData02" column="CDD_DATA02"/>
+		<result property="cddData03" column="CDD_DATA03"/>
+		<result property="cddData04" column="CDD_DATA04"/>
+		<result property="cddData05" column="CDD_DATA05"/>
+		<result property="cddOrderNo" column="CDD_ORDER_NO"/>
+	</resultMap>
+	
+	<select id="selectCodeDetailListAll" parameterType="codeDetailVO" resultMap="codeDetail">
+		SELECT  A.COD_ID
+			 ,  B.COD_NAME AS codName
+			 ,  B.COD_CONTENT AS codContent
+			 ,  A.CDD_ID
+			 ,  A.CDD_NAME
+			 ,  A.CDD_CONTENT
+			 ,  A.CDD_DATA01
+			 ,  A.CDD_DATA02
+			 ,  A.CDD_DATA03
+			 ,  A.CDD_DATA04
+			 ,  A.CDD_DATA05
+			 ,  A.CDD_ORDER_NO
+		  FROM  COING_CODE_DETAIL A
+		  	 ,  COING_CODE B
+		 WHERE  A.COD_ID = B.COD_ID
+		   AND  A.COD_ID = #{searchCodId}
+		   AND  A.CDD_USE_YN = 'Y'
+		   AND  A.CDD_DEL_YN = 'N'
+		   AND  B.COD_USE_YN = 'Y'
+		   AND  B.COD_DEL_YN = 'N'		   
+	  ORDER BY  A.CDD_ORDER_NO ASC
+	</select>
+	
+	<select id="selectCodeDetail" parameterType="codeDetailVO" resultMap="codeDetail">
+		SELECT  A.COD_ID
+			 ,  B.COD_NAME AS codName
+			 ,  B.COD_CONTENT AS codContent
+			 ,  A.CDD_ID
+			 ,  A.CDD_NAME
+			 ,  A.CDD_CONTENT
+			 ,  A.CDD_DATA01
+			 ,  A.CDD_DATA02
+			 ,  A.CDD_DATA03
+			 ,  A.CDD_DATA04
+			 ,  A.CDD_DATA05
+			 ,  A.CDD_ORDER_NO
+		  FROM  COING_CODE_DETAIL A
+		  	 ,  COING_CODE B
+		 WHERE  A.COD_ID = B.COD_ID
+		   AND  A.COD_ID = #{searchCodId}
+		   AND  A.CDD_ID = #{searchCddId}		   
+		   AND  A.CDD_USE_YN = 'Y'
+		   AND  A.CDD_DEL_YN = 'N'
+		   AND  B.COD_USE_YN = 'Y'
+		   AND  B.COD_DEL_YN = 'N'		   
+	</select>	
+	
+	<insert id="insertSendSms">
+		INSERT
+		  INTO  BIZ_MSG
+		     (  MSG_TYPE
+		     ,  CMID
+		     ,  REQUEST_TIME	     
+		     ,  SEND_TIME
+		     ,  DEST_PHONE
+		     ,  DEST_NAME
+		     ,  SEND_PHONE
+		     ,  SEND_NAME
+		     ,  SUBJECT
+		     ,  MSG_BODY
+		     )
+		VALUES
+		     (  #{type}
+			 ,  #{messageId}
+			 ,  NOW()
+			 ,  NOW()
+			 ,  #{to}
+			 ,  #{toName, jdbcType=VARCHAR}
+			 ,  #{from}
+			 ,  #{fromName, jdbcType=VARCHAR}
+			 ,  #{subject, jdbcType=VARCHAR}
+			 ,  #{content, jdbcType=VARCHAR}
+		     )
+	</insert>
+
+</mapper>

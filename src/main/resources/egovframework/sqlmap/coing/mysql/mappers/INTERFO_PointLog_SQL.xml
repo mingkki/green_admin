@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.point.service.impl.PointLogMapper">
+
+  <select id="selectAll" resultType="pointLogVO">
+    SELECT INTERFO_POINT_LOG.ID
+         , INTERFO_POINT_LOG.MEM_ID
+         , INTERFO_POINT_LOG.EXCHANGE_ID
+         , INTERFO_POINT_LOG.POINT
+         , INTERFO_POINT_LOG.DTTM
+         , INTERFO_POINT_LOG.NOW_POINT
+         , COING_MEMBER_GENERAL.MEM_NAME
+         , COING_MEMBER_GENERAL.MEM_EMAIL
+         , INTERFO_EXCHANGE.EMD
+         , COING_CODE_DETAIL.CDD_NAME AS EMD_NM
+      FROM INTERFO_POINT_LOG
+      JOIN COING_MEMBER_GENERAL ON INTERFO_POINT_LOG.MEM_ID = COING_MEMBER_GENERAL.MEM_ID
+ LEFT JOIN INTERFO_EXCHANGE ON INTERFO_POINT_LOG.EXCHANGE_ID = INTERFO_EXCHANGE.ID
+ LEFT JOIN COING_CODE_DETAIL ON INTERFO_EXCHANGE.EMD = COING_CODE_DETAIL.CDD_ID AND COING_CODE_DETAIL.COD_ID = 'EMD'
+  ORDER BY ID DESC
+  </select>
+
+  <select id="select" resultType="pointLogVO" parameterType="pointLogVO">
+    SELECT INTERFO_POINT_LOG.ID
+         , INTERFO_POINT_LOG.MEM_ID
+         , INTERFO_POINT_LOG.EXCHANGE_ID
+         , INTERFO_POINT_LOG.POINT
+         , INTERFO_POINT_LOG.DTTM
+         , INTERFO_POINT_LOG.NOW_POINT
+         , COING_MEMBER_GENERAL.MEM_NAME
+         , COING_MEMBER_GENERAL.MEM_EMAIL
+         , INTERFO_EXCHANGE.EMD
+         , COING_CODE_DETAIL.CDD_NAME AS EMD_NM
+      FROM INTERFO_POINT_LOG
+      JOIN COING_MEMBER_GENERAL ON INTERFO_POINT_LOG.MEM_ID = COING_MEMBER_GENERAL.MEM_ID
+ LEFT JOIN INTERFO_EXCHANGE ON INTERFO_POINT_LOG.EXCHANGE_ID = INTERFO_EXCHANGE.ID
+ LEFT JOIN COING_CODE_DETAIL ON INTERFO_EXCHANGE.EMD = COING_CODE_DETAIL.CDD_ID AND COING_CODE_DETAIL.COD_ID = 'EMD'
+  ORDER BY ID DESC
+  </select>
+  
+  <select id="count" resultType="int" parameterType="pointLogVO">
+    SELECT COUNT(*)
+      FROM INTERFO_POINT_LOG
+      JOIN COING_MEMBER_GENERAL ON INTERFO_POINT_LOG.MEM_ID = COING_MEMBER_GENERAL.MEM_ID
+ LEFT JOIN INTERFO_EXCHANGE ON INTERFO_POINT_LOG.EXCHANGE_ID = INTERFO_EXCHANGE.ID
+ LEFT JOIN COING_CODE_DETAIL ON INTERFO_EXCHANGE.EMD = COING_CODE_DETAIL.CDD_ID AND COING_CODE_DETAIL.COD_ID = 'EMD'
+  </select>
+  
+  <select id="selectOne" resultType="pointLogVO">
+    SELECT INTERFO_POINT_LOG.*
+      FROM INTERFO_POINT_LOG
+    <where>
+      AND ID = #{id}
+    </where>
+  </select>
+  
+  <select id="todayPoint" resultType="int">
+    SELECT TOTAL
+      FROM VIEW_TODAY_POINT
+  </select>
+  
+  <select id="totalPoint" resultType="int">
+    SELECT TOTAL
+      FROM VIEW_TOTAL_POINT
+  </select>
+  
+  <select id="totalExchangePoint" resultType="int">
+    SELECT TOTAL
+      FROM VIEW_TOTAL_EXCHANGE_POINT
+  </select>
+  
+  <insert id="insert" parameterType="pointLogVO">
+  </insert>
+  
+  <update id="update" parameterType="pointLogVO">
+  </update>
+  
+  <update id="delete" parameterType="long">
+  </update>
+
+</mapper>

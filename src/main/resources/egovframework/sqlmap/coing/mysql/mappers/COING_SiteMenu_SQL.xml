@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.site.service.impl.SiteMenuMapper">
+
+	<resultMap id="siteMenu" type="egovframework.coing.site.vo.SiteMenuVO">
+		<result property="sinId" column="SIN_ID" />
+		<result property="smeId" column="SME_ID" />
+		<result property="smeParntsId" column="SME_PARNTS_ID" />
+		<result property="smeName" column="SME_NAME" />
+		<result property="smeContent" column="SME_CONTENT" />
+		<result property="smeDescription" column="SME_DESCRIPTION" />
+		<result property="smeKeyword" column="SME_KEYWORD" />
+		<result property="smeTheme" column="SME_THEME" />
+		<result property="smeLayout" column="SME_LAYOUT" />
+		<result property="smeType" column="SME_TYPE" />
+		<result property="smeLinkTarget" column="SME_LINK_TARGET" />
+		<result property="smeLinkUrl" column="SME_LINK_URL" />
+		<result property="smeLinkParam" column="SME_LINK_PARAM" />
+		<result property="smeLinkSmeId" column="SME_LINK_SME_ID" />
+		<result property="smeLinkBrdId" column="SME_LINK_BRD_ID" />
+		<result property="smeLinkPrgId" column="SME_LINK_PRG_ID" />
+		<result property="smePopupLeft" column="SME_POPUP_LEFT" />
+		<result property="smePopupTop" column="SME_POPUP_TOP" />
+		<result property="smePopupWidth" column="SME_POPUP_WIDTH" />
+		<result property="smePopupHeight" column="SME_POPUP_HEIGHT" />
+		<result property="smePopupScrollAt" column="SME_POPUP_SCROLL_AT" />
+		<result property="smePermitView" column="SME_PERMIT_VIEW" />
+		<result property="smePermitViewGubun" column="SME_PERMIT_VIEW_GUBUN" />
+		<result property="smeLimitView" column="SME_LIMIT_VIEW" />
+		<result property="smeMainmenuYn" column="SME_MAINMENU_YN" />
+		<result property="smeShowYn" column="SME_SHOW_YN" />
+		<result property="smeUseYn" column="SME_USE_YN" />
+		<result property="smeSitemapYn" column="SME_SITEMAP_YN" />
+		<result property="smeLoginViewYn" column="SME_LOGIN_VIEW_YN" />
+		<result property="smeKoglType" column="SME_KOGL_TYPE" />
+		<result property="smeLft" column="SME_LFT" />
+		<result property="smeRgt" column="SME_RGT" />
+		<result property="smeLvl" column="SME_LVL" />
+		<result property="smeRegDttm" column="SME_REG_DTTM" />
+		<result property="smeRegId" column="SME_REG_ID" />
+		<result property="smeRegIp" column="SME_REG_IP" />
+		<result property="smeUpdtDttm" column="SME_UPDT_DTTM" />
+		<result property="smeUpdtId" column="SME_UPDT_ID" />
+		<result property="smeUpdtIp" column="SME_UPDT_IP" />
+		<result property="appointStaffAt" column="APPOINT_STAFF_AT"/>
+		<result property="showSatisAt" column="SHOW_SATIS_AT"/>
+		<result property="ordId" column="ORD_ID"/>
+		<result property="orsId" column="ORS_ID"/>
+	</resultMap>
+
+	<resultMap id="siteMenuJson" type="egovframework.coing.site.vo.SiteMenuJsonVO">
+		<result property="sinId" column="SIN_ID" />
+		<result property="smeId" column="SME_ID" />
+		<result property="smeParntsId" column="SME_PARNTS_ID" />
+		<result property="smeName" column="SME_NAME" />
+		<result property="smeContent" column="SME_CONTENT" />
+		<result property="smeDescription" column="SME_DESCRIPTION" />
+		<result property="smeKeyword" column="SME_KEYWORD" />
+		<result property="smeTheme" column="SME_THEME" />
+		<result property="smeLayout" column="SME_LAYOUT" />
+		<result property="smeType" column="SME_TYPE" />
+		<result property="smeLinkTarget" column="SME_LINK_TARGET" />
+		<result property="smeLinkUrl" column="SME_LINK_URL" />
+		<result property="smeLinkParam" column="SME_LINK_PARAM" />
+		<result property="smeLinkSmeId" column="SME_LINK_SME_ID" />
+		<result property="smeLinkBrdId" column="SME_LINK_BRD_ID" />
+		<result property="smeLinkPrgId" column="SME_LINK_PRG_ID" />
+		<result property="smePopupLeft" column="SME_POPUP_LEFT" />
+		<result property="smePopupTop" column="SME_POPUP_TOP" />
+		<result property="smePopupWidth" column="SME_POPUP_WIDTH" />
+		<result property="smePopupHeight" column="SME_POPUP_HEIGHT" />
+		<result property="smePopupScrollAt" column="SME_POPUP_SCROLL_AT" />
+		<result property="smePermitView" column="SME_PERMIT_VIEW" />
+		<result property="smePermitViewGubun" column="SME_PERMIT_VIEW_GUBUN" />
+		<result property="smeLimitView" column="SME_LIMIT_VIEW" />
+		<result property="smeMainmenuYn" column="SME_MAINMENU_YN" />
+		<result property="smeShowYn" column="SME_SHOW_YN" />
+		<result property="smeUseYn" column="SME_USE_YN" />
+		<result property="smeSitemapYn" column="SME_SITEMAP_YN" />
+		<result property="smeLoginViewYn" column="SME_LOGIN_VIEW_YN" />
+		<result property="smeKoglType" column="SME_KOGL_TYPE" />
+		<result property="smeLvl" column="SME_LVL" />	
+	</resultMap>
+
+	<select id="selectSiteMenuList" parameterType="siteMenuVO" resultMap="siteMenu">			 
+		SELECT  A.SIN_ID
+			 ,  A.SME_ID
+			 ,  A.SME_PARNTS_ID
+			 ,  A.SME_NAME
+			 ,  A.SME_SHOW_YN
+			 ,  A.SME_USE_YN
+			 ,  A.SME_LVL	 			 
+		  FROM	COING_SITE_MENU A
+	 	 WHERE	1=1
+		   AND	A.SIN_ID = #{sinId}
+	  ORDER BY  A.SME_LFT ASC
+	</select>
+
+	<select id="selectSiteMenuRootMenuId" parameterType="siteMenuVO" resultType="int">
+		SELECT  IFNULL(MAX(SME_ID),0) AS smeId
+		  FROM  COING_SITE_MENU
+		 WHERE  SIN_ID = #{sinId}
+		   AND  SME_PARNTS_ID = 0
+	</select>
+
+	<select id="selectParentSiteMenuList" parameterType="siteMenuVO" resultMap="siteMenu">
+		SELECT  PARENT.SIN_ID
+			 ,  PARENT.SME_ID
+			 ,  PARENT.SME_PARNTS_ID
+			 ,  PARENT.SME_NAME
+			 ,  PARENT.SME_TYPE
+			 ,  PARENT.SME_LINK_TARGET
+			 ,  PARENT.SME_LINK_URL
+			 ,  PARENT.SME_LINK_PARAM
+			 ,  PARENT.SME_LINK_SME_ID
+			 ,  PARENT.SME_LINK_BRD_ID
+			 ,  PARENT.SME_LINK_PRG_ID
+			 ,  PARENT.SME_THEME
+			 ,  PARENT.SME_LAYOUT
+			 ,  PARENT.SME_SHOW_YN
+			 ,  PARENT.SME_USE_YN
+			 ,  PARENT.SME_MAINMENU_YN
+			 ,  PARENT.SME_LVL
+		  FROM  COING_SITE_MENU NODE
+		     ,  COING_SITE_MENU PARENT
+		 WHERE  NODE.SME_LFT BETWEEN PARENT.SME_LFT AND PARENT.SME_RGT
+		   AND  PARENT.SME_ID != #{smeId}
+		   AND  NODE.SME_ID = #{smeId}
+		   AND  PARENT.SIN_ID = #{sinId}
+		   AND  NODE.SIN_ID = #{sinId}
+	  ORDER BY  PARENT.SME_LFT ASC
+	</select>
+
+	<select id="selectSiteMenu" parameterType="siteMenuVO" resultMap="siteMenu">
+		SELECT  A.SIN_ID
+			 ,  A.SME_ID
+			 ,  A.SME_PARNTS_ID
+			 ,  A.SME_NAME
+			 ,  A.SME_CONTENT
+			 ,  A.SME_DESCRIPTION
+			 ,  A.SME_KEYWORD
+			 ,  A.SME_THEME
+			 ,  A.SME_LAYOUT
+			 ,  A.SME_TYPE
+			 ,  A.SME_LINK_TARGET
+			 ,  A.SME_LINK_URL
+			 ,  A.SME_LINK_PARAM
+			 ,  A.SME_LINK_SME_ID
+			 ,  A.SME_LINK_BRD_ID
+			 ,  A.SME_LINK_PRG_ID
+			 ,  A.SME_POPUP_LEFT
+			 ,  A.SME_POPUP_TOP
+			 ,  A.SME_POPUP_WIDTH
+			 ,  A.SME_POPUP_HEIGHT
+			 ,  A.SME_POPUP_SCROLL_AT
+			 ,  A.SME_PERMIT_VIEW
+			 ,  A.SME_PERMIT_VIEW_GUBUN
+			 ,  A.SME_LIMIT_VIEW
+			 ,  A.SME_MAINMENU_YN
+			 ,  A.SME_SHOW_YN
+			 ,  A.SME_USE_YN
+			 ,  A.SME_SITEMAP_YN
+			 ,  A.SME_LOGIN_VIEW_YN
+			 ,  A.SME_KOGL_TYPE
+			 ,  A.SME_LFT
+			 ,  A.SME_RGT
+			 ,  A.SME_LVL
+			 ,  A.SME_REG_DTTM
+			 ,  A.SME_REG_ID
+			 ,  A.SME_REG_IP
+			 ,  A.SME_UPDT_DTTM
+			 ,  A.SME_UPDT_ID
+			 ,  A.SME_UPDT_IP
+			 ,  A.ORD_ID
+			 ,  A.ORS_ID
+			 ,  A.SHOW_SATIS_AT
+			 ,  A.APPOINT_STAFF_AT
+			 ,  (CASE
+				WHEN A.ORS_ID IS NOT NULL THEN (SELECT ORS_NAME FROM COING_ORGNZT_STAFF WHERE ORS_ID = A.ORS_ID)
+				ELSE ''
+			 END) AS orsName
+			 ,  (CASE
+				WHEN A.ORD_ID IS NOT NULL THEN (SELECT ORD_NAME FROM COING_ORGNZT_DEPT WHERE ORD_ID = A.ORD_ID)
+				ELSE ''
+			END) AS ordName
+			 <!--  ,  (
+					SELECT  REPLACE(SUBSTR(XMLAGG(XMLELEMENT(x,'|||',PARENT.MENU_NM) ORDER BY PARENT.LFT).EXTRACT('//text()'),4),'|||',' > ')
+					  FROM  COING_SITE_MENU NODE
+					     ,  COING_SITE_MENU PARENT
+					 WHERE  NODE.LFT BETWEEN PARENT.LFT AND PARENT.RGT
+					   AND  PARENT.LVL != 1
+					   AND  NODE.MENU_ID = A.MENU_ID
+					   AND  PARENT.SITE_ID = A.SITE_ID
+					   AND  NODE.SITE_ID = A.SITE_ID
+			 ) AS menuPath  -->
+			 
+		  FROM  COING_SITE_MENU A
+		 WHERE  A.SIN_ID = #{sinId}
+		   AND  A.SME_ID = #{smeId}
+	</select>
+
+	<insert id="insertSiteMenu" parameterType="siteMenuVO">
+		<selectKey keyProperty="smeId" resultType="integer" order="BEFORE">
+			SELECT  IFNULL(MAX(SME_ID),0)+1 FROM COING_SITE_MENU WHERE SIN_ID = #{sinId}
+		</selectKey>
+		<![CDATA[
+		INSERT
+		  INTO  COING_SITE_MENU
+		     (  SIN_ID
+		     ,  SME_ID
+		     ,  SME_PARNTS_ID
+		     ,  SME_NAME
+		     ,  SME_CONTENT
+		     ,  SME_DESCRIPTION
+		     ,  SME_KEYWORD
+		     ,  SME_THEME
+		     ,  SME_LAYOUT
+		     ,  SME_TYPE
+		     ,  SME_LINK_TARGET
+		     ,  SME_LINK_URL
+		     ,  SME_LINK_PARAM
+		     ,  SME_LINK_SME_ID
+		     ,  SME_LINK_BRD_ID
+		     ,  SME_LINK_PRG_ID
+		     ,  SME_POPUP_LEFT
+		     ,  SME_POPUP_TOP
+		     ,  SME_POPUP_WIDTH
+		     ,  SME_POPUP_HEIGHT
+		     ,  SME_POPUP_SCROLL_AT
+		     ,  SME_PERMIT_VIEW
+		     ,  SME_PERMIT_VIEW_GUBUN
+		     ,  SME_LIMIT_VIEW
+		     ,  SME_MAINMENU_YN
+		     ,  SME_SHOW_YN
+		     ,  SME_USE_YN
+		     ,  SME_SITEMAP_YN
+		     ,  SME_LOGIN_VIEW_YN
+		     ,  SME_KOGL_TYPE
+		     ,  SME_LFT
+		     ,  SME_RGT
+		     ,  SME_LVL
+		     ,  SME_REG_DTTM
+		     ,  SME_REG_ID
+		     ,  SME_REG_IP
+		     ,  ORD_ID
+			 ,  ORS_ID
+			 ,  SHOW_SATIS_AT
+			 ,  APPOINT_STAFF_AT
+		     )
+		VALUES
+		     (  #{sinId}
+			 ,  #{smeId}
+			 ,  #{smeParntsId}
+			 ,  #{smeName, jdbcType=VARCHAR}
+			 ,  #{smeContent, jdbcType=VARCHAR}
+			 ,  #{smeDescription, jdbcType=VARCHAR}
+			 ,  #{smeKeyword, jdbcType=VARCHAR}
+			 ,  #{smeTheme, jdbcType=VARCHAR}
+			 ,  #{smeLayout, jdbcType=VARCHAR}
+			 ,  #{smeType, jdbcType=VARCHAR}
+			 ,  #{smeLinkTarget, jdbcType=VARCHAR}
+			 ,  #{smeLinkUrl, jdbcType=VARCHAR}
+			 ,  #{smeLinkParam, jdbcType=VARCHAR}
+			 ,  #{smeLinkSmeId}
+			 ,  #{smeLinkBrdId, jdbcType=VARCHAR}
+			 ,  #{smeLinkPrgId}
+			 ,  #{smePopupLeft}
+			 ,  #{smePopupTop}
+			 ,  #{smePopupWidth}
+			 ,  #{smePopupHeight}
+			 ,  #{smePopupScrollAt, jdbcType=VARCHAR}
+			 ,  #{smePermitView}
+			 ,  #{smePermitViewGubun}
+			 ,  #{smeLimitView, jdbcType=VARCHAR}
+			 ,  #{smeMainmenuYn, jdbcType=VARCHAR}
+			 ,  #{smeShowYn, jdbcType=VARCHAR}
+			 ,  #{smeUseYn, jdbcType=VARCHAR}
+			 ,  #{smeSitemapYn, jdbcType=VARCHAR}
+			 ,  #{smeLoginViewYn, jdbcType=VARCHAR}
+			 ,  #{smeKoglType}
+			 ,  #{smeLft}
+			 ,  #{smeRgt}
+			 ,  #{smeLvl}
+			 ,  NOW()
+			 ,  #{smeRegId, jdbcType=VARCHAR}
+			 ,  #{smeRegIp, jdbcType=VARCHAR}
+			 ,  #{ordId, jdbcType=VARCHAR}
+			 ,  #{orsId, jdbcType=VARCHAR}
+			 ,  #{showSatisAt, jdbcType=VARCHAR}
+			 ,  #{appointStaffAt, jdbcType=VARCHAR}
+		     )
+		]]>
+	</insert>
+
+	<update id="updateSiteMenu">
+		UPDATE  COING_SITE_MENU
+		   SET  SME_NAME = #{smeName, jdbcType=VARCHAR}
+		     ,  SME_CONTENT = #{smeContent, jdbcType=VARCHAR}
+		     ,  SME_DESCRIPTION = #{smeDescription, jdbcType=VARCHAR}
+		     ,  SME_KEYWORD = #{smeKeyword, jdbcType=VARCHAR}
+		     ,  SME_THEME = #{smeTheme, jdbcType=VARCHAR}
+		     ,  SME_LAYOUT = #{smeLayout, jdbcType=VARCHAR}
+		     ,  SME_TYPE = #{smeType, jdbcType=VARCHAR}
+		     ,  SME_LINK_TARGET = #{smeLinkTarget, jdbcType=VARCHAR}
+		     ,  SME_LINK_URL = #{smeLinkUrl, jdbcType=VARCHAR}
+		     ,  SME_LINK_PARAM = #{smeLinkParam, jdbcType=VARCHAR}
+		     ,  SME_LINK_SME_ID = #{smeLinkSmeId}
+		     ,  SME_LINK_BRD_ID = #{smeLinkBrdId, jdbcType=VARCHAR}
+		     ,  SME_LINK_PRG_ID = #{smeLinkPrgId, jdbcType=VARCHAR}
+		     ,  SME_POPUP_LEFT = #{smePopupLeft}
+		     ,  SME_POPUP_TOP = #{smePopupTop}
+		     ,  SME_POPUP_WIDTH = #{smePopupWidth}
+		     ,  SME_POPUP_HEIGHT = #{smePopupHeight}
+		     ,  SME_POPUP_SCROLL_AT = #{smePopupScrollAt, jdbcType=VARCHAR}
+		     ,  SME_PERMIT_VIEW = #{smePermitView}
+		     ,  SME_PERMIT_VIEW_GUBUN = #{smePermitViewGubun}
+		     ,  SME_LIMIT_VIEW = #{smeLimitView, jdbcType=VARCHAR}
+		     ,  SME_MAINMENU_YN = #{smeMainmenuYn, jdbcType=VARCHAR}
+		     ,  SME_SHOW_YN = #{smeShowYn, jdbcType=VARCHAR}
+		     ,  SME_USE_YN = #{smeUseYn, jdbcType=VARCHAR}
+		     ,  SME_SITEMAP_YN = #{smeSitemapYn, jdbcType=VARCHAR}
+		     ,  SME_LOGIN_VIEW_YN = #{smeLoginViewYn, jdbcType=VARCHAR}
+		     ,  SME_KOGL_TYPE = #{smeKoglType}
+		     ,  SME_UPDT_DTTM = NOW()
+		     ,  SME_UPDT_ID = #{smeUpdtId, jdbcType=VARCHAR}
+		     ,  SME_UPDT_IP = #{smeUpdtIp, jdbcType=VARCHAR}
+		     ,  ORD_ID = #{ordId, jdbcType=VARCHAR}
+			 ,  ORS_ID = #{orsId, jdbcType=VARCHAR}
+		     ,  APPOINT_STAFF_AT = #{appointStaffAt, jdbcType=VARCHAR}
+		     ,  SHOW_SATIS_AT = #{showSatisAt, jdbcType=VARCHAR}
+		 WHERE  SIN_ID = #{sinId}
+		   AND  SME_ID = #{smeId}
+	</update>
+	
+	<update id="updateChildrenSiteMenu">
+		UPDATE  COING_SITE_MENU
+		   SET  SIN_ID = #{sinId}
+			<if test='updateChildrenDesign != null and updateChildrenDesign == "Y"'>
+			 ,  SME_THEME = #{smeTheme}
+			 ,  SME_LAYOUT = #{smeLayout}
+			</if>
+		<![CDATA[
+		 WHERE  SIN_ID = #{sinId}
+		   AND  (SME_LFT > #{smeLft} AND SME_RGT < #{smeRgt})
+		]]>
+	</update>	
+
+	<update id="updateSiteMenuLftForInsert">
+	<![CDATA[
+		UPDATE  COING_SITE_MENU
+		   SET  SME_LFT = SME_LFT + 2
+		 WHERE  SIN_ID = #{sinId}
+		   AND  SME_LFT > #{smeLft}
+	]]>
+	</update>
+
+	<update id="updateSiteMenuRgtForInsert">
+	<![CDATA[
+		UPDATE  COING_SITE_MENU
+		   SET  SME_RGT = SME_RGT + 2
+		 WHERE  SIN_ID = #{sinId}
+		   AND  SME_RGT > #{smeRgt}
+	]]>
+	</update>
+
+    <delete id="deleteSiteMenu">
+		DELETE
+		  FROM  COING_SITE_MENU
+		 WHERE  SIN_ID = #{sinId}
+		   AND  SME_LFT BETWEEN #{smeLft}
+		   AND  #{smeRgt}
+    </delete>
+
+    <delete id="deleteSiteMenuBySiteId">
+		DELETE
+		  FROM  COING_SITE_MENU
+		 WHERE  SIN_ID = #{sinId}
+    </delete>
+
+	<update id="updateSiteMenuLftForDelete">
+	<![CDATA[
+		UPDATE  COING_SITE_MENU
+		   SET  SME_LFT = SME_LFT - #{width}
+		 WHERE  SIN_ID = #{sinId}
+		   AND  SME_LFT > #{smeLft}
+	]]>
+	</update>
+
+	<update id="updateSiteMenuRgtForDelete">
+	<![CDATA[
+		UPDATE  COING_SITE_MENU
+		   SET  SME_RGT = SME_RGT - #{width}
+		 WHERE  SIN_ID = #{sinId}
+		   AND  SME_RGT > #{smeRgt}
+	]]>
+	</update>
+
+	<update id="updateSiteMenuMove">
+		UPDATE  COING_SITE_MENU
+		   SET  SME_PARNTS_ID = #{smeParntsId}
+			 ,  SME_LVL = #{smeLvl}
+			 ,  SME_LFT = #{smeLft}
+			 ,  SME_RGT = #{smeRgt}
+		 WHERE  SIN_ID = #{sinId}
+		   AND  SME_ID = #{smeId}
+	</update>
+
+	<select id="selectSiteMenuJsonList" parameterType="siteMenuJsonVO" resultMap="siteMenuJson">
+		SELECT  A.SIN_ID
+			 ,  A.SME_ID
+			 ,  A.SME_PARNTS_ID
+			 ,  A.SME_NAME
+			 ,  A.SME_CONTENT
+			 ,  A.SME_DESCRIPTION
+			 ,  A.SME_KEYWORD
+			 ,  A.SME_THEME
+			 ,  A.SME_LAYOUT
+			 ,  A.SME_TYPE
+			 ,  A.SME_LINK_TARGET
+			 ,  A.SME_LINK_URL
+			 ,  A.SME_LINK_PARAM
+			 ,  A.SME_LINK_SME_ID
+			 ,  A.SME_LINK_BRD_ID
+			 ,  A.SME_LINK_PRG_ID
+			 ,  A.SME_POPUP_LEFT
+			 ,  A.SME_POPUP_TOP
+			 ,  A.SME_POPUP_WIDTH
+			 ,  A.SME_POPUP_HEIGHT
+			 ,  A.SME_POPUP_SCROLL_AT
+			 ,  A.SME_PERMIT_VIEW
+			 ,  A.SME_PERMIT_VIEW_GUBUN
+			 ,  A.SME_LIMIT_VIEW
+			 ,  A.SME_MAINMENU_YN
+			 ,  A.SME_SITEMAP_YN
+			 ,  A.SME_LOGIN_VIEW_YN
+			 ,  A.SME_KOGL_TYPE
+			 ,  A.SME_LVL
+		  FROM  COING_SITE_MENU A
+		 WHERE  A.SIN_ID = #{sinId}
+		   AND  A.SME_SHOW_YN = 'Y'
+		   AND  A.SME_USE_YN = 'Y'
+	  ORDER BY  A.SME_LFT ASC
+	</select>
+
+	<select id="selectSearchSiteMenuList" parameterType="searchDocumentVO" resultType="searchDocumentVO">
+		SELECT  A.INDEX_KEY indexKey
+			 ,  A.SITE_ID siteId
+			 ,  A.CODE code
+			 ,  A.TITLE title
+			 ,  A.CONTENT content
+			 ,  A.REG_DATE regDate
+			 ,  A.UPDT_DATE updtDate
+			 ,  A.LINK_URL linkUrl
+			 ,  A.NAVI navi
+		  FROM  VIEW_SEARCH_SITE_MENU A
+		 WHERE  1=1
+		 	<if test='siteId != null and siteId != ""'>
+		   AND  A.SITE_ID = #{siteId}
+		    </if>
+	</select>
+
+</mapper>

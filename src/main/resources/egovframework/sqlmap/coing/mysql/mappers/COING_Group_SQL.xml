@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.GroupMapper">
+
+	<resultMap id="group" type="egovframework.coing.cmm.vo.GroupVO">
+		<result property="grpId" column="GRP_ID" />
+		<result property="grpName" column="GRP_NAME" />
+		<result property="grpContent" column="GRP_CONTENT" />
+		<result property="grpOrderNo" column="GRP_ORDER_NO" />
+		<result property="grpRegDttm" column="GRP_REG_DTTM" />
+		<result property="grpRegId" column="GRP_REG_ID" />
+		<result property="grpRegIp" column="GRP_REG_IP" />
+		<result property="grpUpdtDttm" column="GRP_UPDT_DTTM" />
+		<result property="grpUpdtId" column="GRP_UPDT_ID" />
+		<result property="grpUpdtIp" column="GRP_UPDT_IP" />	
+	</resultMap>
+	
+	<select id="selectGroupList" parameterType="groupVO" resultMap="group">
+		SELECT  A.GRP_ID
+			 ,  A.GRP_NAME
+			 ,  A.GRP_CONTENT
+			 ,  A.GRP_ORDER_NO
+			 ,  A.SYSTEM_YN AS systemYn
+		  FROM  VIEW_GROUP A
+		 WHERE  1=1
+		 	<if test='systemYn != null and systemYn != ""'>
+		   AND  A.SYSTEM_YN = #{systemYn}
+		 	</if>
+	  ORDER BY  A.ORDER_NO ASC, A.GRP_ORDER_NO ASC
+	</select>
+
+
+	<select id="selectGroup" parameterType="groupVO" resultMap="group">
+		SELECT  A.GRP_ID
+			 ,  A.GRP_NAME
+			 ,  A.GRP_CONTENT
+			 ,  A.GRP_ORDER_NO
+			 ,  A.SYSTEM_YN AS systemYn			 
+		  FROM  VIEW_GROUP A
+		 WHERE  A.GRP_ID = #{grpId}
+		 	<if test='systemYn != null and systemYn != ""'>
+		   AND  A.SYSTEM_YN = #{systemYn}
+		 	</if>		 
+	</select>
+
+
+	<insert id="insertGroup">
+		INSERT
+		  INTO  COING_GROUP
+		     (  GRP_ID
+		     ,  GRP_NAME
+		     ,  GRP_CONTENT
+		     ,  GRP_ORDER_NO
+		     ,  GRP_REG_DTTM
+		     ,  GRP_REG_ID
+		     ,  GRP_REG_IP
+		     )
+		VALUES
+		     (  #{grpId}
+			 ,  #{grpName, jdbcType=VARCHAR}
+			 ,  #{grpContent, jdbcType=VARCHAR}
+			 ,  #{grpOrderNo}
+			 ,  NOW()
+			 ,  #{grpRegId, jdbcType=VARCHAR}
+			 ,  #{grpRegIp, jdbcType=VARCHAR}
+		     )
+	</insert>
+
+
+	<update id="updateGroup">
+		UPDATE  COING_GROUP
+		   SET  GRP_NAME = #{grpName, jdbcType=VARCHAR}
+		     ,  GRP_CONTENT = #{grpContent, jdbcType=VARCHAR}
+		     ,  GRP_ORDER_NO = #{grpOrderNo}
+		     ,  GRP_UPDT_DTTM = NOW()
+		     ,  GRP_UPDT_ID = #{grpUpdtId, jdbcType=VARCHAR}
+		     ,  GRP_UPDT_IP = #{grpUpdtIp, jdbcType=VARCHAR}
+		 WHERE  GRP_ID = #{grpId}
+	</update>
+
+
+	<update id="deleteGroup">
+		DELETE  
+		  FROM  COING_GROUP
+		 WHERE  GRP_ID = #{grpId}
+	</update>
+	
+</mapper>

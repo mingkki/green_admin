@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.board.service.impl.BoardInfoMapper">
+
+	<resultMap id="boardInfo" type="egovframework.coing.board.vo.BoardInfoVO">
+		<result property="brdId" column="BRD_ID"/>
+		<result property="brdName" column="BRD_NAME"/>
+		<result property="brdSummary" column="BRD_SUMMARY"/>
+		<result property="brdSkin" column="BRD_SKIN"/>
+		<result property="brdSubjectLen" column="BRD_SUBJECT_LEN"/>
+		<result property="brdPermitRead" column="BRD_PERMIT_READ"/>
+		<result property="brdLimitRead" column="BRD_LIMIT_READ"/>
+		<result property="brdRealnameReadYn" column="BRD_REALNAME_READ_YN"/>
+		<result property="brdPermitWrite" column="BRD_PERMIT_WRITE"/>
+		<result property="brdLimitWrite" column="BRD_LIMIT_WRITE"/>
+		<result property="brdRealnameWriteYn" column="BRD_REALNAME_WRITE_YN"/>
+		<result property="brdPermitReply" column="BRD_PERMIT_REPLY"/>
+		<result property="brdLimitReply" column="BRD_LIMIT_REPLY"/>
+		<result property="brdRealnameReplyYn" column="BRD_REALNAME_REPLY_YN"/>
+		<result property="brdPermitComment" column="BRD_PERMIT_COMMENT"/>
+		<result property="brdLimitComment" column="BRD_LIMIT_COMMENT"/>
+		<result property="brdRealnameCommentYn" column="BRD_REALNAME_COMMENT_YN"/>
+		<result property="brdPermitUpload" column="BRD_PERMIT_UPLOAD"/>
+		<result property="brdLimitUpload" column="BRD_LIMIT_UPLOAD"/>
+		<result property="brdRealnameUploadYn" column="BRD_REALNAME_UPLOAD_YN"/>
+		<result property="brdPermitDownload" column="BRD_PERMIT_DOWNLOAD"/>
+		<result property="brdLimitDownload" column="BRD_LIMIT_DOWNLOAD"/>
+		<result property="brdRealnameDownloadYn" column="BRD_REALNAME_DOWNLOAD_YN"/>
+		<result property="brdPermitNotice" column="BRD_PERMIT_NOTICE"/>
+		<result property="brdLimitNotice" column="BRD_LIMIT_NOTICE"/>
+		<result property="brdPermitEditor" column="BRD_PERMIT_EDITOR"/>
+		<result property="brdLimitEditor" column="BRD_LIMIT_EDITOR"/>
+		<result property="brdRealnameEditorYn" column="BRD_REALNAME_EDITOR_YN"/>
+		<result property="brdNewPeriod" column="BRD_NEW_PERIOD"/>
+		<result property="brdPerPage" column="BRD_PER_PAGE"/>
+		<result property="brdHeadHtml" column="BRD_HEAD_HTML"/>
+		<result property="brdTailHtml" column="BRD_TAIL_HTML"/>
+		<result property="brdWriteBtnYn" column="BRD_WRITE_BTN_YN"/>
+		<result property="brdNoticeYn" column="BRD_NOTICE_YN"/>
+		<result property="brdEditorYn" column="BRD_EDITOR_YN"/>
+		<result property="brdReplyYn" column="BRD_REPLY_YN"/>
+		<result property="brdCommentYn" column="BRD_COMMENT_YN"/>
+		<result property="brdCommentReplyYn" column="BRD_COMMENT_REPLY_YN"/>
+		<result property="brdPeriodYn" column="BRD_PERIOD_YN"/>
+		<result property="brdCategoryYn" column="BRD_CATEGORY_YN"/>
+		<result property="brdProgressYn" column="BRD_PROGRESS_YN"/>
+		<result property="brdSecretAt" column="BRD_SECRET_AT"/>
+		<result property="brdViewDelYn" column="BRD_VIEW_DEL_YN"/>
+		<result property="brdRestoreYn" column="BRD_RESTORE_YN"/>
+		<result property="brdMyselfYn" column="BRD_MYSELF_YN"/>
+		<result property="brdRssYn" column="BRD_RSS_YN"/>
+		<result property="brdHidenameYn" column="BRD_HIDENAME_YN"/>
+		<result property="brdPrivacyClause" column="BRD_PRIVACY_CLAUSE"/>
+		<result property="brdUploadYn" column="BRD_UPLOAD_YN"/>
+		<result property="brdUploadCnt" column="BRD_UPLOAD_CNT"/>
+		<result property="brdUploadSize" column="BRD_UPLOAD_SIZE"/>
+		<result property="brdUploadExt" column="BRD_UPLOAD_EXT"/>
+		<result property="brdIpGubun" column="BRD_IP_GUBUN"/>
+		<result property="brdCheckIp" column="BRD_CHECK_IP"/>
+		<result property="brdIdGubun" column="BRD_ID_GUBUN"/>
+		<result property="brdCheckId" column="BRD_CHECK_ID"/>
+		<result property="brdLimitWordYn" column="BRD_LIMIT_WORD_YN"/>
+		<result property="brdLimitWord" column="BRD_LIMIT_WORD"/>
+		<result property="brdUseYn" column="BRD_USE_YN"/>
+		<result property="brdRegDttm" column="BRD_REG_DTTM"/>
+		<result property="brdRegId" column="BRD_REG_ID"/>
+		<result property="brdRegIp" column="BRD_REG_IP"/>
+		<result property="brdUpdtDttm" column="BRD_UPDT_DTTM"/>
+		<result property="brdUpdtId" column="BRD_UPDT_ID"/>
+		<result property="brdUpdtIp" column="BRD_UPDT_IP"/>
+	</resultMap>
+	
+	<sql id="boardInfoListWhere">
+		AND  A.BRD_DEL_YN = 'N'
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "brdName"'>AND A.BRD_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+		<if test='brdUseYn != null and brdUseYn != ""'>
+			AND  A.BRD_USE_YN = #{brdUseYn}			
+		</if>		
+	</sql>
+
+	<select id="selectBoardInfoListCnt" parameterType="boardInfoVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_BOARD_INFO A
+		 WHERE  1=1
+		   		<include refid="boardInfoListWhere" />
+	</select>
+
+
+	<select id="selectBoardInfoList" parameterType="boardInfoVO" resultMap="boardInfo">
+		SELECT  A.BRD_ID
+			 ,  A.BRD_NAME
+			 ,  A.BRD_SUMMARY
+			 ,  A.BRD_SKIN
+			 ,  A.BRD_SUBJECT_LEN
+			 ,  A.BRD_PERMIT_READ
+			 ,  A.BRD_LIMIT_READ
+			 ,  A.BRD_REALNAME_READ_YN
+			 ,  A.BRD_PERMIT_WRITE
+			 ,  A.BRD_LIMIT_WRITE
+			 ,  A.BRD_REALNAME_WRITE_YN
+			 ,  A.BRD_PERMIT_REPLY
+			 ,  A.BRD_LIMIT_REPLY
+			 ,  A.BRD_REALNAME_REPLY_YN
+			 ,  A.BRD_PERMIT_COMMENT
+			 ,  A.BRD_LIMIT_COMMENT
+			 ,  A.BRD_REALNAME_COMMENT_YN
+			 ,  A.BRD_PERMIT_UPLOAD
+			 ,  A.BRD_LIMIT_UPLOAD
+			 ,  A.BRD_REALNAME_UPLOAD_YN
+			 ,  A.BRD_PERMIT_DOWNLOAD
+			 ,  A.BRD_LIMIT_DOWNLOAD
+			 ,  A.BRD_REALNAME_DOWNLOAD_YN
+			 ,  A.BRD_PERMIT_NOTICE
+			 ,  A.BRD_LIMIT_NOTICE
+			 ,  A.BRD_PERMIT_EDITOR
+			 ,  A.BRD_LIMIT_EDITOR
+			 ,  A.BRD_REALNAME_EDITOR_YN
+			 ,  A.BRD_NEW_PERIOD
+			 ,  A.BRD_CATEGORY_YN
+			 ,  A.BRD_PROGRESS_YN
+			 ,  A.BRD_USE_YN
+			 ,  A.BRD_REG_DTTM
+			 ,  A.BRD_REG_ID
+			 ,  A.BRD_REG_IP
+		  FROM  COING_BOARD_INFO A
+		 WHERE  1=1
+		   		<include refid="boardInfoListWhere" />
+	  ORDER BY  A.BRD_ID DESC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}	
+	</select>
+	
+	
+	<select id="selectBoardInfoListAll" parameterType="boardInfoVO" resultMap="boardInfo">
+		SELECT  A.BRD_ID
+			 ,  A.BRD_NAME
+			 ,  A.BRD_SUMMARY
+			 ,  A.BRD_SKIN
+			 ,  A.BRD_SUBJECT_LEN
+			 ,  A.BRD_PERMIT_READ
+			 ,  A.BRD_LIMIT_READ
+			 ,  A.BRD_REALNAME_READ_YN
+			 ,  A.BRD_PERMIT_WRITE
+			 ,  A.BRD_LIMIT_WRITE
+			 ,  A.BRD_REALNAME_WRITE_YN
+			 ,  A.BRD_PERMIT_REPLY
+			 ,  A.BRD_LIMIT_REPLY
+			 ,  A.BRD_REALNAME_REPLY_YN
+			 ,  A.BRD_PERMIT_COMMENT
+			 ,  A.BRD_LIMIT_COMMENT
+			 ,  A.BRD_REALNAME_COMMENT_YN
+			 ,  A.BRD_PERMIT_UPLOAD
+			 ,  A.BRD_LIMIT_UPLOAD
+			 ,  A.BRD_REALNAME_UPLOAD_YN
+			 ,  A.BRD_PERMIT_DOWNLOAD
+			 ,  A.BRD_LIMIT_DOWNLOAD
+			 ,  A.BRD_REALNAME_DOWNLOAD_YN
+			 ,  A.BRD_PERMIT_NOTICE
+			 ,  A.BRD_LIMIT_NOTICE
+			 ,  A.BRD_PERMIT_EDITOR
+			 ,  A.BRD_LIMIT_EDITOR
+			 ,  A.BRD_REALNAME_EDITOR_YN
+			 ,  A.BRD_NEW_PERIOD
+			 ,  A.BRD_CATEGORY_YN
+			 ,  A.BRD_PROGRESS_YN			 
+			 ,  A.BRD_USE_YN
+			 ,  A.BRD_REG_DTTM
+			 ,  A.BRD_REG_ID
+			 ,  A.BRD_REG_IP
+		  FROM  COING_BOARD_INFO A
+		 WHERE  1=1
+		   		<include refid="boardInfoListWhere" />
+	  ORDER BY  A.BRD_ID DESC	
+	</select>	
+
+
+	<select id="selectBoardInfo" parameterType="boardInfoVO" resultMap="boardInfo">
+		SELECT  A.BRD_ID
+			 ,  A.BRD_NAME
+			 ,  A.BRD_SUMMARY
+			 ,  A.BRD_SKIN
+			 ,  A.BRD_SUBJECT_LEN
+			 ,  A.BRD_PERMIT_READ
+			 ,  A.BRD_LIMIT_READ
+			 ,  A.BRD_REALNAME_READ_YN
+			 ,  A.BRD_PERMIT_WRITE
+			 ,  A.BRD_LIMIT_WRITE
+			 ,  A.BRD_REALNAME_WRITE_YN
+			 ,  A.BRD_PERMIT_REPLY
+			 ,  A.BRD_LIMIT_REPLY
+			 ,  A.BRD_REALNAME_REPLY_YN
+			 ,  A.BRD_PERMIT_COMMENT
+			 ,  A.BRD_LIMIT_COMMENT
+			 ,  A.BRD_REALNAME_COMMENT_YN
+			 ,  A.BRD_PERMIT_UPLOAD
+			 ,  A.BRD_LIMIT_UPLOAD
+			 ,  A.BRD_REALNAME_UPLOAD_YN
+			 ,  A.BRD_PERMIT_DOWNLOAD
+			 ,  A.BRD_LIMIT_DOWNLOAD
+			 ,  A.BRD_REALNAME_DOWNLOAD_YN
+			 ,  A.BRD_PERMIT_NOTICE
+			 ,  A.BRD_LIMIT_NOTICE
+			 ,  A.BRD_PERMIT_EDITOR
+			 ,  A.BRD_LIMIT_EDITOR
+			 ,  A.BRD_REALNAME_EDITOR_YN
+			 ,  A.BRD_NEW_PERIOD
+			 ,  A.BRD_PER_PAGE
+			 ,  A.BRD_HEAD_HTML
+			 ,  A.BRD_TAIL_HTML
+			 ,  A.BRD_WRITE_BTN_YN
+			 ,  A.BRD_NOTICE_YN
+			 ,  A.BRD_EDITOR_YN
+			 ,  A.BRD_REPLY_YN
+			 ,  A.BRD_COMMENT_YN
+			 ,  A.BRD_COMMENT_REPLY_YN
+			 ,  A.BRD_PERIOD_YN
+			 ,  A.BRD_CATEGORY_YN
+			 ,  A.BRD_PROGRESS_YN
+			 ,  A.BRD_SECRET_AT
+			 ,  A.BRD_VIEW_DEL_YN
+			 ,  A.BRD_RESTORE_YN
+			 ,  A.BRD_MYSELF_YN
+			 ,  A.BRD_RSS_YN
+			 ,  A.BRD_HIDENAME_YN
+			 ,  A.BRD_PRIVACY_CLAUSE
+			 ,  A.BRD_UPLOAD_YN
+			 ,  A.BRD_UPLOAD_CNT
+			 ,  A.BRD_UPLOAD_SIZE
+			 ,  A.BRD_UPLOAD_EXT
+			 ,  A.BRD_IP_GUBUN
+			 ,  A.BRD_CHECK_IP
+			 ,  A.BRD_ID_GUBUN
+			 ,  A.BRD_CHECK_ID
+			 ,  A.BRD_LIMIT_WORD_YN
+			 ,  A.BRD_LIMIT_WORD
+			 ,  A.BRD_USE_YN
+			 ,  A.BRD_REG_DTTM
+			 ,  A.BRD_REG_ID
+			 ,  A.BRD_REG_IP
+			 ,  A.BRD_UPDT_DTTM
+			 ,  A.BRD_UPDT_ID
+			 ,  A.BRD_UPDT_IP
+		  FROM  COING_BOARD_INFO A
+		 WHERE  A.BRD_ID = #{brdId}
+		   AND  A.BRD_DEL_YN = 'N'
+	</select>
+
+
+	<insert id="insertBoardInfo">
+		INSERT
+		  INTO  COING_BOARD_INFO
+		     (  BRD_ID
+		     ,  BRD_NAME
+		     ,  BRD_SUMMARY
+		     ,  BRD_SKIN
+		     ,  BRD_SUBJECT_LEN
+			 ,  BRD_PERMIT_READ
+			 ,  BRD_LIMIT_READ
+			 ,  BRD_REALNAME_READ_YN
+			 ,  BRD_PERMIT_WRITE
+			 ,  BRD_LIMIT_WRITE
+			 ,  BRD_REALNAME_WRITE_YN
+			 ,  BRD_PERMIT_REPLY
+			 ,  BRD_LIMIT_REPLY
+			 ,  BRD_REALNAME_REPLY_YN
+			 ,  BRD_PERMIT_COMMENT
+			 ,  BRD_LIMIT_COMMENT
+			 ,  BRD_REALNAME_COMMENT_YN
+			 ,  BRD_PERMIT_UPLOAD
+			 ,  BRD_LIMIT_UPLOAD
+			 ,  BRD_REALNAME_UPLOAD_YN
+			 ,  BRD_PERMIT_DOWNLOAD
+			 ,  BRD_LIMIT_DOWNLOAD
+			 ,  BRD_REALNAME_DOWNLOAD_YN
+			 ,  BRD_PERMIT_NOTICE
+			 ,  BRD_LIMIT_NOTICE
+			 ,  BRD_PERMIT_EDITOR
+			 ,  BRD_LIMIT_EDITOR
+			 ,  BRD_REALNAME_EDITOR_YN
+		     ,  BRD_NEW_PERIOD
+		     ,  BRD_PER_PAGE
+		     ,  BRD_HEAD_HTML
+		     ,  BRD_TAIL_HTML
+		     ,  BRD_WRITE_BTN_YN
+		     ,  BRD_NOTICE_YN
+		     ,  BRD_EDITOR_YN
+		     ,  BRD_REPLY_YN
+		     ,  BRD_COMMENT_YN
+		     ,  BRD_COMMENT_REPLY_YN
+		     ,  BRD_PERIOD_YN
+		     ,  BRD_CATEGORY_YN
+		     ,  BRD_PROGRESS_YN
+		     ,  BRD_SECRET_AT
+		     ,  BRD_VIEW_DEL_YN
+		     ,  BRD_RESTORE_YN
+		     ,  BRD_MYSELF_YN
+		     ,  BRD_RSS_YN
+		     ,  BRD_HIDENAME_YN
+		     ,  BRD_PRIVACY_CLAUSE
+		     ,  BRD_UPLOAD_YN
+		     ,  BRD_UPLOAD_CNT
+		     ,  BRD_UPLOAD_SIZE
+		     ,  BRD_UPLOAD_EXT
+		     ,  BRD_IP_GUBUN
+		     ,  BRD_CHECK_IP
+		     ,  BRD_ID_GUBUN
+		     ,  BRD_CHECK_ID
+		     ,  BRD_LIMIT_WORD_YN
+		     ,  BRD_LIMIT_WORD
+		     ,  BRD_USE_YN
+		     ,  BRD_REG_DTTM
+		     ,  BRD_REG_ID
+		     ,  BRD_REG_IP
+		     ,  BRD_DEL_YN
+		     )
+		VALUES
+		     (  #{brdId}
+			 ,  #{brdName, jdbcType=VARCHAR}
+			 ,  #{brdSummary, jdbcType=VARCHAR}
+			 ,  #{brdSkin, jdbcType=VARCHAR}
+			 ,  #{brdSubjectLen}
+			 ,  #{brdPermitRead}
+			 ,  #{brdLimitRead, jdbcType=VARCHAR}
+			 ,  #{brdRealnameReadYn, jdbcType=VARCHAR}
+			 ,  #{brdPermitWrite}
+			 ,  #{brdLimitWrite, jdbcType=VARCHAR}
+			 ,  #{brdRealnameWriteYn, jdbcType=VARCHAR}
+			 ,  #{brdPermitReply}
+			 ,  #{brdLimitReply, jdbcType=VARCHAR}
+			 ,  #{brdRealnameReplyYn, jdbcType=VARCHAR}
+			 ,  #{brdPermitComment}
+			 ,  #{brdLimitComment, jdbcType=VARCHAR}
+			 ,  #{brdRealnameCommentYn, jdbcType=VARCHAR}
+			 ,  #{brdPermitUpload}
+			 ,  #{brdLimitUpload, jdbcType=VARCHAR}
+			 ,  #{brdRealnameUploadYn, jdbcType=VARCHAR}
+			 ,  #{brdPermitDownload}
+			 ,  #{brdLimitDownload, jdbcType=VARCHAR}
+			 ,  #{brdRealnameDownloadYn, jdbcType=VARCHAR}
+			 ,  #{brdPermitNotice}
+			 ,  #{brdLimitNotice, jdbcType=VARCHAR}
+			 ,  #{brdPermitEditor}
+			 ,  #{brdLimitEditor, jdbcType=VARCHAR}
+			 ,  #{brdRealnameEditorYn, jdbcType=VARCHAR}
+			 ,  #{brdNewPeriod}
+			 ,  #{brdPerPage}
+			 ,  #{brdHeadHtml, jdbcType=VARCHAR}
+			 ,  #{brdTailHtml, jdbcType=VARCHAR}
+			 ,  #{brdWriteBtnYn, jdbcType=VARCHAR}
+			 ,  #{brdNoticeYn, jdbcType=VARCHAR}
+			 ,  #{brdEditorYn, jdbcType=VARCHAR}
+			 ,  #{brdReplyYn, jdbcType=VARCHAR}
+			 ,  #{brdCommentYn, jdbcType=VARCHAR}
+			 ,  #{brdCommentReplyYn, jdbcType=VARCHAR}
+			 ,  #{brdPeriodYn, jdbcType=VARCHAR}
+			 ,  #{brdCategoryYn, jdbcType=VARCHAR}
+			 ,  #{brdProgressYn, jdbcType=VARCHAR}
+			 ,  #{brdSecretAt, jdbcType=VARCHAR}
+			 ,  #{brdViewDelYn, jdbcType=VARCHAR}
+			 ,  #{brdRestoreYn, jdbcType=VARCHAR}
+			 ,  #{brdMyselfYn, jdbcType=VARCHAR}
+			 ,  #{brdRssYn, jdbcType=VARCHAR}
+			 ,  #{brdHidenameYn, jdbcType=VARCHAR}
+			 ,  #{brdPrivacyClause, jdbcType=VARCHAR}
+			 ,  #{brdUploadYn, jdbcType=VARCHAR}
+			 ,  #{brdUploadCnt}
+			 ,  #{brdUploadSize}
+			 ,  #{brdUploadExt, jdbcType=VARCHAR}
+			 ,  #{brdIpGubun, jdbcType=VARCHAR}
+			 ,  #{brdCheckIp, jdbcType=VARCHAR}
+			 ,  #{brdIdGubun, jdbcType=VARCHAR}
+			 ,  #{brdCheckId, jdbcType=VARCHAR}
+			 ,  #{brdLimitWordYn, jdbcType=VARCHAR}
+			 ,  #{brdLimitWord, jdbcType=VARCHAR}
+			 ,  #{brdUseYn, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  #{brdRegId, jdbcType=VARCHAR}
+			 ,  #{brdRegIp, jdbcType=VARCHAR}
+			 ,  'N'
+		     )
+	</insert>
+
+
+	<update id="updateBoardInfo">
+		UPDATE  COING_BOARD_INFO
+		   SET  BRD_NAME = #{brdName, jdbcType=VARCHAR}
+		     ,  BRD_SUMMARY = #{brdSummary, jdbcType=VARCHAR}
+		     ,  BRD_SKIN = #{brdSkin, jdbcType=VARCHAR}
+		     ,  BRD_SUBJECT_LEN = #{brdSubjectLen}
+		     ,  BRD_PERMIT_READ = #{brdPermitRead}
+		     ,  BRD_LIMIT_READ = #{brdLimitRead, jdbcType=VARCHAR}
+		     ,  BRD_REALNAME_READ_YN = #{brdRealnameReadYn, jdbcType=VARCHAR}
+		     ,  BRD_PERMIT_WRITE = #{brdPermitWrite}
+		     ,  BRD_LIMIT_WRITE = #{brdLimitWrite, jdbcType=VARCHAR}
+		     ,  BRD_REALNAME_WRITE_YN = #{brdRealnameWriteYn, jdbcType=VARCHAR}
+		     ,  BRD_PERMIT_REPLY = #{brdPermitReply}
+		     ,  BRD_LIMIT_REPLY = #{brdLimitReply, jdbcType=VARCHAR}
+		     ,  BRD_REALNAME_REPLY_YN = #{brdRealnameReplyYn, jdbcType=VARCHAR}
+		     ,  BRD_PERMIT_COMMENT = #{brdPermitComment}
+		     ,  BRD_LIMIT_COMMENT = #{brdLimitComment, jdbcType=VARCHAR}
+		     ,  BRD_REALNAME_COMMENT_YN = #{brdRealnameCommentYn, jdbcType=VARCHAR}
+		     ,  BRD_PERMIT_UPLOAD = #{brdPermitUpload}
+		     ,  BRD_LIMIT_UPLOAD = #{brdLimitUpload, jdbcType=VARCHAR}
+		     ,  BRD_REALNAME_UPLOAD_YN = #{brdRealnameUploadYn, jdbcType=VARCHAR}
+		     ,  BRD_PERMIT_DOWNLOAD = #{brdPermitDownload}
+		     ,  BRD_LIMIT_DOWNLOAD = #{brdLimitDownload, jdbcType=VARCHAR}
+		     ,  BRD_REALNAME_DOWNLOAD_YN = #{brdRealnameDownloadYn, jdbcType=VARCHAR}
+		     ,  BRD_PERMIT_NOTICE = #{brdPermitNotice}
+		     ,  BRD_LIMIT_NOTICE = #{brdLimitNotice, jdbcType=VARCHAR}
+		     ,  BRD_PERMIT_EDITOR = #{brdPermitEditor}
+		     ,  BRD_LIMIT_EDITOR = #{brdLimitEditor, jdbcType=VARCHAR}
+		     ,  BRD_REALNAME_EDITOR_YN = #{brdRealnameEditorYn, jdbcType=VARCHAR}
+		     ,  BRD_NEW_PERIOD = #{brdNewPeriod}
+		     ,  BRD_PER_PAGE = #{brdPerPage}
+		     ,  BRD_HEAD_HTML = #{brdHeadHtml, jdbcType=VARCHAR}
+		     ,  BRD_TAIL_HTML = #{brdTailHtml, jdbcType=VARCHAR}
+		     ,  BRD_WRITE_BTN_YN = #{brdWriteBtnYn, jdbcType=VARCHAR}
+		     ,  BRD_NOTICE_YN = #{brdNoticeYn, jdbcType=VARCHAR}
+		     ,  BRD_EDITOR_YN = #{brdEditorYn, jdbcType=VARCHAR}
+		     ,  BRD_REPLY_YN = #{brdReplyYn, jdbcType=VARCHAR}
+		     ,  BRD_COMMENT_YN = #{brdCommentYn, jdbcType=VARCHAR}
+		     ,  BRD_COMMENT_REPLY_YN = #{brdCommentReplyYn, jdbcType=VARCHAR}
+		     ,  BRD_PERIOD_YN = #{brdPeriodYn, jdbcType=VARCHAR}
+		     ,  BRD_CATEGORY_YN = #{brdCategoryYn, jdbcType=VARCHAR}
+		     ,  BRD_PROGRESS_YN = #{brdProgressYn, jdbcType=VARCHAR}
+		     ,  BRD_SECRET_AT = #{brdSecretAt, jdbcType=VARCHAR}
+		     ,  BRD_VIEW_DEL_YN = #{brdViewDelYn, jdbcType=VARCHAR}
+		     ,  BRD_RESTORE_YN = #{brdRestoreYn, jdbcType=VARCHAR}
+		     ,  BRD_MYSELF_YN = #{brdMyselfYn, jdbcType=VARCHAR}
+		     ,  BRD_RSS_YN = #{brdRssYn, jdbcType=VARCHAR}
+		     ,  BRD_HIDENAME_YN = #{brdHidenameYn, jdbcType=VARCHAR}
+		     ,  BRD_PRIVACY_CLAUSE = #{brdPrivacyClause, jdbcType=VARCHAR}
+		     ,  BRD_UPLOAD_YN = #{brdUploadYn, jdbcType=VARCHAR}
+		     ,  BRD_UPLOAD_CNT = #{brdUploadCnt}
+		     ,  BRD_UPLOAD_SIZE = #{brdUploadSize}
+		     ,  BRD_UPLOAD_EXT = #{brdUploadExt, jdbcType=VARCHAR}
+		     ,  BRD_IP_GUBUN = #{brdIpGubun, jdbcType=VARCHAR}
+		     ,  BRD_CHECK_IP = #{brdCheckIp, jdbcType=VARCHAR}
+		     ,  BRD_ID_GUBUN = #{brdIdGubun, jdbcType=VARCHAR}
+		     ,  BRD_CHECK_ID = #{brdCheckId, jdbcType=VARCHAR}
+		     ,  BRD_LIMIT_WORD_YN = #{brdLimitWordYn, jdbcType=VARCHAR}
+		     ,  BRD_LIMIT_WORD = #{brdLimitWord, jdbcType=VARCHAR}
+		     ,  BRD_USE_YN = #{brdUseYn, jdbcType=VARCHAR}
+		     ,  BRD_UPDT_DTTM = NOW()
+		     ,  BRD_UPDT_ID = #{brdUpdtId, jdbcType=VARCHAR}
+		     ,  BRD_UPDT_IP = #{brdUpdtIp, jdbcType=VARCHAR}
+		 WHERE  BRD_ID = #{brdId}
+		   AND  BRD_DEL_YN = 'N'
+	</update>
+
+
+	<update id="deleteBoardInfo">
+		UPDATE  COING_BOARD_INFO
+		   SET  BRD_DEL_YN = 'Y'
+			 ,  BRD_DEL_DTTM = NOW()
+			 ,  BRD_DEL_ID = #{brdDelId, jdbcType=VARCHAR}
+			 ,  BRD_DEL_IP = #{brdDelIp, jdbcType=VARCHAR}
+		 WHERE  BRD_ID = #{brdId}
+		   AND  BRD_DEL_YN = 'N'	
+	</update>
+	
+	<select id="selectSearchBoardWriteList" parameterType="searchDocumentVO" resultType="searchDocumentVO">
+		SELECT  A.INDEX_KEY indexKey
+			 ,  A.SITE_ID siteId
+			 ,  A.CODE code
+			 ,  A.TITLE title
+			 ,  A.CONTENT content
+			 ,  A.REG_DATE regDate
+			 ,  A.UPDT_DATE updtDate
+			 ,  A.LINK_URL linkUrl
+			 ,  A.NAVI navi
+		  FROM  VIEW_SEARCH_BOARD_WRITE A
+		 WHERE  1=1
+		 	<if test='siteId != null and siteId != ""'>
+		   AND  A.SITE_ID = #{siteId}
+		    </if>
+	</select>	
+	
+	<select id="selectSearchBoardFileList" parameterType="searchDocumentVO" resultType="searchDocumentVO">
+		SELECT  A.INDEX_KEY indexKey
+			 ,  A.SITE_ID siteId
+			 ,  A.CODE code
+			 ,  A.TITLE title
+			 ,  A.CONTENT content
+			 ,  A.REG_DATE regDate
+			 ,  A.UPDT_DATE updtDate
+			 ,  A.LINK_URL linkUrl
+			 ,  A.NAVI navi
+		  FROM  VIEW_SEARCH_BOARD_FILE A
+		 WHERE  1=1
+		 	<if test='siteId != null and siteId != ""'>
+		   AND  A.SITE_ID = #{siteId}
+		    </if>
+	</select>	
+
+</mapper>

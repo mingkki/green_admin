@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.AdminMenuMapper">
+
+	<resultMap id="adminMenu" type="egovframework.coing.cmm.vo.AdminMenuVO">
+		<result property="ameId" column="AME_ID" />
+		<result property="ameParntsId" column="AME_PARNTS_ID" />
+		<result property="ameName" column="AME_NAME" />
+		<result property="amePname" column="AME_PNAME" />
+		<result property="ameType" column="AME_TYPE" />
+		<result property="ameLinkTarget" column="AME_LINK_TARGET" />
+		<result property="ameLinkUrl" column="AME_LINK_URL" />
+		<result property="ameLinkParam" column="AME_LINK_PARAM" />
+		<result property="amePopupParam" column="AME_POPUP_PARAM" />
+		<result property="ameShowYn" column="AME_SHOW_YN" />
+		<result property="ameUseYn" column="AME_USE_YN" />
+		<result property="ameLft" column="AME_LFT" />
+		<result property="ameRgt" column="AME_RGT" />
+		<result property="ameLvl" column="AME_LVL" />
+		<result property="ameRegDttm" column="AME_REG_DTTM" />
+		<result property="ameRegId" column="AME_REG_ID" />
+		<result property="ameRegIp" column="AME_REG_IP" />
+		<result property="ameUpdtDttm" column="AME_UPDT_DTTM" />
+		<result property="ameUpdtId" column="AME_UPDT_ID" />
+		<result property="ameUpdtIp" column="AME_UPDT_IP" />	
+	</resultMap>
+
+	<select id="selectAdminMenuList" parameterType="adminMenuVO" resultMap="adminMenu">
+		SELECT  A.AME_ID
+			 ,  A.AME_PARNTS_ID
+			 ,  A.AME_NAME
+			 ,  A.AME_PNAME
+			 ,  A.AME_TYPE
+			 ,  A.AME_LINK_TARGET
+			 ,  A.AME_LINK_URL
+			 ,  A.AME_LINK_PARAM
+			 ,  A.AME_SHOW_YN
+			 ,  A.AME_USE_YN
+			 ,  A.AME_LVL
+		  FROM  COING_ADMIN_MENU A
+	  ORDER BY  A.AME_LFT ASC
+	</select>
+
+	<select id="selectParentAdminMenuList" parameterType="adminMenuVO" resultMap="adminMenu">
+		SELECT  PARENT.AME_ID
+			 ,  PARENT.AME_PARNTS_ID
+			 ,  PARENT.AME_NAME
+			 ,  PARENT.AME_PNAME
+			 ,  PARENT.AME_TYPE
+			 ,  PARENT.AME_LINK_TARGET
+			 ,  PARENT.AME_LINK_URL
+			 ,  PARENT.AME_LINK_PARAM
+			 ,  PARENT.AME_SHOW_YN
+			 ,  PARENT.AME_USE_YN
+			 ,  PARENT.AME_LVL
+		  FROM  COING_ADMIN_MENU NODE
+		     ,  COING_ADMIN_MENU PARENT
+		 WHERE  NODE.AME_LFT BETWEEN PARENT.AME_LFT AND PARENT.AME_RGT
+		   AND  PARENT.AME_ID != #{ameId}
+		   AND  NODE.AME_ID = #{ameId}
+	  ORDER BY  PARENT.AME_LFT ASC
+	</select>
+
+	<select id="selectChildrenAdminMenuList" parameterType="adminMenuVO" resultMap="adminMenu">
+		SELECT  NODE.AME_ID
+			 ,  NODE.AME_PARNTS_ID
+			 ,  NODE.AME_NAME
+			 ,  NODE.AME_PNAME
+			 ,  NODE.AME_TYPE
+			 ,  NODE.AME_LINK_TARGET
+			 ,  NODE.AME_LINK_URL
+			 ,  NODE.AME_LINK_PARAM
+			 ,  NODE.AME_SHOW_YN
+			 ,  NODE.AME_USE_YN
+			 ,  NODE.AME_LVL
+		  FROM  COING_ADMIN_MENU NODE
+		     ,  COING_ADMIN_MENU PARENT
+		 WHERE  NODE.AME_LFT BETWEEN PARENT.AME_LFT AND PARENT.AME_RGT
+		   AND  NODE.AME_ID != #{ameId}
+		   AND  PARENT.AME_ID = #{ameId}
+	  ORDER BY  NODE.AME_LFT ASC
+	</select>
+
+	<select id="selectAdminMenu" parameterType="adminMenuVO" resultMap="adminMenu">
+		SELECT  A.AME_ID
+			 ,  A.AME_PARNTS_ID
+			 ,  A.AME_NAME
+			 ,  A.AME_PNAME
+			 ,  A.AME_TYPE
+			 ,  A.AME_LINK_TARGET
+			 ,  A.AME_LINK_URL
+			 ,  A.AME_LINK_PARAM
+			 ,  A.AME_SHOW_YN
+			 ,  A.AME_USE_YN
+			 ,  A.AME_LFT
+			 ,  A.AME_RGT
+			 ,  A.AME_LVL
+		  FROM  COING_ADMIN_MENU A
+		 WHERE  A.AME_ID = #{ameId}
+	</select>
+
+	<select id="selectAdminMenuByMenuTy" parameterType="adminMenuVO" resultMap="adminMenu">
+		SELECT  A.AME_ID
+			 ,  A.AME_PARNTS_ID
+			 ,  A.AME_NAME
+			 ,  A.AME_PNAME
+			 ,  A.AME_TYPE
+			 ,  A.AME_LINK_TARGET
+			 ,  A.AME_LINK_URL
+			 ,  A.AME_LINK_PARAM
+			 ,  A.AME_SHOW_YN
+			 ,  A.AME_USE_YN
+			 ,  A.AME_LFT
+			 ,  A.AME_RGT
+			 ,  A.AME_LVL
+		  FROM  COING_ADMIN_MENU A
+		 WHERE  A.AME_TYPE = #{ameType}
+		   AND  A.AME_LINK_URL = #{ameLinkUrl}
+		 LIMIT  1
+	</select>
+
+	<select id="selectAdminMenuRootMenuId" parameterType="adminMenuVO" resultType="int">
+		SELECT  IFNULL(MAX(AME_ID),0) AS ameId
+		  FROM  COING_ADMIN_MENU
+		 WHERE  AME_PARNTS_ID = 0
+	</select>
+
+
+	<insert id="insertAdminMenu" parameterType="adminMenuVO">
+		<selectKey keyProperty="ameId" resultType="integer" order="BEFORE">
+			SELECT  IFNULL(MAX(AME_ID),0)+1 FROM COING_ADMIN_MENU
+		</selectKey>
+		<![CDATA[
+		INSERT
+		  INTO  COING_ADMIN_MENU
+		     (  AME_ID
+			 ,  AME_PARNTS_ID
+			 ,  AME_NAME
+			 ,  AME_PNAME
+			 ,  AME_TYPE
+			 ,  AME_LINK_TARGET
+			 ,  AME_LINK_URL
+			 ,  AME_LINK_PARAM
+			 ,  AME_POPUP_PARAM
+			 ,  AME_SHOW_YN
+			 ,  AME_USE_YN
+			 ,  AME_LFT
+			 ,  AME_RGT
+			 ,  AME_LVL
+			 ,  AME_REG_DTTM
+			 ,  AME_REG_ID
+			 ,  AME_REG_IP
+		     )
+		VALUES
+		     (  #{ameId}
+			 ,  #{ameParntsId}
+			 ,  #{ameName, jdbcType=VARCHAR}
+			 ,  #{amePname, jdbcType=VARCHAR}
+			 ,  #{ameType, jdbcType=VARCHAR}
+			 ,  #{ameLinkTarget, jdbcType=VARCHAR}
+			 ,  #{ameLinkUrl, jdbcType=VARCHAR}
+			 ,  #{ameLinkParam, jdbcType=VARCHAR}
+			 ,  #{amePopupParam, jdbcType=VARCHAR}
+			 ,  #{ameShowYn, jdbcType=VARCHAR}
+			 ,  #{ameUseYn, jdbcType=VARCHAR}
+			 ,  #{ameLft}
+			 ,  #{ameRgt}
+			 ,  #{ameLvl}
+			 ,  NOW()
+			 ,  #{ameRegId, jdbcType=VARCHAR}
+			 ,  #{ameRegIp, jdbcType=VARCHAR}
+		     )
+		]]>
+	</insert>
+
+	<update id="updateAdminMenu">
+		UPDATE  COING_ADMIN_MENU
+		   SET  AME_NAME = #{ameName, jdbcType=VARCHAR}
+		     ,  AME_PNAME = #{amePname, jdbcType=VARCHAR}
+			 ,  AME_TYPE = #{ameType, jdbcType=VARCHAR}
+			 ,  AME_LINK_TARGET = #{ameLinkTarget, jdbcType=VARCHAR}
+			 ,  AME_LINK_URL = #{ameLinkUrl, jdbcType=VARCHAR}
+			 ,  AME_LINK_PARAM = #{ameLinkParam, jdbcType=VARCHAR}
+			 ,  AME_POPUP_PARAM = #{amePopupParam, jdbcType=VARCHAR}
+			 ,  AME_SHOW_YN = #{ameShowYn, jdbcType=VARCHAR}
+			 ,  AME_USE_YN = #{ameUseYn, jdbcType=VARCHAR}
+			 ,  AME_UPDT_DTTM = NOW()
+			 ,  AME_UPDT_ID = #{ameUpdtId, jdbcType=VARCHAR}
+			 ,  AME_UPDT_IP = #{ameUpdtIp, jdbcType=VARCHAR}
+		 WHERE  AME_ID = #{ameId}
+	</update>
+
+	<update id="updateAdminMenuLftForInsert">
+	<![CDATA[
+		UPDATE  COING_ADMIN_MENU
+		   SET  AME_LFT = AME_LFT + 2
+		 WHERE  AME_LFT > #{ameLft}
+	]]>
+	</update>
+
+	<update id="updateAdminMenuRgtForInsert">
+	<![CDATA[
+		UPDATE  COING_ADMIN_MENU
+		   SET  AME_RGT = AME_RGT + 2
+		 WHERE  AME_RGT > #{ameRgt}
+	]]>
+	</update>
+
+    <delete id="deleteAdminMenu">
+		DELETE
+		  FROM  COING_ADMIN_MENU
+		 WHERE  AME_LFT BETWEEN #{ameLft}
+		   AND  #{ameRgt}
+    </delete>
+
+	<update id="updateAdminMenuLftForDelete">
+	<![CDATA[
+		UPDATE  COING_ADMIN_MENU
+		   SET  AME_LFT = AME_LFT - #{width}
+		 WHERE  AME_LFT > #{ameLft}
+	]]>
+	</update>
+
+	<update id="updateAdminMenuRgtForDelete">
+	<![CDATA[
+		UPDATE  COING_ADMIN_MENU
+		   SET  AME_RGT = AME_RGT - #{width}
+		 WHERE  AME_RGT > #{ameRgt}
+	]]>
+	</update>
+
+	<update id="updateAdminMenuMove">
+		UPDATE  COING_ADMIN_MENU
+		   SET  AME_PARNTS_ID = #{ameParntsId}
+			 ,  AME_LVL = #{ameLvl}
+			 ,  AME_LFT = #{ameLft}
+			 ,  AME_RGT = #{ameRgt}
+		 WHERE  AME_ID = #{ameId}
+	</update>
+
+</mapper>

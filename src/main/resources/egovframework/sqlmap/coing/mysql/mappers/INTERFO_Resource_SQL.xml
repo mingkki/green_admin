@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.resource.service.impl.ResourceMapper">
+
+  <select id="selectAll" resultType="resourceVO">
+    SELECT *
+      FROM INTERFO_RESOURCE
+    <where>
+      AND DEL_YN = 'N'
+    </where>
+  </select>
+
+  <select id="select" resultType="resourceVO" parameterType="resourceVO">
+    SELECT *
+      FROM INTERFO_RESOURCE
+     <where>
+        AND DEL_YN = 'N'
+     </where>
+  </select>
+  
+  <select id="count" resultType="int" parameterType="resourceVO">
+    SELECT COUNT(*)
+      FROM INTERFO_RESOURCE
+     <where>
+        AND DEL_YN = 'N'
+     </where>
+  </select>
+  
+  <select id="selectOne" resultType="resourceVO">
+    SELECT *
+      FROM INTERFO_RESOURCE
+    <where>
+       AND DEL_YN = 'N'
+       AND ID = #{id}
+    </where>
+  </select>
+  
+  <insert id="insert" parameterType="resourceVO">
+    INSERT INTO INTERFO_RESOURCE
+    (
+      NAME
+    , POINT
+    )
+    VALUES
+    (
+      #{name}
+    , #{point}
+    )
+  </insert>
+  
+  <update id="update" parameterType="resourceVO">
+    UPDATE INTERFO_RESOURCE
+       SET NAME  = #{name}
+         , POINT = #{point}
+     WHERE ID = #{id}
+  </update>
+  
+  <update id="delete" parameterType="long">
+    UPDATE INTERFO_RESOURCE
+       SET DEL_YN = 'Y'
+     WHERE ID = #{id}
+  </update>
+
+</mapper>

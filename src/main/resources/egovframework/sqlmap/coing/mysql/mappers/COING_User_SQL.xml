@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.UserMapper">
+
+	<resultMap id="login" type="egovframework.coing.cmm.vo.LoginVO">
+		<result property="id" column="ID"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="name" column="NAME"/>
+		<result property="userLevel" column="USER_LEVEL"/>
+		<result property="userGroup" column="USER_GROUP"/>
+		<result property="lastloginDttm" column="LASTLOGIN_DTTM"/>
+		<result property="lastloginIp" column="LASTLOGIN_IP"/>
+		<result property="pwchangeDttm" column="PWCHANGE_DTTM"/>
+		<result property="loginfailDttm" column="LOGINFAIL_DTTM"/>
+		<result property="loginfailCnt" column="LOGINFAIL_CNT"/>
+		<result property="delYn" column="DEL_YN"/>
+		<result property="status" column="STATUS"/>
+		<result property="userSe" column="USER_SE"/>
+	</resultMap>
+
+	<resultMap id="userLoginLog" type="egovframework.coing.cmm.vo.UserLoginLogVO">
+		<result property="ullId" column="ULL_ID"/>
+		<result property="sinId" column="SIN_ID"/>
+		<result property="ullSuccessYn" column="ULL_SUCCESS_YN"/>
+		<result property="ullUserId" column="ULL_USER_ID"/>
+		<result property="ullDttm" column="ULL_DTTM"/>
+		<result property="ullIp" column="ULL_IP"/>
+		<result property="ullMessage" column="ULL_MESSAGE"/>
+		<result property="ullUseragent" column="ULL_USERAGENT"/>
+		<result property="ullBrowser" column="ULL_BROWSER"/>
+		<result property="ullBrowserType" column="ULL_BROWSER_TYPE"/>
+		<result property="ullOs" column="ULL_OS"/>
+		<result property="ullDeviceType" column="ULL_DEVICE_TYPE"/>
+		<result property="ullUrl" column="ULL_URL"/>
+		<result property="ullReferer" column="ULL_REFERER"/>
+		<result property="ullSessionId" column="ULL_SESSION_ID"/>
+		<result property="ullCmsYn" column="ULL_CMS_YN"/>
+	</resultMap>
+	
+	<!-- 일반 로그인 -->
+	<select id="actionLogin" resultMap="login">
+		SELECT  ID
+			 ,  PASSWORD
+			 ,  NAME
+			 ,  USER_LEVEL
+			 ,  USER_GROUP
+			 ,  LASTLOGIN_DTTM
+			 ,  LASTLOGIN_IP
+			 ,  PWCHANGE_DTTM
+			 ,  LOGINFAIL_DTTM
+			 ,  LOGINFAIL_CNT
+			 ,  STATUS
+			 ,  USER_SE
+		  FROM  VIEW_USER_MASTER
+		 WHERE  ID = #{id}
+		   AND  STATUS != 'D'
+		   AND  DEL_YN = 'N'
+	</select>
+
+	<select id="selectUserMaster" resultMap="login">
+		SELECT  ID
+			 ,  PASSWORD
+			 ,  NAME
+			 ,  USER_LEVEL
+			 ,  USER_GROUP
+			 ,  LASTLOGIN_DTTM
+			 ,  LASTLOGIN_IP
+			 ,  PWCHANGE_DTTM
+			 ,  STATUS
+			 ,  USER_SE
+			 ,  DEL_YN
+			 ,  LOGINFAIL_DTTM
+			 ,  LOGINFAIL_CNT			 
+		  FROM  VIEW_USER_MASTER
+		 WHERE  ID = #{id}
+	</select>
+	
+	<!-- 장비담당자만 -->
+	<select id="selectStfMng" resultMap="login">
+		SELECT
+			*
+		FROM
+		(
+			SELECT 
+				ORS_LOGIN_ID AS ID
+			 ,  ORS_NAME AS NAME
+			 ,  ORS_LOGIN_LEVEL AS USER_LEVEL
+			 ,  ORS_LOGIN_STATUS AS STATUS
+			 ,  'STF' AS USER_SE
+			 ,  ORS_MNG_YN AS ORS_MNG_YN
+			 ,  (CASE WHEN ORS_USE_YN = 'Y' THEN 'N' ELSE 'Y' END) AS DEL_YN				
+			FROM COING_ORGNZT_STAFF
+			UNION
+			SELECT
+				MNG_ID AS ID
+			 ,  MNG_NAME AS NAME
+			 ,  MNG_LEVEL AS USER_LEVEL
+			 ,  MNG_STATUS AS STATUS
+			 ,  'MNG' AS USER_SE
+			 ,  'Y' AS ORS_MNG_YN
+			 ,  MNG_DEL_YN AS DEL_YN	
+			FROM COING_MANAGER
+		) AS  t
+		WHERE 
+		DEL_YN = 'N'
+		AND ORS_MNG_YN = 'Y'
+		<!--
+		SELECT  
+				ID
+			 ,  NAME
+			 ,  USER_LEVEL
+			 ,  USER_GROUP
+			 ,  LASTLOGIN_DTTM
+			 ,  LASTLOGIN_IP
+			 ,  PWCHANGE_DTTM
+			 ,  STATUS
+			 ,  USER_SE
+			 ,  DEL_YN
+			 ,  LOGINFAIL_DTTM
+			 ,  LOGINFAIL_CNT			 
+		  FROM  VIEW_USER_MASTER
+		 WHERE  STATUS = 'P' AND DEL_YN = 'N'  AND (USER_GROUP = 'MNG' OR USER_GROUP = 'STF')
+		   -->
+	</select>
+	
+	<update id="updateLoginInfo">
+		<choose>
+			<when test='userSe != null and userSe == "MNG"'>
+				UPDATE COING_MANAGER
+				   SET MNG_LASTLOGIN_DTTM = NOW()
+				     , MNG_LASTLOGIN_IP = #{ip}
+				     , MNG_LOGIN_CNT = MNG_LOGIN_CNT + 1
+				     , MNG_LOGINFAIL_DTTM = NULL
+				     , MNG_LOGINFAIL_IP = NULL
+				     , MNG_LOGINFAIL_CNT = 0
+				 WHERE MNG_ID = #{id}
+			</when>
+			<otherwise>
+				UPDATE COING_ORGNZT_STAFF
+				   SET ORS_LOGIN_DTTM = NOW()
+				     , ORS_LOGIN_CNT = ORS_LOGIN_CNT + 1
+				     , ORS_LOGINFAIL_DTTM = NULL
+				     , ORS_LOGINFAIL_IP = NULL
+				     , ORS_LOGINFAIL_CNT = 0
+				 WHERE ORS_LOGIN_ID = #{id}
+			</otherwise>
+		</choose>		
+	</update>	
+		
+	<update id="updateLoginFail">
+		<choose>
+			<when test='userSe != null and userSe == "MNG"'>
+				UPDATE COING_MANAGER
+				   SET MNG_LOGINFAIL_DTTM = NOW()
+				     , MNG_LOGINFAIL_IP = #{ip}
+				     , MNG_LOGINFAIL_CNT = MNG_LOGINFAIL_CNT + 1
+				 WHERE MNG_ID = #{id}
+			</when>
+			<otherwise>
+				UPDATE COING_ORGNZT_STAFF
+				   SET ORS_LOGINFAIL_DTTM = NOW()
+				     , ORS_LOGINFAIL_IP = #{ip}
+				     , ORS_LOGINFAIL_CNT = ORS_LOGINFAIL_CNT + 1
+				 WHERE ORS_LOGIN_ID = #{id}
+			</otherwise>
+		</choose>
+	</update>	
+	
+	<update id="updateLoginFailReset">
+		<choose>
+			<when test='userSe != null and userSe == "MNG"'>
+				UPDATE COING_MANAGER
+				   SET MNG_LOGINFAIL_DTTM = NULL
+				     , MNG_LOGINFAIL_IP = NULL
+				     , MNG_LOGINFAIL_CNT = 0
+				 WHERE MNG_ID = #{id}
+			</when>
+			<otherwise>
+				UPDATE COING_ORGNZT_STAFF
+				   SET ORS_LOGINFAIL_DTTM = NULL
+				     , ORS_LOGINFAIL_IP = NULL
+				     , ORS_LOGINFAIL_CNT = 0
+				 WHERE ORS_LOGIN_ID = #{id}
+			</otherwise>
+		</choose>
+	</update>	
+	
+	
+	
+	<sql id="loginLogListWhere">
+		<if test='gubun != null and gubun != ""'>
+			<choose>
+				<when test='gubun == "oneself"'>AND A.ULL_USER_ID = #{ullUserId}</when>
+		    	<when test='gubun == "member"'>AND B.USER_SE NOT IN ('MNG')</when>
+		    	<when test='gubun == "all"'></when>
+		    	<otherwise>AND B.USER_SE = UPPER(#{gubun})</otherwise>
+			</choose>		
+		</if>
+		<if test='ullCmsYn != null and ullCmsYn != ""'>
+			AND  A.ULL_CMS_YN = #{ullCmsYn}			
+		</if>		
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "brdName"'>AND A.BRD_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+	</sql>
+
+	<select id="selectLoginLogListCnt" parameterType="userLoginLogVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_USER_LOGIN_LOG A
+		  	 ,  VIEW_USER_MASTER B
+		 WHERE  A.ULL_USER_ID = B.ID
+				<include refid="loginLogListWhere" />
+	</select>
+
+	<select id="selectLoginLogList" parameterType="userLoginLogVO" resultMap="userLoginLog">
+		SELECT  A.ULL_ID
+			 ,  A.SIN_ID
+			 ,  A.ULL_SUCCESS_YN
+			 ,  A.ULL_USER_ID
+			 ,  B.NAME AS ullUserNm
+			 ,  A.ULL_DTTM
+			 ,  A.ULL_IP
+			 ,  A.ULL_MESSAGE
+			 ,  A.ULL_USERAGENT
+			 ,  A.ULL_BROWSER
+			 ,  A.ULL_BROWSER_TYPE
+			 ,  A.ULL_OS
+			 ,  A.ULL_DEVICE_TYPE
+			 ,  A.ULL_URL
+			 ,  A.ULL_REFERER
+			 ,  A.ULL_SESSION_ID
+			 ,  A.ULL_CMS_YN
+		  FROM  COING_USER_LOGIN_LOG A
+		  	 ,  VIEW_USER_MASTER B
+		 WHERE  A.ULL_USER_ID = B.ID
+		 		<include refid="loginLogListWhere" />
+	  ORDER BY  A.ULL_ID DESC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}	
+	</select>	
+	
+	<!-- 곽민성  -->
+	<select id="selectLoginLogListAll" parameterType="userLoginLogVO" resultMap="userLoginLog">
+		SELECT  A.ULL_ID
+			 ,  A.SIN_ID
+			 ,  A.ULL_SUCCESS_YN
+			 ,  A.ULL_USER_ID
+			 ,  B.NAME AS ullUserNm
+			 ,  A.ULL_DTTM
+			 ,  A.ULL_IP
+			 ,  A.ULL_MESSAGE
+			 ,  A.ULL_USERAGENT
+			 ,  A.ULL_BROWSER
+			 ,  A.ULL_BROWSER_TYPE
+			 ,  A.ULL_OS
+			 ,  A.ULL_DEVICE_TYPE
+			 ,  A.ULL_URL
+			 ,  A.ULL_REFERER
+			 ,  A.ULL_SESSION_ID
+			 ,  A.ULL_CMS_YN
+		  FROM  COING_USER_LOGIN_LOG A
+		  	 ,  VIEW_USER_MASTER B
+		 WHERE  A.ULL_USER_ID = B.ID
+		   AND A.ULL_USER_ID NOT IN ('admin')
+	  ORDER BY  A.ULL_ID DESC
+	  	 LIMIT 10
+	</select>	
+	
+	<insert id="insertLoginLog">
+		INSERT
+		  INTO  COING_USER_LOGIN_LOG
+		     (  ULL_ID
+		     ,  ULL_SUCCESS_YN
+		     ,  ULL_USER_ID
+		     ,  ULL_DTTM
+		     ,  ULL_IP
+		     ,  ULL_MESSAGE
+		     ,  ULL_USERAGENT
+		     ,  ULL_BROWSER
+		     ,  ULL_BROWSER_TYPE
+		     ,  ULL_OS
+		     ,  ULL_DEVICE_TYPE
+		     ,  ULL_URL
+		     ,  ULL_REFERER
+		     ,  ULL_SESSION_ID
+		     ,  ULL_CMS_YN
+		     )
+		VALUES
+		     (  #{ullId}
+			 ,  #{ullSuccessYn, jdbcType=VARCHAR}
+			 ,  #{ullUserId, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  #{ullIp, jdbcType=VARCHAR}
+			 ,  #{ullMessage, jdbcType=VARCHAR}
+			 ,  #{ullUseragent, jdbcType=VARCHAR}			 
+			 ,  #{ullBrowser, jdbcType=VARCHAR}
+			 ,  #{ullBrowserType, jdbcType=VARCHAR}
+			 ,  #{ullOs, jdbcType=VARCHAR}
+			 ,  #{ullDeviceType, jdbcType=VARCHAR}			 
+			 ,  #{ullUrl, jdbcType=VARCHAR}
+			 ,  #{ullReferer, jdbcType=VARCHAR}
+			 ,  #{ullSessionId, jdbcType=VARCHAR}
+			 ,  'Y'
+		     )
+	</insert>
+	
+	<update id="updatePassword">
+		<if test='userSe != null and userSe == "MNG"'>
+			UPDATE COING_MANAGER
+			   SET MNG_PASSWD = #{password}
+			     , MNG_PWCHANGE_DTTM = NOW()
+			     , MNG_PWCHANGE_IP = #{ip}
+			 WHERE MNG_ID = #{id}
+		</if>	
+		<if test='userSe != null and userSe == "GNR"'>
+			UPDATE COING_MEMBER_GENERAL
+			   SET MEM_PASSWD = #{password}
+			     , MEM_PWCHANGE_DTTM = NOW()
+			     , MEM_PWCHANGE_IP = #{ip}
+			 WHERE MEM_ID = #{id}
+		</if>
+		<if test='userSe != null and userSe == "MNT"'>
+			UPDATE IPL_MENTO_INFO
+			   SET MTIN_LOGIN_PASSWD = #{password}
+			     , MTIN_PWCHANGE_DTTM = NOW()
+			     , MTIN_PWCHANGE_IP = #{ip}
+			 WHERE MTIN_LOGIN_ID = #{id}
+		</if>
+		<if test='userSe != null and userSe == "COM"'>
+			UPDATE IPL_COMPANY_INFO
+			   SET COIN_LOGIN_PASSWD = #{password}
+			     , COIN_PWCHANGE_DTTM = NOW()
+			     , COIN_PWCHANGE_IP = #{ip}
+			 WHERE COIN_LOGIN_ID = #{id}
+		</if>
+		<if test='userSe != null and userSe == "INT"'>
+			UPDATE IPL_INSTITUTION_INFO
+			   SET ININ_LOGIN_PASSWD = #{password}
+			     , ININ_PWCHANGE_DTTM = NOW()
+			     , ININ_PWCHANGE_IP = #{ip}
+			 WHERE ININ_LOGIN_ID = #{id}
+		</if>
+	</update>
+	
+</mapper>

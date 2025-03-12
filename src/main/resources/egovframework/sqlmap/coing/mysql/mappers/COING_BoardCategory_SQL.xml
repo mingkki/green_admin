@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.board.service.impl.BoardCategoryMapper">
+
+	<resultMap id="boardCategory" type="egovframework.coing.board.vo.BoardCategoryVO">
+		<result property="bcaId" column="BCA_ID" />
+		<result property="brdId" column="BRD_ID" />
+		<result property="bcaType" column="BCA_TYPE" />
+		<result property="bcaTitle" column="BCA_TITLE" />
+		<result property="bcaOrderNo" column="BCA_ORDER_NO" />
+		<result property="bcaUseYn" column="BCA_USE_YN" />
+		<result property="bcaRegDttm" column="BCA_REG_DTTM" />
+		<result property="bcaRegId" column="BCA_REG_ID" />
+		<result property="bcaRegIp" column="BCA_REG_IP" />
+		<result property="bcaUpdtDttm" column="BCA_UPDT_DTTM" />
+		<result property="bcaUpdtId" column="BCA_UPDT_ID" />
+		<result property="bcaUpdtIp" column="BCA_UPDT_IP" />
+	</resultMap>
+
+	<select id="selectBoardCategoryList" parameterType="boardCategoryVO" resultMap="boardCategory">
+		SELECT  A.BCA_ID
+			 ,  A.BRD_ID
+			 ,  A.BCA_TYPE
+			 ,  A.BCA_TITLE
+			 ,  A.BCA_ORDER_NO
+			 ,  A.BCA_USE_YN
+			 ,  A.BCA_REG_DTTM
+			 ,  A.BCA_REG_ID
+			 ,  A.BCA_REG_IP
+			 ,  A.BCA_UPDT_DTTM
+			 ,  A.BCA_UPDT_ID
+			 ,  A.BCA_UPDT_IP
+		  FROM  COING_BOARD_CATEGORY A
+		 WHERE  A.BRD_ID = #{brdId}
+		   AND  A.BCA_TYPE = UPPER(#{bcaType})
+		   AND  A.BCA_DEL_YN = 'N'
+	  ORDER BY  A.BCA_ORDER_NO ASC
+	</select>
+
+	<select id="selectBoardCategory" parameterType="boardCategoryVO" resultMap="boardCategory">
+		SELECT  A.BCA_ID
+			 ,  A.BRD_ID
+			 ,  A.BCA_TYPE
+			 ,  A.BCA_TITLE
+			 ,  A.BCA_ORDER_NO
+			 ,  A.BCA_USE_YN
+			 ,  A.BCA_REG_DTTM
+			 ,  A.BCA_REG_ID
+			 ,  A.BCA_REG_IP
+			 ,  A.BCA_UPDT_DTTM
+			 ,  A.BCA_UPDT_ID
+			 ,  A.BCA_UPDT_IP
+		  FROM  COING_BOARD_CATEGORY A
+		 WHERE  A.BCA_ID = #{bcaId}
+		   AND  A.BRD_ID = #{brdId}
+		   AND  A.BCA_TYPE = UPPER(#{bcaType})
+		   AND  A.BCA_DEL_YN = 'N'
+	</select>
+
+	<select id="selectBoardCategoryMaxOrderNo" parameterType="boardCategoryVO" resultType="int">
+		SELECT  IFNULL(MAX(A.BCA_ORDER_NO),0)
+		  FROM  COING_BOARD_CATEGORY A
+		 WHERE  A.BRD_ID = #{brdId}
+		   AND  A.BCA_TYPE = UPPER(#{bcaType})
+		   AND  A.BCA_DEL_YN = 'N'
+	</select>
+
+	<insert id="insertBoardCategory">
+		<selectKey keyProperty="bcaId" resultType="integer" order="BEFORE">
+			SELECT  IFNULL(MAX(BCA_ID),0)+1 FROM COING_BOARD_CATEGORY WHERE BRD_ID = #{brdId} AND BCA_TYPE = #{bcaType}
+		</selectKey>	
+		INSERT
+		  INTO  COING_BOARD_CATEGORY
+		     (  BCA_ID
+		     ,  BRD_ID
+		     ,  BCA_TYPE
+		     ,  BCA_TITLE
+		     ,  BCA_ORDER_NO
+		     ,  BCA_USE_YN
+		     ,  BCA_REG_DTTM
+		     ,  BCA_REG_ID
+		     ,  BCA_REG_IP
+		     ,  BCA_DEL_YN
+		     )
+		VALUES
+		     (  #{bcaId}
+			 ,  #{brdId, jdbcType=VARCHAR}
+			 ,  #{bcaType, jdbcType=VARCHAR}
+			 ,  #{bcaTitle, jdbcType=VARCHAR}
+			 ,  #{bcaOrderNo}
+			 ,  #{bcaUseYn}
+			 ,  NOW()
+			 ,  #{bcaRegId, jdbcType=VARCHAR}
+			 ,  #{bcaRegIp, jdbcType=VARCHAR}
+			 ,  'N'
+		     )
+	</insert>
+
+	<update id="updateBoardCategory">
+		UPDATE  COING_BOARD_CATEGORY
+		   SET  BCA_TITLE = #{bcaTitle, jdbcType=VARCHAR}
+		     ,  BCA_ORDER_NO = #{bcaOrderNo}
+		     ,  BCA_USE_YN = #{bcaUseYn}
+		     ,  BCA_UPDT_DTTM = NOW()
+		     ,  BCA_UPDT_ID = #{bcaUpdtId, jdbcType=VARCHAR}
+		     ,  BCA_UPDT_IP = #{bcaUpdtIp, jdbcType=VARCHAR}
+		 WHERE  BCA_ID = #{bcaId}
+		   AND  BRD_ID = #{brdId}
+		   AND  BCA_TYPE = #{bcaType}
+		   AND  BCA_DEL_YN = 'N'		   
+	</update>
+
+	<update id="deleteBoardCategory">
+		UPDATE  COING_BOARD_CATEGORY
+		   SET  BCA_DEL_YN = 'Y'
+			 ,  BCA_DEL_DTTM = NOW()
+			 ,  BCA_DEL_ID = #{bcaDelId}
+			 ,  BCA_DEL_IP = #{bcaDelIp}
+		 WHERE  BCA_ID = #{bcaId}
+		   AND  BRD_ID = #{brdId}
+		   AND  BCA_TYPE = #{bcaType}
+		   AND  BCA_DEL_YN = 'N'
+	</update>
+
+</mapper>

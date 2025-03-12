@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.member.service.impl.MemberGeneralMapper">
+
+
+	<resultMap id="memberGeneral" type="egovframework.coing.member.vo.MemberGeneralVO">
+		<result property="memId" column="MEM_ID"/>
+		<result property="memPasswd" column="MEM_PASSWD"/>
+		<result property="memName" column="MEM_NAME"/>		
+		<result property="memGender" column="MEM_GENDER"/>
+		<result property="memBirthDt" column="MEM_BIRTH_DT"/>
+		<result property="memBirthGb" column="MEM_BIRTH_GB"/>
+		<result property="memEmail" column="MEM_EMAIL"/>
+		<result property="memEmailYn" column="MEM_EMAIL_YN"/>
+		<result property="memHomepage" column="MEM_HOMEPAGE"/>
+		<result property="memTel" column="MEM_TEL"/>
+		<result property="memHp" column="MEM_HP"/>
+		<result property="memHpYn" column="MEM_HP_YN"/>
+		<result property="memDept" column="MEM_DEPT"/>
+		<result property="memJobTitle" column="MEM_JOB_TITLE"/>
+		<result property="memTask" column="MEM_TASK"/>
+		<result property="memIdentifyGb" column="MEM_IDENTIFY_GB"/>
+		<result property="memIdentifyYn" column="MEM_IDENTIFY_YN"/>
+		<result property="memStatus" column="MEM_STATUS"/>
+		<result property="memLevel" column="MEM_LEVEL"/>
+		<result property="memGroups" column="MEM_GROUPS"/>
+		<result property="memMemo" column="MEM_MEMO"/>
+		<result property="memLastloginDttm" column="MEM_LASTLOGIN_DTTM"/>
+		<result property="memLastloginIp" column="MEM_LASTLOGIN_IP"/>
+		<result property="memLoginCnt" column="MEM_LOGIN_CNT"/>
+		<result property="memPwchangeDttm" column="MEM_PWCHANGE_DTTM"/>
+		<result property="memPwchangeIp" column="MEM_PWCHANGE_IP"/>
+		<result property="memRegDttm" column="MEM_REG_DTTM"/>
+		<result property="memRegId" column="MEM_REG_ID"/>
+		<result property="memRegIp" column="MEM_REG_IP"/>
+		<result property="memUpdtDttm" column="MEM_UPDT_DTTM"/>
+		<result property="memUpdtId" column="MEM_UPDT_ID"/>
+		<result property="memUpdtIp" column="MEM_UPDT_IP"/>
+		<result property="memLoginfailDttm" column="MEM_LOGINFAIL_DTTM"/>
+		<result property="memLoginfailIp" column="MEM_LOGINFAIL_IP"/>
+		<result property="memLoginfailCnt" column="MEM_LOGINFAIL_CNT"/>
+		<result property="memPwwrongCnt" column="MEM_PWWRONG_CNT"/>
+		<result property="memPwwrongDttm" column="MEM_PWWRONG_DTTM"/>
+		<result property="memLockDttm" column="MEM_LOCK_DTTM"/>
+		<result property="memLockId" column="MEM_LOCK_ID"/>
+		<result property="memLockIp" column="MEM_LOCK_IP"/>
+		<result property="memLockMemo" column="MEM_LOCK_MEMO"/>		
+		<result property="memLeaveDttm" column="MEM_LEAVE_DTTM"/>
+		<result property="memLeaveId" column="MEM_LEAVE_ID"/>
+		<result property="memLeaveIp" column="MEM_LEAVE_IP"/>
+		<result property="memLeaveMemo" column="MEM_LEAVE_MEMO"/>		
+		<result property="memDelId" column="MEM_DEL_ID"/>
+		<result property="memDelIp" column="MEM_DEL_IP"/>
+		<result property="memSosok" column="MEM_SOSOK"/>
+		<result property="memComName" column="MEM_COM_NAME"/>
+		<result property="memComRegNum" column="MEM_COM_REG_NUM"/>
+		<result property="memFax" column="MEM_FAX"/>
+		<result property="memComZipcd" column="MEM_COM_ZIPCD"/>
+		<result property="memComAddress1" column="MEM_COM_ADDRESS1"/>
+		<result property="memComAddress2" column="MEM_COM_ADDRESS2"/>
+		<result property="memCeoName" column="MEM_CEO_NAME"/>
+	</resultMap>
+
+	<sql id="memberGeneralListWhere">
+		<if test='memStatus != null and memStatus != ""'>
+		AND  A.MEM_STATUS = #{memStatus}
+		</if>
+		<if test='memLevel > 0'>
+		AND  A.MEM_LEVEL = #{memLevel}
+		</if>
+		<if test='memGroups != null and memGroups != ""'>
+		AND  A.MEM_GROUPS = #{memGroups}
+		</if>		
+		<if test='memGender != null and memGender != ""'>
+		AND  A.MEM_GENDER = #{memGender}
+		</if>	
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "memId"'>AND A.MEM_ID LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "memName"'>AND A.MEM_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "memEmail"'>AND A.MEM_EMAIL LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "memTel"'>AND A.MEM_TEL LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "memHp"'>AND A.MEM_HP LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "memBirthDt"'>AND A.MEM_BIRTH_DT LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "memLeaveDttm"'>AND A.MEM_LEAVE_DTTM LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "memLeaveIp"'>AND A.MEM_LEAVE_IP LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "ID_NAME"'>
+		    		AND ( 
+		    			A.MEM_ID LIKE CONCAT ('%', #{searchKeyword}, '%') 
+		    			OR A.MEM_NAME LIKE CONCAT ('%', #{searchKeyword}, '%') 
+		    			OR A.MEM_COM_NAME LIKE CONCAT ('%', #{searchKeyword}, '%') 
+		    		 )
+		    	</when>
+			</choose>
+		</if>	
+		AND  A.MEM_DEL_YN = 'N'
+	</sql>
+	
+	
+	<select id="selectMemberGeneralListCnt" parameterType="memberGeneralVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_MEMBER_GENERAL A
+		 WHERE  1=1
+		   		<include refid="memberGeneralListWhere" />
+	</select>
+	
+	<select id="selectCompanyRegistNumberCnt" parameterType="memberGeneralVO" resultType="int">
+		SELECT	COUNT(*)
+		  FROM	COING_MEMBER_GENERAL A
+		 WHERE	A.MEM_COM_REG_NUM = #{memComRegNum} AND A.MEM_GROUPS = #{memGroups}
+	 	   AND	A.MEM_DEL_YN = 'N'
+	</select>
+
+	<select id="selectMemberGeneralList" parameterType="memberGeneralVO" resultMap="memberGeneral">
+		SELECT  A.MEM_ID
+			 ,  A.MEM_NAME
+			 ,  A.MEM_EMAIL
+			 ,  A.MEM_EMAIL_YN
+			 ,  A.MEM_TEL
+			 ,  A.MEM_HP
+			 ,  A.MEM_HP_YN
+			 ,  A.MEM_IDENTIFY_GB
+			 ,  A.MEM_IDENTIFY_YN
+			 ,  A.MEM_STATUS
+			 ,  A.MEM_LEVEL
+			 ,  (SELECT LVL_NAME FROM COING_LEVEL WHERE LVL_ID = A.MEM_LEVEL) AS memLevelNm
+			 ,  A.MEM_GROUPS			 
+			 ,  (SELECT GROUP_CONCAT(GRP_NAME) FROM VIEW_GROUP WHERE GRP_ID IN (
+			 		SELECT  SUBSTRING_INDEX(SUBSTRING_INDEX(A.MEM_GROUPS, ',', n.n), ',', -1) value
+			 		  FROM  COING_TALLY n
+			 		 WHERE  n.n &lt;= 1 + (LENGTH(A.MEM_GROUPS) - LENGTH(REPLACE(A.MEM_GROUPS, ',', '')))
+			 	)) AS memGroupsNm
+			 ,  A.MEM_LASTLOGIN_DTTM
+			 ,  A.MEM_LASTLOGIN_IP
+			 ,  A.MEM_LOGIN_CNT
+			 ,  A.MEM_REG_DTTM
+			 ,  A.MEM_REG_ID
+			 ,  A.MEM_REG_IP
+			 ,  A.MEM_LOGINFAIL_DTTM
+			 ,  A.MEM_LOGINFAIL_IP
+			 ,  A.MEM_LOGINFAIL_CNT
+			 ,  A.MEM_PWWRONG_CNT
+			 ,  A.MEM_PWWRONG_DTTM
+			 ,  A.MEM_LOCK_DTTM
+			 ,  A.MEM_LOCK_MEMO
+			 ,  A.MEM_LOCK_ID
+			 ,  A.MEM_LOCK_IP
+			 ,  A.MEM_LEAVE_DTTM
+			 ,  A.MEM_LEAVE_ID
+			 ,  A.MEM_LEAVE_IP
+			 ,  A.MEM_LEAVE_MEMO
+			 ,  A.MEM_FAX
+			 ,  A.MEM_COM_REG_NUM
+		     ,  A.MEM_COM_ZIPCD		     
+		     ,  A.MEM_COM_ADDRESS1
+		     ,  A.MEM_COM_ADDRESS2
+		     ,  A.MEM_COM_NAME
+			 ,  A.MEM_SOSOK
+			 ,	A.MEM_CEO_NAME
+		  FROM  COING_MEMBER_GENERAL A
+		 WHERE  1=1
+				<include refid="memberGeneralListWhere" />
+	  ORDER BY  A.MEM_REG_DTTM DESC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}	  
+	</select>
+	
+	<select id="selectEduMemberGeneralListCnt" resultType="int">
+		SELECT  COUNT(DISTINCT A.MEM_ID)
+		  FROM  COING_MEMBER_GENERAL A
+   INNER JOIN	JMOD_EDU_APPLICATION B ON (A.MEM_ID != B.MEM_ID)
+		 WHERE  1=1 
+		   AND  A.MEM_GROUPS NOT IN ('GNR', 'MCO', 'USR')
+		  	    <include refid="memberGeneralListWhere" />
+	</select>
+	
+	<select id="selectEduMemberGeneralList" resultMap="memberGeneral">
+		SELECT  DISTINCT A.MEM_ID
+			 ,  A.MEM_NAME
+			 ,  A.MEM_EMAIL
+			 ,  A.MEM_HP				 
+			 ,  A.MEM_COM_NAME
+		  FROM  COING_MEMBER_GENERAL A
+   INNER JOIN	JMOD_EDU_APPLICATION B ON (A.MEM_ID != B.MEM_ID)
+		 WHERE  1=1
+		   AND  A.MEM_GROUPS NOT IN ('GNR', 'MCO', 'USR')
+		  	    <include refid="memberGeneralListWhere" />
+		<choose>
+	    	<when test='orderBy != null and orderBy != ""'>
+	  ORDER BY  ${orderBy}
+	  		</when>
+	    	<otherwise>
+	  ORDER BY  A.MEM_ID DESC
+	    	</otherwise>
+		</choose>
+		<if test='paging'>
+	     LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+	    </if>
+	</select>
+	
+
+	<select id="selectMemberGeneral" parameterType="memberGeneralVO" resultMap="memberGeneral">
+		SELECT  A.MEM_ID
+			 ,  A.MEM_PASSWD
+			 ,  A.MEM_NAME
+			 ,  A.MEM_GENDER
+			 ,  A.MEM_BIRTH_DT
+			 ,  A.MEM_BIRTH_GB
+			 ,  A.MEM_EMAIL
+			 ,  A.MEM_EMAIL_YN
+			 ,  A.MEM_HOMEPAGE
+			 ,  A.MEM_TEL
+			 ,  A.MEM_HP
+			 ,  A.MEM_HP_YN
+			 ,  A.MEM_DEPT
+			 ,  A.MEM_JOB_TITLE
+			 ,  A.MEM_TASK
+			 ,  A.MEM_IDENTIFY_GB
+			 ,  A.MEM_IDENTIFY_YN
+			 ,  A.MEM_STATUS
+			 ,  A.MEM_LEVEL
+			 ,  (SELECT LVL_NAME FROM COING_LEVEL WHERE LVL_ID = A.MEM_LEVEL) AS memLevelNm
+			 ,  A.MEM_GROUPS			 
+			 ,  (SELECT GROUP_CONCAT(GRP_NAME) FROM VIEW_GROUP WHERE GRP_ID IN (
+			 		SELECT  SUBSTRING_INDEX(SUBSTRING_INDEX(A.MEM_GROUPS, ',', n.n), ',', -1) value
+			 		  FROM  COING_TALLY n
+			 		 WHERE  n.n &lt;= 1 + (LENGTH(A.MEM_GROUPS) - LENGTH(REPLACE(A.MEM_GROUPS, ',', '')))
+			 	)) AS memGroupsNm
+			 ,  A.MEM_MEMO
+			 ,  A.MEM_LASTLOGIN_DTTM
+			 ,  A.MEM_LASTLOGIN_IP
+			 ,  A.MEM_LOGIN_CNT
+			 ,  A.MEM_PWCHANGE_DTTM
+			 ,  A.MEM_PWCHANGE_IP
+			 ,  A.MEM_REG_DTTM
+			 ,  A.MEM_REG_ID
+			 ,  A.MEM_REG_IP
+			 ,  A.MEM_UPDT_DTTM
+			 ,  A.MEM_UPDT_ID
+			 ,  A.MEM_UPDT_IP
+			 ,  A.MEM_LOGINFAIL_DTTM
+			 ,  A.MEM_LOGINFAIL_IP
+			 ,  A.MEM_LOGINFAIL_CNT
+			 ,  A.MEM_PWWRONG_CNT
+			 ,  A.MEM_PWWRONG_DTTM
+			 ,  A.MEM_LOCK_DTTM
+			 ,  A.MEM_LOCK_MEMO
+			 ,  A.MEM_LOCK_ID
+			 ,  A.MEM_LOCK_IP
+			 ,  A.MEM_LEAVE_DTTM
+			 ,  A.MEM_LEAVE_ID
+			 ,  A.MEM_LEAVE_IP
+			 ,  A.MEM_LEAVE_MEMO
+			 ,  A.MEM_FAX
+			 ,  A.MEM_COM_REG_NUM
+		     ,  A.MEM_COM_ZIPCD
+		     ,  A.MEM_COM_ADDRESS1
+		     ,  A.MEM_COM_ADDRESS2
+		     ,  A.MEM_COM_NAME
+			 ,  A.MEM_SOSOK			
+			 ,	A.MEM_CEO_NAME
+			 ,	A.MEM_BANK
+			 ,	A.MEM_BANK_ACCOUNT_NUMBER
+			 ,	A.MEM_EXCHANGE_ID
+		  FROM  COING_MEMBER_GENERAL A
+		 WHERE  A.MEM_ID = #{memId}
+		   AND  A.MEM_DEL_YN = 'N'
+	</select>
+
+	<insert id="insertMemberGeneral">
+		INSERT
+		  INTO  COING_MEMBER_GENERAL
+		     (  MEM_ID
+		     ,  MEM_PASSWD
+		     ,  MEM_NAME
+			 ,  MEM_GENDER
+			 ,  MEM_BIRTH_DT
+			 ,  MEM_BIRTH_GB		     
+		     ,  MEM_EMAIL
+		     ,  MEM_EMAIL_YN
+		     ,  MEM_HOMEPAGE
+		     ,  MEM_TEL
+		     ,  MEM_HP
+		     ,  MEM_HP_YN
+		     ,  MEM_DEPT
+		     ,  MEM_JOB_TITLE
+		     ,  MEM_TASK
+		     ,  MEM_IDENTIFY_GB
+		     ,  MEM_IDENTIFY_YN
+		     ,  MEM_STATUS
+		     ,  MEM_LEVEL
+		     ,  MEM_GROUPS
+		     ,  MEM_MEMO
+		     ,  MEM_PWCHANGE_DTTM
+		     ,  MEM_REG_DTTM
+		     ,  MEM_REG_ID
+		     ,  MEM_REG_IP
+		     ,  MEM_DEL_YN
+		     ,  MEM_FAX
+		     ,  MEM_COM_ZIPCD
+		     ,  MEM_COM_REG_NUM
+		     ,  MEM_COM_ADDRESS1
+		     ,  MEM_COM_ADDRESS2
+		     ,  MEM_COM_NAME
+			 ,  MEM_SOSOK
+			 ,	MEM_CEO_NAME
+			 ,	MEM_BANK
+			 ,	MEM_BANK_ACCOUNT_NUMBER
+			 ,	MEM_EXCHANGE_ID
+		     )
+		VALUES
+		     (  #{memId, jdbcType=VARCHAR}
+			 ,  #{memPasswd, jdbcType=VARCHAR}
+			 ,  #{memName, jdbcType=VARCHAR}
+			 ,  #{memGender, jdbcType=VARCHAR}
+			 ,  #{memBirthDt, jdbcType=VARCHAR}
+			 ,  #{memBirthGb, jdbcType=VARCHAR}
+			 ,  #{memEmail, jdbcType=VARCHAR}
+			 ,  #{memEmailYn, jdbcType=VARCHAR}
+			 ,  #{memHomepage, jdbcType=VARCHAR}
+			 ,  #{memTel, jdbcType=VARCHAR}
+			 ,  #{memHp, jdbcType=VARCHAR}
+			 ,  #{memHpYn, jdbcType=VARCHAR}
+			 ,  #{memDept, jdbcType=VARCHAR}
+			 ,  #{memJobTitle, jdbcType=VARCHAR}
+			 ,  #{memTask, jdbcType=VARCHAR}
+			 ,  #{memIdentifyGb, jdbcType=VARCHAR}
+			 ,  #{memIdentifyYn, jdbcType=VARCHAR}
+			 ,  #{memStatus, jdbcType=VARCHAR}
+			 ,  #{memLevel}
+			 ,  #{memGroups, jdbcType=VARCHAR}
+			 ,  #{memMemo, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  NOW()
+			 ,  #{memRegId, jdbcType=VARCHAR}
+			 ,  #{memRegIp, jdbcType=VARCHAR}
+			 ,  'N'
+			 ,	#{memFax, jdbcType=VARCHAR}
+			 ,	#{memComZipcd, jdbcType=VARCHAR}
+			 ,	#{memComRegNum, jdbcType=VARCHAR}
+			 ,	#{memComAddress1, jdbcType=VARCHAR}
+			 ,	#{memComAddress2, jdbcType=VARCHAR}
+			 ,	#{memComName, jdbcType=VARCHAR}
+			 ,	#{memSosok, jdbcType=VARCHAR}
+			 ,	#{memCeoName, jdbcType=VARCHAR}
+			 ,	#{memBank, jdbcType=VARCHAR}
+			 ,	#{memBankAccountNumber, jdbcType=VARCHAR}
+			 ,	#{memExchangeId, jdbcType=VARCHAR}
+		     )
+	</insert>
+
+	<update id="updateMemberGeneral">
+		UPDATE  COING_MEMBER_GENERAL
+		   SET  MEM_NAME = #{memName, jdbcType=VARCHAR}
+		   	 ,  MEM_GENDER = #{memGender, jdbcType=VARCHAR}
+		   	 ,  MEM_BIRTH_DT = #{memBirthDt, jdbcType=VARCHAR}
+		   	 ,  MEM_BIRTH_GB = #{memBirthGb, jdbcType=VARCHAR}
+		     ,  MEM_EMAIL = #{memEmail, jdbcType=VARCHAR}
+		     ,  MEM_EMAIL_YN = #{memEmailYn, jdbcType=VARCHAR}
+		     ,  MEM_HOMEPAGE = #{memHomepage, jdbcType=VARCHAR}
+		     ,  MEM_TEL = #{memTel, jdbcType=VARCHAR}
+		     ,  MEM_HP = #{memHp, jdbcType=VARCHAR}
+		     ,  MEM_HP_YN = #{memHpYn, jdbcType=VARCHAR}
+		     ,  MEM_DEPT = #{memDept, jdbcType=VARCHAR}
+		     ,  MEM_JOB_TITLE = #{memJobTitle, jdbcType=VARCHAR}
+		     ,  MEM_TASK = #{memTask, jdbcType=VARCHAR}
+		     ,  MEM_IDENTIFY_GB = #{memIdentifyGb, jdbcType=VARCHAR}
+		     ,  MEM_IDENTIFY_YN = #{memIdentifyYn, jdbcType=VARCHAR}
+		     ,  MEM_STATUS = #{memStatus, jdbcType=VARCHAR}
+		     ,  MEM_LEVEL = #{memLevel}
+		     ,  MEM_GROUPS = #{memGroups, jdbcType=VARCHAR}
+		     ,  MEM_MEMO = #{memMemo, jdbcType=VARCHAR}
+		     ,  MEM_UPDT_DTTM = NOW()
+		     ,  MEM_UPDT_ID = #{memUpdtId, jdbcType=VARCHAR}
+		     ,  MEM_UPDT_IP = #{memUpdtIp, jdbcType=VARCHAR}
+		     ,	MEM_FAX = #{memFax, jdbcType=VARCHAR}
+			 ,	MEM_COM_ZIPCD = #{memComZipcd, jdbcType=VARCHAR}
+			 ,  MEM_COM_REG_NUM = #{memComRegNum, jdbcType=VARCHAR}
+			 ,	MEM_COM_ADDRESS1 = #{memComAddress1, jdbcType=VARCHAR}
+			 ,	MEM_COM_ADDRESS2 = #{memComAddress2, jdbcType=VARCHAR}
+			 ,	MEM_COM_NAME = #{memComName, jdbcType=VARCHAR}
+			 ,	MEM_SOSOK = #{memSosok, jdbcType=VARCHAR}
+			 ,	MEM_CEO_NAME = #{memCeoName, jdbcType=VARCHAR}
+			 ,	MEM_BANK = #{memBank, jdbcType=VARCHAR}
+			 ,	MEM_BANK_ACCOUNT_NUMBER = #{memBankAccountNumber, jdbcType=VARCHAR}
+			<if test='memExchangeId != null and memExchangeId !=""'>
+				,	MEM_EXCHANGE_ID = #{memExchangeId, jdbcType=VARCHAR}
+			</if>
+		 WHERE  MEM_ID = #{memId}
+		   AND  MEM_DEL_YN = 'N'
+	</update>
+
+
+	<update id="updateMemberGeneralCheckedLevel">
+		UPDATE  COING_MEMBER_GENERAL
+		   SET  MEM_LEVEL = #{memLevel}
+		 WHERE  MEM_DEL_YN = 'N'
+		   AND  MEM_ID IN
+			<foreach collection="memIdArr" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+    		</foreach>
+	</update>
+
+
+	<update id="updateMemberGeneralCheckedStatus">
+		UPDATE  COING_MEMBER_GENERAL
+		   SET  MEM_STATUS = #{memStatus}
+		 WHERE  MEM_DEL_YN = 'N'
+		   AND  MEM_ID IN
+			<foreach collection="memIdArr" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+    		</foreach>
+	</update>
+	
+
+	<update id="deleteMemberGeneral">
+		UPDATE  COING_MEMBER_GENERAL
+		   SET  MEM_DEL_YN = 'Y'
+			 ,  MEM_DEL_DTTM = NOW()
+			 ,  MEM_DEL_ID = #{memDelId, jdbcType=VARCHAR}
+			 ,  MEM_DEL_IP = #{memDelIp, jdbcType=VARCHAR}
+		 WHERE  MEM_ID = #{memId}
+		   AND  MEM_DEL_YN = 'N'
+	</update>
+	
+
+</mapper>

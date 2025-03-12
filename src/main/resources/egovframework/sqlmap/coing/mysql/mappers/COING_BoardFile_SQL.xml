@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.board.service.impl.BoardFileMapper">
+
+	<resultMap id="boardFile" type="egovframework.coing.board.vo.BoardFileVO">
+		<result property="brdId" column="BRD_ID"/>
+		<result property="bwrId" column="BWR_ID"/>
+		<result property="bfiId" column="BFI_ID"/>
+		<result property="bfiNo" column="BFI_NO"/>
+		<result property="bfiName" column="BFI_NAME"/>
+		<result property="bfiTname1" column="BFI_TNAME1"/>
+		<result property="bfiTname2" column="BFI_TNAME2"/>
+		<result property="bfiOname" column="BFI_ONAME"/>
+		<result property="bfiContent" column="BFI_CONTENT"/>
+		<result property="bfiExt" column="BFI_EXT"/>
+		<result property="bfiSize" column="BFI_SIZE"/>
+		<result property="bfiImageYn" column="BFI_IMAGE_YN"/>
+		<result property="bfiDownCnt" column="BFI_DOWN_CNT"/>
+		<result property="bfiRegDttm" column="BFI_REG_DTTM"/>
+		<result property="bfiRegId" column="BFI_REG_ID"/>
+		<result property="bfiRegIp" column="BFI_REG_IP"/>
+		<result property="bfiUpdtDttm" column="BFI_UPDT_DTTM"/>
+		<result property="bfiUpdtId" column="BFI_UPDT_ID"/>
+		<result property="bfiUpdtIp" column="BFI_UPDT_IP"/>	
+		<result property="bfiDelYn" column="BFI_DEL_YN"/>
+		<result property="bfiDelDttm" column="BFI_DEL_DTTM"/>
+		<result property="bfiDelId" column="BFI_DEL_ID"/>
+		<result property="bfiDelIp" column="BFI_DEL_IP"/>
+	</resultMap>
+	
+	<sql id="boardFileListWhere">
+		AND  B.BRD_DEL_YN = 'N'
+		AND  C.BWR_DEL_YN = 'N'		
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+				<when test='searchCondition == "brdName"'>AND B.BRD_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+				<when test='searchCondition == "bwrSubject"'>AND C.BWR_SUBJECT LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "bfiOname"'>AND A.BFI_ONAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+		<if test='brdId != null and brdId != ""'>
+			AND  A.BRD_ID = #{brdId}			
+		</if>
+		<if test='bwrId != null and bwrId != ""'>
+			AND  A.BWR_ID = #{bwrId}			
+		</if>
+	</sql>
+
+
+	<select id="selectBoardFileListCnt" parameterType="boardFileVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_BOARD_FILE A
+		  	 ,  COING_BOARD_INFO B
+		  	 ,  COING_BOARD_WRITE C
+		 WHERE  A.BRD_ID = B.BRD_ID
+		   AND  (A.BRD_ID = C.BRD_ID AND A.BWR_ID = C.BWR_ID)
+		   		<include refid="boardFileListWhere" />
+	</select>
+	
+	
+	<select id="selectBoardFileList" parameterType="boardFileVO" resultMap="boardFile">
+		SELECT  A.BRD_ID
+			 ,  B.BRD_NAME AS brdName
+			 ,  C.BWR_SUBJECT AS bwrSubject
+			 ,  A.BWR_ID
+			 ,  A.BFI_ID
+			 ,  A.BFI_NO
+			 ,  A.BFI_NAME
+			 ,  A.BFI_TNAME1
+			 ,  A.BFI_TNAME2
+			 ,  A.BFI_ONAME
+			 ,  A.BFI_CONTENT
+			 ,  A.BFI_EXT
+			 ,  A.BFI_SIZE
+			 ,  A.BFI_IMAGE_YN
+			 ,  A.BFI_DOWN_CNT
+			 ,  A.BFI_REG_DTTM
+			 ,  A.BFI_REG_ID
+			 ,  A.BFI_REG_IP
+			 ,  A.BFI_UPDT_DTTM
+			 ,  A.BFI_UPDT_ID
+			 ,  A.BFI_UPDT_IP
+			 ,  A.BFI_DEL_YN
+			 ,  A.BFI_DEL_DTTM
+			 ,  A.BFI_DEL_ID
+			 ,  A.BFI_DEL_IP			 
+		  FROM  COING_BOARD_FILE A
+		  	 ,  COING_BOARD_INFO B
+		  	 ,  COING_BOARD_WRITE C
+		 WHERE  A.BRD_ID = B.BRD_ID
+		   AND  (A.BRD_ID = C.BRD_ID AND A.BWR_ID = C.BWR_ID)
+		   		<include refid="boardFileListWhere" />
+	  ORDER BY  A.BWR_ID DESC, A.BFI_NO ASC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	
+	<select id="selectBoardFileListAll" parameterType="boardFileVO" resultMap="boardFile">
+		SELECT  A.BRD_ID
+			 ,  B.BRD_NAME AS brdName
+			 ,  C.BWR_SUBJECT AS bwrSubject
+			 ,  A.BWR_ID
+			 ,  A.BFI_ID
+			 ,  A.BFI_NO
+			 ,  A.BFI_NAME
+			 ,  A.BFI_TNAME1
+			 ,  A.BFI_TNAME2
+			 ,  A.BFI_ONAME
+			 ,  A.BFI_CONTENT
+			 ,  A.BFI_EXT
+			 ,  A.BFI_SIZE
+			 ,  A.BFI_IMAGE_YN
+			 ,  A.BFI_DOWN_CNT
+			 ,  A.BFI_REG_DTTM
+			 ,  A.BFI_REG_ID
+			 ,  A.BFI_REG_IP
+			 ,  A.BFI_UPDT_DTTM
+			 ,  A.BFI_UPDT_ID
+			 ,  A.BFI_UPDT_IP
+			 ,  A.BFI_DEL_YN
+			 ,  A.BFI_DEL_DTTM
+			 ,  A.BFI_DEL_ID
+			 ,  A.BFI_DEL_IP			 
+		  FROM  COING_BOARD_FILE A
+		  	 ,  COING_BOARD_INFO B
+		  	 ,  COING_BOARD_WRITE C
+		 WHERE  A.BRD_ID = B.BRD_ID
+		   AND  (A.BRD_ID = C.BRD_ID AND A.BWR_ID = C.BWR_ID)
+		   		<include refid="boardFileListWhere" />
+	  ORDER BY  A.BWR_ID DESC, A.BFI_NO ASC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}	  
+	</select>	
+
+
+	<select id="selectBoardFile" parameterType="boardFileVO" resultMap="boardFile">
+		SELECT  A.BRD_ID
+			 ,  B.BRD_NAME AS brdName
+			 ,  C.BWR_SUBJECT AS bwrSubject
+			 ,  A.BWR_ID
+			 ,  A.BFI_ID
+			 ,  A.BFI_NO
+			 ,  A.BFI_NAME
+			 ,  A.BFI_TNAME1
+			 ,  A.BFI_TNAME2
+			 ,  A.BFI_ONAME
+			 ,  A.BFI_CONTENT
+			 ,  A.BFI_EXT
+			 ,  A.BFI_SIZE
+			 ,  A.BFI_IMAGE_YN
+			 ,  A.BFI_DOWN_CNT
+			 ,  A.BFI_REG_DTTM
+			 ,  A.BFI_REG_ID
+			 ,  A.BFI_REG_IP
+			 ,  A.BFI_UPDT_DTTM
+			 ,  A.BFI_UPDT_ID
+			 ,  A.BFI_UPDT_IP
+			 ,  A.BFI_DEL_YN
+			 ,  A.BFI_DEL_DTTM
+			 ,  A.BFI_DEL_ID
+			 ,  A.BFI_DEL_IP			 
+		  FROM  COING_BOARD_FILE A
+		  	 ,  COING_BOARD_INFO B
+		  	 ,  COING_BOARD_WRITE C
+		 WHERE  A.BRD_ID = B.BRD_ID
+		   AND  (A.BRD_ID = C.BRD_ID AND A.BWR_ID = C.BWR_ID)
+		   AND  A.BFI_ID = #{bfiId}
+		   AND  B.BRD_DEL_YN = 'N'
+		   AND  C.BWR_DEL_YN = 'N'
+	</select>
+	
+
+</mapper>

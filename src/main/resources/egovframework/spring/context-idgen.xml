@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- 첨부파일 -->
+    <bean name="egovFileIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="strategy" ref="fileStrategy" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="FILE_ID"/>
+    </bean>
+    <bean name="fileStrategy" class="egovframework.rte.fdl.idgnr.impl.strategy.EgovIdGnrStrategyImpl">
+        <property name="prefix" value="FILE_" />
+        <property name="cipers" value="15" />
+        <property name="fillChar" value="0" />
+    </bean>
+    <!-- 첨부파일 -->    
+    
+    <!-- 프로그램 ID -->
+    <bean name="egovProgramIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="PROGRAM_ID"/>
+    </bean> 
+    
+     <bean name="egovScheduleWriteFileIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="SCHEDULE_WRITE_FILE_ID"/>
+    </bean>  	
+    
+    <!-- 게시판 ID -->
+    <bean name="egovBoardIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="strategy"   ref="boardIdStrategy" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="BOARD_ID"/>
+    </bean>
+    <bean name="boardIdStrategy" class="egovframework.rte.fdl.idgnr.impl.strategy.EgovIdGnrStrategyImpl">
+        <property name="prefix"   value="B" />
+        <property name="cipers"   value="4" />
+        <property name="fillChar" value="0" />
+    </bean>    
+
+    <!-- 회원약관 ID -->
+    <bean name="egovMemberAgreementIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="MEMBER_AGREEMENT_ID"/>
+    </bean>    
+    
+    <!-- 팝업 ID -->
+    <bean name="egovPopupIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="POPUP_ID"/>
+    </bean>        
+           
+
+    <bean name="egovImageInfoIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="IMAGE_INFO_ID"/>
+    </bean>
+
+    <bean name="egovImageFileIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="IMAGE_FILE_ID"/>
+    </bean>
+    
+    <!-- 소스버젼 -->
+    <bean name="egovSourceHistoryIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="SOURCE_HISTORY_ID"/>
+    </bean>
+    
+    <!-- 설문조사 -->
+	<bean name="egovSurveyInfoIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="SurveyExample"/>
+    </bean>
+    
+     <bean name="egovSurveyQuestionIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="SurveyQuestion"/>
+    </bean>
+    
+    <bean name="egovSurveyExampleIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="SurveyExample"/>
+    </bean>
+    
+    <!-- 추가건 -->
+	<!-- 사이트 CONTENT ID -->
+    <bean name="egovSiteContentIdGnrService" class="egovframework.rte.fdl.idgnr.impl.EgovTableIdGnrServiceImpl" destroy-method="destroy">
+        <property name="dataSource" ref="egov.dataSource" />
+        <property name="blockSize"  value="1"/>
+        <property name="table"      value="COING_IDS"/>
+        <property name="tableName"  value="SITE_CONTENT_ID"/>
+    </bean>
+
+
+</beans>

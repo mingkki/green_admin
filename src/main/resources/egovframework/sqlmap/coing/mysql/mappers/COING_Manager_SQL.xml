@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.ManagerMapper">
+
+	<resultMap id="manager" type="egovframework.coing.cmm.vo.ManagerVO">
+		<result property="mngId" column="MNG_ID" />
+		<result property="mngPasswd" column="MNG_PASSWD" />
+		<result property="mngName" column="MNG_NAME" />
+		<result property="mngTel" column="MNG_TEL" />
+		<result property="mngHp" column="MNG_HP" />
+		<result property="mngEmail" column="MNG_EMAIL" />
+		<result property="mngStatus" column="MNG_STATUS" />
+		<result property="mngLevel" column="MNG_LEVEL" />
+		<result property="mngMemo" column="MNG_MEMO" />
+		<result property="mngLastloginDttm" column="MNG_LASTLOGIN_DTTM" />
+		<result property="mngLastloginIp" column="MNG_LASTLOGIN_IP" />
+		<result property="mngLoginCnt" column="MNG_LOGIN_CNT" />
+		<result property="mngPwchangeDttm" column="MNG_PWCHANGE_DTTM" />
+		<result property="mngPwchangeIp" column="MNG_PWCHANGE_IP" />
+		<result property="mngRegDttm" column="MNG_REG_DTTM" />
+		<result property="mngRegId" column="MNG_REG_ID" />
+		<result property="mngRegIp" column="MNG_REG_IP" />
+		<result property="mngUpdtDttm" column="MNG_UPDT_DTTM" />
+		<result property="mngUpdtId" column="MNG_UPDT_ID" />
+		<result property="mngUpdtIp" column="MNG_UPDT_IP" />
+		<result property="mngPwwrongCnt" column="MNG_PWWRONG_CNT" />
+		<result property="mngPwwrongDttm" column="MNG_PWWRONG_DTTM" />
+		<result property="mngLockDttm" column="MNG_LOCK_DTTM" />
+		<result property="mngLockMemo" column="MNG_LOCK_MEMO" />
+		<result property="mngLockIp" column="MNG_LOCK_IP" />
+		<result property="mngAccessIp" column="MNG_ACCESS_IP" />	
+	</resultMap>
+
+	<sql id="managerListWhere">
+		AND  A.MNG_DEL_YN = 'N'
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "mngId"'>AND A.MNG_ID LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+		    	<when test='searchCondition == "mngName"'>AND A.MNG_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+	</sql>
+	
+	<select id="selectManagerListCnt" parameterType="managerVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_MANAGER A
+		 WHERE  1=1
+		   		<include refid="managerListWhere" />
+	</select>
+
+
+	<select id="selectManagerList" parameterType="managerVO" resultMap="manager">
+		SELECT  A.MNG_ID
+			 ,  A.MNG_PASSWD
+			 ,  A.MNG_NAME
+			 ,  A.MNG_STATUS
+			 ,  A.MNG_LEVEL
+			 ,  A.MNG_MEMO
+			 ,  A.MNG_LASTLOGIN_DTTM
+			 ,  A.MNG_LASTLOGIN_IP
+			 ,  A.MNG_LOGIN_CNT
+			 ,  A.MNG_PWCHANGE_DTTM
+			 ,  A.MNG_PWCHANGE_IP
+			 ,  A.MNG_REG_DTTM
+			 ,  A.MNG_REG_ID
+			 ,  A.MNG_REG_IP
+			 ,  A.MNG_UPDT_DTTM
+			 ,  A.MNG_UPDT_ID
+			 ,  A.MNG_UPDT_IP
+			 ,  A.MNG_PWWRONG_CNT
+			 ,  A.MNG_PWWRONG_DTTM
+			 ,  A.MNG_LOCK_DTTM
+			 ,  A.MNG_LOCK_MEMO
+			 ,  A.MNG_LOCK_IP
+		  FROM  COING_MANAGER A
+		 WHERE  1=1
+		   		<include refid="managerListWhere" />
+	  ORDER BY  A.MNG_REG_DTTM DESC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}	  
+	</select>
+
+
+	<select id="selectManager" parameterType="managerVO" resultMap="manager">
+		SELECT  A.MNG_ID
+			 ,  A.MNG_PASSWD
+			 ,  A.MNG_NAME
+			 ,  A.MNG_TEL
+			 ,  A.MNG_HP
+			 ,  A.MNG_EMAIL
+			 ,  A.MNG_STATUS
+			 ,  A.MNG_LEVEL
+			 ,  A.MNG_MEMO
+			 ,  A.MNG_LASTLOGIN_DTTM
+			 ,  A.MNG_LASTLOGIN_IP
+			 ,  A.MNG_LOGIN_CNT
+			 ,  A.MNG_PWCHANGE_DTTM
+			 ,  A.MNG_PWCHANGE_IP
+			 ,  A.MNG_REG_DTTM
+			 ,  A.MNG_REG_ID
+			 ,  A.MNG_REG_IP
+			 ,  A.MNG_UPDT_DTTM
+			 ,  A.MNG_UPDT_ID
+			 ,  A.MNG_UPDT_IP
+			 ,  A.MNG_PWWRONG_CNT
+			 ,  A.MNG_PWWRONG_DTTM
+			 ,  A.MNG_LOCK_DTTM
+			 ,  A.MNG_LOCK_MEMO
+			 ,  A.MNG_LOCK_IP
+			 ,  A.MNG_ACCESS_IP
+		  FROM  COING_MANAGER A
+		 WHERE  A.MNG_ID = #{mngId}
+		   AND  A.MNG_DEL_YN = 'N'
+	</select>	
+
+	<insert id="insertManager">
+		INSERT
+		  INTO  COING_MANAGER
+		     (  MNG_ID
+		     ,  MNG_PASSWD
+		     ,  MNG_NAME
+			 ,  MNG_TEL
+			 ,  MNG_HP
+			 ,  MNG_EMAIL		     
+		     ,  MNG_STATUS
+		     ,  MNG_LEVEL
+		     ,  MNG_MEMO
+		     ,  MNG_PWCHANGE_DTTM
+		     ,  MNG_REG_DTTM
+		     ,  MNG_REG_ID
+		     ,  MNG_REG_IP
+		     ,  MNG_ACCESS_IP
+		     )
+		VALUES
+		     (  #{mngId}
+			 ,  #{mngPasswd}
+			 ,  #{mngName, jdbcType=VARCHAR}
+			 ,  #{mngTel, jdbcType=VARCHAR}
+			 ,  #{mngHp, jdbcType=VARCHAR}
+			 ,  #{mngEmail, jdbcType=VARCHAR}
+			 ,  #{mngStatus, jdbcType=VARCHAR}
+			 ,  #{mngLevel}
+			 ,  #{mngMemo, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  NOW()
+			 ,  #{mngRegId, jdbcType=VARCHAR}
+			 ,  #{mngRegIp, jdbcType=VARCHAR}
+			 ,  #{mngAccessIp, jdbcType=VARCHAR}
+		     )
+	</insert>
+
+
+	<update id="updateManager">
+		UPDATE  COING_MANAGER
+		   SET  MNG_NAME = #{mngName, jdbcType=VARCHAR}
+		     ,  MNG_TEL = #{mngTel, jdbcType=VARCHAR}
+		     ,  MNG_HP = #{mngHp, jdbcType=VARCHAR}
+		     ,  MNG_EMAIL = #{mngEmail, jdbcType=VARCHAR}
+		     ,  MNG_STATUS = #{mngStatus, jdbcType=VARCHAR}
+		     ,  MNG_LEVEL = #{mngLevel}
+		     ,  MNG_MEMO = #{mngMemo, jdbcType=VARCHAR}
+		     ,  MNG_UPDT_DTTM = NOW()
+		     ,  MNG_UPDT_ID = #{mngUpdtId, jdbcType=VARCHAR}
+		     ,  MNG_UPDT_IP = #{mngUpdtIp, jdbcType=VARCHAR}
+		     ,  MNG_ACCESS_IP = #{mngAccessIp, jdbcType=VARCHAR}
+		 WHERE  MNG_ID = #{mngId}
+		   AND  MNG_DEL_YN = 'N'
+	</update>
+
+
+	<update id="updateManagerMyinfo">
+		UPDATE  COING_MANAGER
+		   SET  MNG_NAME = #{mngName, jdbcType=VARCHAR}
+		     ,  MNG_TEL = #{mngTel, jdbcType=VARCHAR}
+		     ,  MNG_HP = #{mngHp, jdbcType=VARCHAR}
+		     ,  MNG_EMAIL = #{mngEmail, jdbcType=VARCHAR}
+		     ,  MNG_UPDT_DTTM = NOW()
+		     ,  MNG_UPDT_ID = #{mngUpdtId, jdbcType=VARCHAR}
+		     ,  MNG_UPDT_IP = #{mngUpdtIp, jdbcType=VARCHAR}
+		     ,  MNG_ACCESS_IP = #{mngAccessIp, jdbcType=VARCHAR}
+		 WHERE  MNG_ID = #{mngId}
+		   AND  MNG_DEL_YN = 'N'
+	</update>
+
+
+	<update id="deleteManager">
+		UPDATE  COING_MANAGER
+		   SET  MNG_DEL_YN = 'Y'
+			 ,  MNG_DEL_DTTM = NOW()
+			 ,  MNG_DEL_ID = #{mngDelId, jdbcType=VARCHAR}
+			 ,  MNG_DEL_IP = #{mngDelIp, jdbcType=VARCHAR}
+		 WHERE  MNG_ID = #{mngId}
+		   AND  MNG_DEL_YN = 'N'
+	</update>
+
+</mapper>

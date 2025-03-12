@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.site.service.impl.SiteCounterMapper">
+
+	<resultMap id="siteCounterDay" type="egovframework.coing.site.vo.SiteCounterDayVO">
+		<result property="scdDate" column="SCD_DATE" />
+		<result property="sinId" column="SIN_ID" />
+		<result property="scdYy" column="SCD_YY" />
+		<result property="scdMm" column="SCD_MM" />
+		<result property="scdDd" column="SCD_DD" />
+		<result property="scdWw" column="SCD_WW" />
+		<result property="scdHh00" column="SCD_HH00" />
+		<result property="scdHh01" column="SCD_HH01" />
+		<result property="scdHh02" column="SCD_HH02" />
+		<result property="scdHh03" column="SCD_HH03" />
+		<result property="scdHh04" column="SCD_HH04" />
+		<result property="scdHh05" column="SCD_HH05" />
+		<result property="scdHh06" column="SCD_HH06" />
+		<result property="scdHh07" column="SCD_HH07" />
+		<result property="scdHh08" column="SCD_HH08" />
+		<result property="scdHh09" column="SCD_HH09" />
+		<result property="scdHh10" column="SCD_HH10" />
+		<result property="scdHh11" column="SCD_HH11" />
+		<result property="scdHh12" column="SCD_HH12" />
+		<result property="scdHh13" column="SCD_HH13" />
+		<result property="scdHh14" column="SCD_HH14" />
+		<result property="scdHh15" column="SCD_HH15" />
+		<result property="scdHh16" column="SCD_HH16" />
+		<result property="scdHh17" column="SCD_HH17" />
+		<result property="scdHh18" column="SCD_HH18" />
+		<result property="scdHh19" column="SCD_HH19" />
+		<result property="scdHh20" column="SCD_HH20" />
+		<result property="scdHh21" column="SCD_HH21" />
+		<result property="scdHh22" column="SCD_HH22" />
+		<result property="scdHh23" column="SCD_HH23" />
+		<result property="scdUhh00" column="SCD_UHH00" />
+		<result property="scdUhh01" column="SCD_UHH01" />
+		<result property="scdUhh02" column="SCD_UHH02" />
+		<result property="scdUhh03" column="SCD_UHH03" />
+		<result property="scdUhh04" column="SCD_UHH04" />
+		<result property="scdUhh05" column="SCD_UHH05" />
+		<result property="scdUhh06" column="SCD_UHH06" />
+		<result property="scdUhh07" column="SCD_UHH07" />
+		<result property="scdUhh08" column="SCD_UHH08" />
+		<result property="scdUhh09" column="SCD_UHH09" />
+		<result property="scdUhh10" column="SCD_UHH10" />
+		<result property="scdUhh11" column="SCD_UHH11" />
+		<result property="scdUhh12" column="SCD_UHH12" />
+		<result property="scdUhh13" column="SCD_UHH13" />
+		<result property="scdUhh14" column="SCD_UHH14" />
+		<result property="scdUhh15" column="SCD_UHH15" />
+		<result property="scdUhh16" column="SCD_UHH16" />
+		<result property="scdUhh17" column="SCD_UHH17" />
+		<result property="scdUhh18" column="SCD_UHH18" />
+		<result property="scdUhh19" column="SCD_UHH19" />
+		<result property="scdUhh20" column="SCD_UHH20" />
+		<result property="scdUhh21" column="SCD_UHH21" />
+		<result property="scdUhh22" column="SCD_UHH22" />
+		<result property="scdUhh23" column="SCD_UHH23" />
+		<result property="scdHits" column="SCD_HITS" />
+		<result property="scdUniqHits" column="SCD_UNIQ_HITS" />
+	</resultMap>
+	
+	<resultMap id="siteCounterMenu" type="egovframework.coing.site.vo.SiteCounterMenuVO">
+		<result property="sinId" column="SIN_ID"/>
+		<result property="smeId" column="SME_ID"/>
+		<result property="countDt" column="COUNT_DT"/>
+		<result property="hits" column="HITS"/>
+	</resultMap>
+	
+	<select id="selectCounterDayListHour" parameterType="siteCounterDayVO" resultMap="siteCounterDay">
+		SELECT  A.*
+		  FROM  COING_SITE_COUNTER_DAY A
+		 WHERE  1=1
+		   AND  A.SIN_ID = #{sinId} 
+		   AND  A.SCD_DATE &gt;= #{searchStartDt} 
+		   AND  A.SCD_DATE &lt;= #{searchEndDt}
+	</select>
+
+	<select id="selectCounterDayListDay" parameterType="siteCounterDayVO" resultMap="siteCounterDay">
+		SELECT  A.*
+		  FROM  COING_SITE_COUNTER_DAY A
+		 WHERE  1=1
+		   AND  A.SIN_ID = #{sinId} 
+		   AND  A.SCD_DATE &gt;= #{searchStartDt} 
+		   AND  A.SCD_DATE &lt;= #{searchEndDt}
+	  ORDER BY  A.SCD_DATE ASC		   
+	</select>
+
+	<select id="selectCounterDayListWeek" parameterType="siteCounterDayVO" resultMap="siteCounterDay">
+		SELECT  A.SCD_WW 
+			 ,	(  
+			 	SELECT  IFNULL(SUM(SCD_HITS),0) 
+				  FROM  COING_SITE_COUNTER_DAY 
+				 WHERE  SIN_ID = A.SIN_ID 
+				   AND  SCD_WW = A.SCD_WW 
+				   AND  SCD_DATE &gt;= #{searchStartDt} 
+				   AND  SCD_DATE &lt;= #{searchEndDt}
+			 	)  AS scdHits 
+			 ,  (  
+			 	SELECT  IFNULL(SUM(SCD_UNIQ_HITS),0) 
+				  FROM  COING_SITE_COUNTER_DAY 
+				 WHERE  SIN_ID = A.SIN_ID 
+				   AND  SCD_WW = A.SCD_WW 
+				   AND  SCD_DATE &gt;= #{searchStartDt} 
+				   AND  SCD_DATE &lt;= #{searchEndDt}
+			 	)  AS scdUniqHits
+		  FROM  COING_SITE_COUNTER_DAY AS A
+		 WHERE  A.SIN_ID = #{sinId} 
+		   AND  A.SCD_DATE &gt;= #{searchStartDt} 
+		   AND  A.SCD_DATE &lt;= #{searchEndDt}
+	  GROUP BY  A.SCD_WW
+	  ORDER BY  A.SCD_WW ASC	
+	</select>
+
+	<select id="selectCounterDayListMonth" parameterType="siteCounterDayVO" resultMap="siteCounterDay">
+		SELECT  SUBSTR(A.SCD_DATE, 1, 7) AS SCD_DATE
+			 ,	(  
+			 	SELECT  IFNULL(SUM(SCD_HITS),0) 
+				  FROM  COING_SITE_COUNTER_DAY 
+				 WHERE  SIN_ID = A.SIN_ID 
+				   AND  SCD_YY = A.SCD_YY
+				   AND  SCD_MM = A.SCD_MM 
+				   AND  SUBSTR(SCD_DATE, 1, 7) &gt;= #{searchStartDt} 
+				   AND  SUBSTR(SCD_DATE, 1, 7) &lt;= #{searchEndDt}
+			 	)  AS SCD_HITS 
+			 ,  (  
+			 	SELECT  IFNULL(SUM(SCD_UNIQ_HITS),0) 
+				  FROM  COING_SITE_COUNTER_DAY 
+				 WHERE  SIN_ID = A.SIN_ID 
+				   AND  SCD_YY = A.SCD_YY
+				   AND  SCD_MM = A.SCD_MM 
+				   AND  SUBSTR(SCD_DATE, 1, 7) &gt;= #{searchStartDt} 
+				   AND  SUBSTR(SCD_DATE, 1, 7) &lt;= #{searchEndDt}
+			 	)  AS SCD_UNIQ_HITS
+		  FROM  COING_SITE_COUNTER_DAY AS A
+		 WHERE  A.SIN_ID = #{sinId} 
+		   AND  SUBSTR(A.SCD_DATE, 1, 7) &gt;= #{searchStartDt} 
+		   AND  SUBSTR(A.SCD_DATE, 1, 7) &lt;= #{searchEndDt}
+	  GROUP BY  A.SCD_YY, A.SCD_MM
+	  ORDER BY  A.SCD_DATE ASC	
+	</select>
+	
+	<select id="selectCounterDayListYear" parameterType="siteCounterDayVO" resultMap="siteCounterDay">
+		SELECT  SUBSTR(A.SCD_DATE, 1, 4) AS SCD_DATE
+			 ,	(  
+			 	SELECT  IFNULL(SUM(SCD_HITS),0) 
+				  FROM  COING_SITE_COUNTER_DAY 
+				 WHERE  SIN_ID = A.SIN_ID 
+				   AND  SCD_YY = A.SCD_YY 
+				   AND  SUBSTR(SCD_DATE, 1, 4) &gt;= #{searchStartDt} 
+				   AND  SUBSTR(SCD_DATE, 1, 4) &lt;= #{searchEndDt}
+			 	)  AS SCD_HITS 
+			 ,  (  
+			 	SELECT  IFNULL(SUM(SCD_UNIQ_HITS),0) 
+				  FROM  COING_SITE_COUNTER_DAY 
+				 WHERE  SIN_ID = A.SIN_ID 
+				   AND  SCD_YY = A.SCD_YY
+				   AND  SUBSTR(SCD_DATE, 1, 4) &gt;= #{searchStartDt} 
+				   AND  SUBSTR(SCD_DATE, 1, 4) &lt;= #{searchEndDt}
+			 	)  AS SCD_UNIQ_HITS
+		  FROM  COING_SITE_COUNTER_DAY AS A
+		 WHERE  A.SIN_ID = #{sinId} 
+		   AND  SUBSTR(A.SCD_DATE, 1, 4) &gt;= #{searchStartDt} 
+		   AND  SUBSTR(A.SCD_DATE, 1, 4) &lt;= #{searchEndDt}
+	  GROUP BY  A.SCD_YY
+	  ORDER BY  A.SCD_YY ASC	
+	</select>
+
+	<select id="selectCounterDayTotal" parameterType="siteCounterDayVO" resultMap="siteCounterDay">
+		SELECT  IFNULL(SUM(SCD_HITS),0) AS SCD_HITS 
+			 ,	IFNULL(SUM(SCD_UNIQ_HITS),0) AS SCD_UNIQ_HITS
+		  FROM  COING_SITE_COUNTER_DAY AS A
+		 WHERE  A.SIN_ID = #{sinId} 
+		 <if test='searchStartDt != null and searchStartDt != ""'>
+		   AND  A.SCD_DATE &gt;= #{searchStartDt}		 
+		 </if>
+		 <if test='searchEndDt != null and searchEndDt != ""'>
+		   AND  A.SCD_DATE &lt;= #{searchEndDt}
+		 </if>
+	</select>
+	
+	
+	<select id="selectCounterMenuList" parameterType="siteCounterMenuVO" resultMap="siteCounterMenu">
+	SELECT  SIN_ID
+		 ,  SME_ID
+		 ,  HITS
+		 ,  menuPath
+	  FROM  (
+				SELECT  A.SIN_ID
+					 ,  A.SME_ID
+				     ,  SUM(A.HITS) AS HITS
+					 ,  (
+					 		SELECT  GROUP_CONCAT(PARENT.SME_NAME ORDER BY PARENT.SME_LFT ASC SEPARATOR ' > ')
+							  FROM  COING_SITE_MENU NODE
+						INNER JOIN  COING_SITE_MENU PARENT
+							 WHERE  NODE.SME_LFT BETWEEN PARENT.SME_LFT AND PARENT.SME_RGT
+							   AND  PARENT.SME_LVL != 1
+							   AND  NODE.SME_ID = A.SME_ID
+							   AND  PARENT.SIN_ID = A.SIN_ID
+							   AND  NODE.SIN_ID = A.SIN_ID
+					 ) AS menuPath
+				  FROM  COING_SITE_COUNTER_MENU A
+				 WHERE  A.SIN_ID = #{sinId}
+				   AND  A.COUNT_DT BETWEEN #{searchStartDt} AND #{searchEndDt}
+			  GROUP BY  A.SIN_ID, A.SME_ID
+	  		) T
+  ORDER BY  HITS DESC
+	</select>
+	<!-- 여기까지 -->
+	
+
+</mapper>

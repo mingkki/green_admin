@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.popup.service.impl.PopupMapper">
+
+	<resultMap id="popup" type="egovframework.coing.popup.vo.PopupVO">
+		<result property="popId" column="POP_ID"/>
+		<result property="popType" column="POP_TYPE"/>
+		<result property="popCategory" column="POP_CATEGORY"/>		
+		<result property="popTitle" column="POP_TITLE"/>
+		<result property="popPeriodYn" column="POP_PERIOD_YN"/>
+		<result property="popStartDttm" column="POP_START_DTTM"/>
+		<result property="popEndDttm" column="POP_END_DTTM"/>
+		<result property="popWidth" column="POP_WIDTH"/>
+		<result property="popWidthUnit" column="POP_WIDTH_UNIT"/>
+		<result property="popHeight" column="POP_HEIGHT"/>
+		<result property="popHeightUnit" column="POP_HEIGHT_UNIT"/>
+		<result property="popLeft" column="POP_LEFT"/>
+		<result property="popLeftUnit" column="POP_LEFT_UNIT"/>
+		<result property="popTop" column="POP_TOP"/>
+		<result property="popTopUnit" column="POP_TOP_UNIT"/>
+		<result property="popFile" column="POP_FILE"/>
+		<result property="popFileAlt" column="POP_FILE_ALT"/>
+		<result property="popCookieDay" column="POP_COOKIE_DAY"/>
+		<result property="popScrollAt" column="POP_SCROLL_AT"/>
+		<result property="popContent" column="POP_CONTENT"/>
+		<result property="popLinkUrl" column="POP_LINK_URL"/>
+		<result property="popLinkTarget" column="POP_LINK_TARGET"/>
+		<result property="popOrderNo" column="POP_ORDER_NO"/>
+		<result property="popHits" column="POP_HITS"/>
+		<result property="popShares" column="POP_SHARES"/>
+		<result property="popUseYn" column="POP_USE_YN"/>
+		<result property="popRegDttm" column="POP_REG_DTTM"/>
+		<result property="popRegId" column="POP_REG_ID"/>
+		<result property="popRegIp" column="POP_REG_IP"/>
+		<result property="popUpdtDttm" column="POP_UPDT_DTTM"/>
+		<result property="popUpdtId" column="POP_UPDT_ID"/>
+		<result property="popUpdtIp" column="POP_UPDT_IP"/>	
+	</resultMap>
+
+
+	<sql id="popupListWhere">
+		AND  A.POP_TYPE = UPPER(#{popType})
+		<if test='progress != null and progress != ""'>
+			<choose>
+		    	<when test='progress == "ING"'>AND ((NOW() &gt;= A.POP_START_DTTM AND NOW() &lt;= A.POP_END_DTTM) AND A.POP_PERIOD_YN = 'N')</when>
+		    	<when test='progress == "COMPLETE"'>AND (NOW() &gt; A.POP_END_DTTM AND A.POP_PERIOD_YN = 'N')</when>
+		    	<when test='progress == "PRE"'>AND (NOW() &lt; A.POP_START_DTTM AND A.POP_PERIOD_YN = 'N')</when>
+			</choose>
+		</if>		
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "popTitle"'>AND A.POP_TITLE LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+		<if test='popCategory != null and popCategory != ""'>
+			AND  A.POP_CATEGORY = #{popCategory}			
+		</if>
+		<if test='popUseYn != null and popUseYn != ""'>
+			AND  A.POP_USE_YN = #{popUseYn}			
+		</if>
+		AND  A.POP_DEL_YN = 'N'
+	</sql>
+	
+	
+	<select id="selectPopupListCnt" parameterType="popupVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_POPUP A
+		 WHERE  1=1
+		   		<include refid="popupListWhere" />
+	</select>
+
+
+	<select id="selectPopupList" parameterType="popupVO" resultMap="popup">
+		SELECT  A.POP_ID
+			 ,  A.POP_TYPE
+			 ,  A.POP_CATEGORY
+			 ,  (SELECT CDD_NAME FROM COING_CODE_DETAIL WHERE COD_ID = CONCAT('POP',UPPER(A.POP_TYPE)) AND CDD_ID = A.POP_CATEGORY AND CDD_USE_YN = 'Y' AND CDD_DEL_YN ='N') AS popCategoryNm
+			 ,  A.POP_TITLE
+			 ,  A.POP_PERIOD_YN
+			 ,  A.POP_START_DTTM
+			 ,  A.POP_END_DTTM
+			 ,  A.POP_FILE
+			 ,  A.POP_LINK_URL
+			 ,  A.POP_ORDER_NO
+			 ,  A.POP_HITS
+			 ,  A.POP_SHARES
+			 ,  (SELECT GROUP_CONCAT(CDD_NAME) FROM COING_CODE_DETAIL WHERE COD_ID = CONCAT('POP',UPPER(A.POP_TYPE)) AND CDD_ID IN (
+			 		SELECT  SUBSTRING_INDEX(SUBSTRING_INDEX(A.POP_SHARES, ',', n.n), ',', -1) value
+			 		  FROM  COING_TALLY n
+			 		 WHERE  n.n &lt;= 1 + (LENGTH(A.POP_SHARES) - LENGTH(REPLACE(A.POP_SHARES, ',', '')))
+			 	)) AS popSharesNm
+			 ,  A.POP_USE_YN
+			 ,  A.POP_REG_DTTM
+			 ,  A.POP_REG_ID
+			 ,  A.POP_REG_IP
+			 ,  (
+			 		<![CDATA[			 
+			 		CASE 
+			 		WHEN A.POP_PERIOD_YN = 'N' THEN 'ING'		
+			 		WHEN (NOW() >= A.POP_START_DTTM AND NOW() <= A.POP_END_DTTM) THEN 'ING'
+			 		WHEN (NOW() > A.POP_END_DTTM) THEN 'COMPLETE'
+			 		ELSE 'PRE'
+			 		END
+			 		]]>
+			 	) AS progress			 
+		  FROM  COING_POPUP A
+		 WHERE  1=1
+		   		<include refid="popupListWhere" />
+	  ORDER BY  A.POP_ORDER_NO ASC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}	
+	</select>
+
+
+	<select id="selectPopup" parameterType="popupVO" resultMap="popup">
+		SELECT  A.POP_ID
+			 ,  A.POP_TYPE
+			 ,  A.POP_CATEGORY
+			 ,  A.POP_TITLE
+			 ,  A.POP_PERIOD_YN
+			 ,  A.POP_START_DTTM
+			 ,  A.POP_END_DTTM
+			 ,  A.POP_WIDTH
+			 ,  A.POP_WIDTH_UNIT
+			 ,  A.POP_HEIGHT
+			 ,  A.POP_HEIGHT_UNIT
+			 ,  A.POP_LEFT
+			 ,  A.POP_LEFT_UNIT
+			 ,  A.POP_TOP
+			 ,  A.POP_TOP_UNIT
+			 ,  A.POP_FILE
+			 ,  A.POP_FILE_ALT
+			 ,  A.POP_COOKIE_DAY
+			 ,  A.POP_SCROLL_AT
+			 ,  A.POP_CONTENT
+			 ,  A.POP_LINK_URL
+			 ,  A.POP_LINK_TARGET
+			 ,  A.POP_ORDER_NO
+			 ,  A.POP_HITS
+			 ,  A.POP_SHARES
+			 ,  A.POP_USE_YN
+			 ,  A.POP_REG_DTTM
+			 ,  A.POP_REG_ID
+			 ,  A.POP_REG_IP
+			 ,  A.POP_UPDT_DTTM
+			 ,  A.POP_UPDT_ID
+			 ,  A.POP_UPDT_IP
+		  FROM  COING_POPUP A
+		 WHERE  A.POP_ID = #{popId}
+		   AND  A.POP_TYPE = UPPER(#{popType})
+		   AND  A.POP_DEL_YN = 'N'
+	</select>
+
+	<select id="selectPopupMaxOrderNo" parameterType="popupVO" resultType="int">
+		SELECT  IFNULL(MAX(A.POP_ORDER_NO),0)
+		  FROM  COING_POPUP A
+		 WHERE  A.POP_TYPE = #{popType}
+		   AND  A.POP_CATEGORY = #{popCategory}
+		   AND  A.POP_DEL_YN = 'N'
+	</select>
+
+	<insert id="insertPopup">
+		INSERT
+		  INTO  COING_POPUP
+		     (  POP_ID
+		     ,  POP_TYPE
+		     ,  POP_CATEGORY
+		     ,  POP_TITLE
+		     ,  POP_PERIOD_YN
+		     ,  POP_START_DTTM
+		     ,  POP_END_DTTM
+		     ,  POP_WIDTH
+		     ,  POP_WIDTH_UNIT
+		     ,  POP_HEIGHT
+		     ,  POP_HEIGHT_UNIT
+		     ,  POP_LEFT
+		     ,  POP_LEFT_UNIT
+		     ,  POP_TOP
+		     ,  POP_TOP_UNIT
+		     ,  POP_FILE
+		     ,  POP_FILE_ALT
+		     ,  POP_COOKIE_DAY
+		     ,  POP_SCROLL_AT
+		     ,  POP_CONTENT
+		     ,  POP_LINK_URL
+		     ,  POP_LINK_TARGET
+		     ,  POP_ORDER_NO
+		     ,  POP_USE_YN
+		     ,  POP_SHARES
+		     ,  POP_REG_DTTM
+		     ,  POP_REG_ID
+		     ,  POP_REG_IP
+		     ,  POP_DEL_YN
+		     )
+		VALUES
+		     (  #{popId}
+			 ,  UPPER(#{popType, jdbcType=VARCHAR})
+			 ,  #{popCategory, jdbcType=VARCHAR}
+			 ,  #{popTitle, jdbcType=VARCHAR}
+			 ,  #{popPeriodYn, jdbcType=VARCHAR}
+			 ,  #{popStartDttm, jdbcType=VARCHAR}
+			 ,  #{popEndDttm, jdbcType=VARCHAR}
+			 ,  #{popWidth}
+			 ,  #{popWidthUnit, jdbcType=VARCHAR}
+			 ,  #{popHeight}
+			 ,  #{popHeightUnit, jdbcType=VARCHAR}
+			 ,  #{popLeft}
+			 ,  #{popLeftUnit, jdbcType=VARCHAR}
+			 ,  #{popTop}
+			 ,  #{popTopUnit, jdbcType=VARCHAR}
+			 ,  #{popFile, jdbcType=VARCHAR}
+			 ,  #{popFileAlt, jdbcType=VARCHAR}
+			 ,  #{popCookieDay}
+			 ,  #{popScrollAt, jdbcType=VARCHAR}
+			 ,  #{popContent, jdbcType=VARCHAR}
+			 ,  #{popLinkUrl, jdbcType=VARCHAR}
+			 ,  #{popLinkTarget, jdbcType=VARCHAR}
+			 ,  #{popOrderNo}
+			 ,  #{popUseYn, jdbcType=VARCHAR}
+			 ,  #{popShares, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  #{popRegId, jdbcType=VARCHAR}
+			 ,  #{popRegIp, jdbcType=VARCHAR}
+			 ,  'N'
+		     )
+	</insert>
+
+
+	<update id="updatePopup">
+		UPDATE  COING_POPUP
+		   SET  POP_CATEGORY = #{popCategory, jdbcType=VARCHAR}
+		   	 ,  POP_TITLE = #{popTitle, jdbcType=VARCHAR}
+		     ,  POP_PERIOD_YN = #{popPeriodYn, jdbcType=VARCHAR}
+		     ,  POP_START_DTTM = #{popStartDttm, jdbcType=VARCHAR}
+		     ,  POP_END_DTTM = #{popEndDttm, jdbcType=VARCHAR}
+		     ,  POP_WIDTH = #{popWidth}
+		     ,  POP_WIDTH_UNIT = #{popWidthUnit, jdbcType=VARCHAR}
+		     ,  POP_HEIGHT = #{popHeight}
+		     ,  POP_HEIGHT_UNIT = #{popHeightUnit, jdbcType=VARCHAR}
+		     ,  POP_LEFT = #{popLeft}
+		     ,  POP_LEFT_UNIT = #{popLeftUnit, jdbcType=VARCHAR}
+		     ,  POP_TOP = #{popTop}
+		     ,  POP_TOP_UNIT = #{popTopUnit, jdbcType=VARCHAR}
+		     <if test='popFile != null'>
+		     ,  POP_FILE = #{popFile, jdbcType=VARCHAR}
+		     </if>
+		     ,  POP_FILE_ALT = #{popFileAlt, jdbcType=VARCHAR}
+		     ,  POP_COOKIE_DAY = #{popCookieDay}
+		     ,  POP_SCROLL_AT = #{popScrollAt, jdbcType=VARCHAR}
+		     ,  POP_CONTENT = #{popContent, jdbcType=VARCHAR}
+		     ,  POP_LINK_URL = #{popLinkUrl, jdbcType=VARCHAR}
+		     ,  POP_LINK_TARGET = #{popLinkTarget, jdbcType=VARCHAR}
+		     ,  POP_ORDER_NO = #{popOrderNo}
+		     ,  POP_USE_YN = #{popUseYn, jdbcType=VARCHAR}
+		     ,  POP_SHARES = #{popShares, jdbcType=VARCHAR}
+		     ,  POP_UPDT_DTTM = NOW()
+		     ,  POP_UPDT_ID = #{popUpdtId, jdbcType=VARCHAR}
+		     ,  POP_UPDT_IP = #{popUpdtIp, jdbcType=VARCHAR}
+		 WHERE  POP_ID = #{popId}
+		   AND  POP_TYPE = UPPER(#{popType})
+		   AND  POP_DEL_YN = 'N'
+	</update>
+
+
+	<update id="deletePopup">
+		UPDATE  COING_POPUP
+		   SET  POP_DEL_YN = 'Y'
+			 ,  POP_DEL_DTTM = NOW()
+			 ,  POP_DEL_ID = #{popDelId, jdbcType=VARCHAR}
+			 ,  POP_DEL_IP = #{popDelIp, jdbcType=VARCHAR}
+		 WHERE  POP_ID = #{popId}
+		   AND  POP_TYPE = UPPER(#{popType})
+		   AND  POP_DEL_YN = 'N'	
+	</update>
+	
+</mapper>

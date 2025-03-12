@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.DbTableMapper">
+
+	<resultMap id="dbTableInfo" type="egovframework.coing.cmm.vo.DbTableInfoVO">
+		<result property="tableCatalog" column="TABLE_CATALOG" />
+		<result property="tableSchema" column="TABLE_SCHEMA" />
+		<result property="tableName" column="TABLE_NAME" />
+		<result property="tableType" column="TABLE_TYPE" />
+		<result property="engine" column="ENGINE" />
+		<result property="version" column="VERSION" />
+		<result property="rowFormat" column="ROW_FORMAT" />
+		<result property="tableRows" column="TABLE_ROWS" />
+		<result property="avgRowLength" column="AVG_ROW_LENGTH" />
+		<result property="dataLength" column="DATA_LENGTH" />
+		<result property="maxDataLength" column="MAX_DATA_LENGTH" />
+		<result property="indexLength" column="INDEX_LENGTH" />
+		<result property="dataFree" column="DATA_FREE" />
+		<result property="autoIncrement" column="AUTO_INCREMENT" />
+		<result property="createTime" column="CREATE_TIME" />
+		<result property="updateTime" column="UPDATE_TIME" />
+		<result property="checkTime" column="CHECK_TIME" />
+		<result property="tableCollation" column="TABLE_COLLATION" />
+		<result property="checksum" column="CHECKSUM" />
+		<result property="createOptions" column="CREATE_OPTIONS" />
+		<result property="tableComment" column="TABLE_COMMENT" />
+	</resultMap>
+
+	<resultMap id="dbTableColumn" type="egovframework.coing.cmm.vo.DbTableColumnVO">
+		<result property="field" column="Field"/>
+		<result property="type" column="Type"/>
+		<result property="collation" column="Collation"/>
+		<result property="nullYn" column="Null"/>
+		<result property="key" column="Key"/>
+		<result property="defaultValue" column="Default"/>
+		<result property="extra" column="Extra"/>
+		<result property="privileges" column="Privileges"/>
+		<result property="comment" column="Comment"/>	
+	</resultMap>
+
+	<sql id="dbTableInfoListWhere">
+		AND  A.TABLE_SCHEMA = #{tableSchema}
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<choose>
+		    	<when test='searchCondition == "tableName"'>AND A.TABLE_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</when>
+			</choose>
+		</if>
+	</sql>
+
+	<select id="selectDbTableInfoListCnt" parameterType="dbTableInfoVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  information_schema.tables A
+		 WHERE  1=1
+				<include refid="dbTableInfoListWhere" />
+	</select>
+
+
+	<select id="selectDbTableInfoList" parameterType="dbTableInfoVO" resultMap="dbTableInfo">
+		SELECT  A.TABLE_CATALOG
+			 ,  A.TABLE_SCHEMA
+			 ,  A.TABLE_NAME
+			 ,  A.TABLE_TYPE
+			 ,  A.ENGINE
+			 ,  A.VERSION
+			 ,  A.ROW_FORMAT
+			 ,  A.TABLE_ROWS
+			 ,  A.AVG_ROW_LENGTH
+			 ,  A.DATA_LENGTH
+			 ,  A.MAX_DATA_LENGTH
+			 ,  A.INDEX_LENGTH
+			 ,  A.DATA_FREE
+			 ,  A.AUTO_INCREMENT
+			 ,  A.CREATE_TIME
+			 ,  A.UPDATE_TIME
+			 ,  A.CHECK_TIME
+			 ,  A.TABLE_COLLATION
+			 ,  A.CHECKSUM
+			 ,  A.CREATE_OPTIONS
+			 ,  A.TABLE_COMMENT
+		  FROM  information_schema.tables A
+		 WHERE  1=1
+		   		<include refid="dbTableInfoListWhere" />
+	  ORDER BY  A.TABLE_NAME ASC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}	  
+	</select>
+
+
+	<select id="selectDbTableInfo" parameterType="dbTableInfoVO" resultMap="dbTableInfo">
+		SELECT  A.TABLE_CATALOG
+			 ,  A.TABLE_SCHEMA
+			 ,  A.TABLE_NAME
+			 ,  A.TABLE_TYPE
+			 ,  A.ENGINE
+			 ,  A.VERSION
+			 ,  A.ROW_FORMAT
+			 ,  A.TABLE_ROWS
+			 ,  A.AVG_ROW_LENGTH
+			 ,  A.DATA_LENGTH
+			 ,  A.MAX_DATA_LENGTH
+			 ,  A.INDEX_LENGTH
+			 ,  A.DATA_FREE
+			 ,  A.AUTO_INCREMENT
+			 ,  A.CREATE_TIME
+			 ,  A.UPDATE_TIME
+			 ,  A.CHECK_TIME
+			 ,  A.TABLE_COLLATION
+			 ,  A.CHECKSUM
+			 ,  A.CREATE_OPTIONS
+			 ,  A.TABLE_COMMENT
+		  FROM  information_schema.tables A
+		 WHERE  A.TABLE_SCHEMA = #{tableSchema}
+		   AND  A.TABLE_NAME = #{tableName}
+	</select>
+
+	<select id="selectDbTableColumnList" parameterType="dbTableColumnVO" resultMap="dbTableColumn">
+		SHOW FULL FIELDS FROM ${tableName}
+	</select>
+	
+	<select id="selectDbTableInfoListAll" parameterType="dbTableInfoVO" resultMap="dbTableInfo">
+		SELECT	A.TABLE_CATALOG
+			 ,  A.TABLE_SCHEMA
+			 ,  A.TABLE_NAME
+			 ,  A.TABLE_TYPE
+			 ,  A.ENGINE
+			 ,  A.VERSION
+			 ,  A.ROW_FORMAT
+			 ,  A.TABLE_ROWS
+			 ,  A.AVG_ROW_LENGTH
+			 ,  A.DATA_LENGTH
+			 ,  A.MAX_DATA_LENGTH
+			 ,  A.INDEX_LENGTH
+			 ,  A.DATA_FREE
+			 ,  A.AUTO_INCREMENT
+			 ,  A.CREATE_TIME
+			 ,  A.UPDATE_TIME
+			 ,  A.CHECK_TIME
+			 ,  A.TABLE_COLLATION
+			 ,  A.CHECKSUM
+			 ,  A.CREATE_OPTIONS
+			 ,  A.TABLE_COMMENT
+		  FROM	information_schema.tables A
+		 WHERE	1=1
+		 <include refid="dbTableInfoListWhere" />
+	  ORDER BY  A.TABLE_NAME ASC
+	</select>
+</mapper>

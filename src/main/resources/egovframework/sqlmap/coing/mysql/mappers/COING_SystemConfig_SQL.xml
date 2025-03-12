@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.SystemConfigMapper">
+
+	<resultMap id="systemConfig" type="egovframework.coing.cmm.vo.SystemConfigVO">
+		<result property="cfgAdminAccessIp" column="CFG_ADMIN_ACCESS_IP"/>
+		<result property="cfgAdminPwchangeMonth" column="CFG_ADMIN_PWCHANGE_MONTH"/>
+		<result property="cfgDuploginYn" column="CFG_DUPLOGIN_YN"/>
+	</resultMap>
+
+	<select id="selectSystemConfig" parameterType="systemConfigVO" resultMap="systemConfig">
+		SELECT  A.CFG_ADMIN_ACCESS_IP
+			 ,  A.CFG_ADMIN_PWCHANGE_MONTH
+			 ,  A.CFG_DUPLOGIN_YN
+		  FROM  COING_CONFIG A
+		 LIMIT  1
+	</select>
+
+</mapper>

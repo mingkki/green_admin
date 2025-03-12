@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.cmm.service.impl.UserConfigMapper">
+
+	<resultMap id="userConfig" type="egovframework.coing.cmm.vo.UserConfigVO">
+		<result property="ucfUserSe" column="UCF_USER_SE"/>
+		<result property="ucfJoinYn" column="UCF_JOIN_YN"/>
+		<result property="ucfJoinLevel" column="UCF_JOIN_LEVEL"/>
+		<result property="ucfJoinGroup" column="UCF_JOIN_GROUP"/>
+		<result property="ucfLeaveConfirmYn" column="UCF_LEAVE_CONFIRM_YN"/>
+		<result property="ucfJoinConfirmYn" column="UCF_JOIN_CONFIRM_YN"/>
+		<result property="ucfJoinGubunYn" column="UCF_JOIN_GUBUN_YN"/>
+		<result property="ucfJoinAgreeYn" column="UCF_JOIN_AGREE_YN"/>
+		<result property="ucfJoinRealnameYn" column="UCF_JOIN_REALNAME_YN"/>
+		<result property="ucfFindRealnameYn" column="UCF_FIND_REALNAME_YN"/>
+		<result property="ucfJoinPrivacy1" column="UCF_JOIN_PRIVACY1"/>
+		<result property="ucfJoinPrivacy2" column="UCF_JOIN_PRIVACY2"/>
+		<result property="ucfRegDttm" column="UCF_REG_DTTM"/>
+		<result property="ucfRegId" column="UCF_REG_ID"/>
+		<result property="ucfRegIp" column="UCF_REG_IP"/>
+		<result property="ucfUpdtDttm" column="UCF_UPDT_DTTM"/>
+		<result property="ucfUpdtId" column="UCF_UPDT_ID"/>
+		<result property="ucfUpdtIp" column="UCF_UPDT_IP"/>
+	</resultMap>
+
+	<select id="selectUserConfig" parameterType="userConfigVO" resultMap="userConfig">
+		SELECT  A.UCF_USER_SE
+			 ,  A.UCF_JOIN_YN
+			 ,  A.UCF_JOIN_LEVEL
+			 ,  A.UCF_JOIN_GROUP
+			 ,  A.UCF_LEAVE_CONFIRM_YN
+			 ,  A.UCF_JOIN_CONFIRM_YN
+			 ,  A.UCF_JOIN_GUBUN_YN
+			 ,  A.UCF_JOIN_AGREE_YN
+			 ,  A.UCF_JOIN_REALNAME_YN
+			 ,  A.UCF_FIND_REALNAME_YN
+			 ,  A.UCF_JOIN_PRIVACY1
+			 ,  A.UCF_JOIN_PRIVACY2
+			 ,  A.UCF_REG_DTTM
+			 ,  A.UCF_REG_ID
+			 ,  A.UCF_REG_IP
+			 ,  A.UCF_UPDT_DTTM
+			 ,  A.UCF_UPDT_ID
+			 ,  A.UCF_UPDT_IP
+		  FROM  COING_USER_CONFIG A
+		 WHERE  A.UCF_USER_SE = #{ucfUserSe}
+	</select>
+
+	<insert id="insertUserConfig">
+		INSERT
+		  INTO  COING_USER_CONFIG
+		     (  UCF_USER_SE
+		     ,  UCF_JOIN_YN
+		     ,  UCF_JOIN_LEVEL
+		     ,  UCF_JOIN_GROUP
+		     ,  UCF_LEAVE_CONFIRM_YN
+		     ,  UCF_JOIN_CONFIRM_YN
+		     ,  UCF_JOIN_GUBUN_YN
+		     ,  UCF_JOIN_AGREE_YN
+		     ,  UCF_JOIN_REALNAME_YN
+		     ,  UCF_FIND_REALNAME_YN
+		     ,  UCF_JOIN_PRIVACY1
+		     ,  UCF_JOIN_PRIVACY2
+		     ,  UCF_REG_DTTM
+		     ,  UCF_REG_ID
+		     ,  UCF_REG_IP
+		     ,  UCF_UPDT_DTTM
+		     ,  UCF_UPDT_ID
+		     ,  UCF_UPDT_IP
+		     )
+		VALUES
+		     (  UPPER(#{ucfUserSe})
+			 ,  #{ucfJoinYn}
+			 ,  #{ucfJoinLevel}
+			 ,  #{ucfJoinGroup}
+			 ,  #{ucfLeaveConfirmYn}
+			 ,  #{ucfJoinConfirmYn}
+			 ,  #{ucfJoinGubunYn}
+			 ,  #{ucfJoinAgreeYn}
+			 ,  #{ucfJoinRealnameYn}
+			 ,  #{ucfFindRealnameYn}
+			 ,  #{ucfJoinPrivacy1}
+			 ,  #{ucfJoinPrivacy2}
+			 ,  NOW()
+			 ,  #{ucfRegId}
+			 ,  #{ucfRegIp}
+		     )
+	</insert>
+
+	<update id="updateUserConfig">
+		UPDATE  COING_USER_CONFIG
+		   SET  UCF_JOIN_YN = #{ucfJoinYn, jdbcType=VARCHAR}
+		     ,  UCF_JOIN_LEVEL = #{ucfJoinLevel}
+		     ,  UCF_JOIN_GROUP = #{ucfJoinGroup, jdbcType=VARCHAR}
+		     ,  UCF_LEAVE_CONFIRM_YN = #{ucfLeaveConfirmYn, jdbcType=VARCHAR}
+		     ,  UCF_JOIN_CONFIRM_YN = #{ucfJoinConfirmYn, jdbcType=VARCHAR}
+		     ,  UCF_JOIN_GUBUN_YN = #{ucfJoinGubunYn, jdbcType=VARCHAR}
+		     ,  UCF_JOIN_AGREE_YN = #{ucfJoinAgreeYn, jdbcType=VARCHAR}
+		     ,  UCF_JOIN_REALNAME_YN = #{ucfJoinRealnameYn, jdbcType=VARCHAR}
+		     ,  UCF_FIND_REALNAME_YN = #{ucfFindRealnameYn, jdbcType=VARCHAR}
+		     ,  UCF_JOIN_PRIVACY1 = #{ucfJoinPrivacy1, jdbcType=VARCHAR}
+		     ,  UCF_JOIN_PRIVACY2 = #{ucfJoinPrivacy2, jdbcType=VARCHAR}
+		     ,  UCF_UPDT_DTTM = NOW()
+		     ,  UCF_UPDT_ID = #{ucfUpdtId, jdbcType=VARCHAR}
+		     ,  UCF_UPDT_IP = #{ucfUpdtIp, jdbcType=VARCHAR}
+		 WHERE  UCF_USER_SE = #{ucfUserSe}
+	</update>
+	
+</mapper>
