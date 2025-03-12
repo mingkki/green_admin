@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+body{background:#fff;margin:1cm 0;page-break-after:always;}
+
+.hidden{display:none;}
+h2 {margin-top:10px; margin-bottom:5px; font-size:17px;}
+
+
+h1{margin-top:-40px;}
+
+@page {
+    size: A4;
+    margin:5em 3em 5em 3em;
+    padding: 0;
+}
+
