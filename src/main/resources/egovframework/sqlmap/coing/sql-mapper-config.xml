@@ -56,6 +56,9 @@
     <typeAlias alias="boardCategoryVO" type="egovframework.coing.board.vo.BoardCategoryVO"/>
     <typeAlias alias="boardWriteVO" type="egovframework.coing.board.vo.BoardWriteVO"/>
 
+    <!-- 설문조사 -->
+    <package name="egovframework.coing.survey.vo"/>
+
   </typeAliases>
 
 </configuration>

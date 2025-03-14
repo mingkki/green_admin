@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.survey.service.impl.SurveyMapper">
+
+	<resultMap id="surveyInfo" type="egovframework.coing.survey.vo.SurveyInfoVO">
+		<result property="svinId" column="SVIN_ID" />
+		<result property="svinTitle" column="SVIN_TITLE" />
+		<result property="svinContent" column="SVIN_CONTENT" />
+		<result property="svinStartDt" column="SVIN_START_DT" />
+		<result property="svinEndDt" column="SVIN_END_DT" />
+		<result property="svinOpenYn" column="SVIN_OPEN_YN" />
+		<result property="svinUseYn" column="SVIN_USE_YN" />
+		<result property="svinDplctnYn" column="SVIN_DPLCTN_YN" />
+		<result property="svinResopenYn" column="SVIN_RESOPEN_YN" />
+		<result property="svinRegDttm" column="SVIN_REG_DTTM" />
+		<result property="svinRegId" column="SVIN_REG_ID" />
+		<result property="svinRegIp" column="SVIN_REG_IP" />
+		<result property="svinUpdtDttm" column="SVIN_UPDT_DTTM" />
+		<result property="svinUpdtId" column="SVIN_UPDT_ID" />
+		<result property="svinUpdtIp" column="SVIN_UPDT_IP" />
+	</resultMap>
+
+	<resultMap id="surveyQuestion" type="egovframework.coing.survey.vo.SurveyQuestionVO">
+		<result property="svquId" column="SVQU_ID" />
+		<result property="svinId" column="SVIN_ID" />
+		<result property="svquType" column="SVQU_TYPE" />
+		<result property="svquTitle" column="SVQU_TITLE" />
+		<result property="svquReqYn" column="SVQU_REQ_YN" />
+		<result property="svquMinchkNum" column="SVQU_MINCHK_NUM" />
+		<result property="svquOrderNo" column="SVQU_ORDER_NO" />
+		<result property="svquRegDttm" column="SVQU_REG_DTTM" />
+		<result property="svquRegId" column="SVQU_REG_ID" />
+		<result property="svquRegIp" column="SVQU_REG_IP" />
+		<result property="svquUpdtDttm" column="SVQU_UPDT_DTTM" />
+		<result property="svquUpdtId" column="SVQU_UPDT_ID" />
+		<result property="svquUpdtIp" column="SVQU_UPDT_IP" />
+	</resultMap>
+	
+	<resultMap id="surveyExample" type="egovframework.coing.survey.vo.SurveyExampleVO">
+		<result property="svexId" column="SVEX_ID" />
+		<result property="svinId" column="SVIN_ID" />
+		<result property="svquId" column="SVQU_ID" />
+		<result property="svexKey" column="SVEX_KEY" />
+		<result property="svexTitle" column="SVEX_TITLE" />
+	</resultMap>	
+	
+	<resultMap id="surveyAnswer" type="egovframework.coing.survey.vo.SurveyAnswerVO">
+		<result property="svanId" column="SVAN_ID" />
+		<result property="svinId" column="SVIN_ID" />
+		<result property="svvoId" column="SVVO_ID" />
+		<result property="svquId" column="SVQU_ID" />
+		<result property="svexId" column="SVEX_ID" />
+		<result property="svanRemarks" column="SVAN_REMARKS" />
+	</resultMap>
+	
+	<resultMap id="surveyVote" type="egovframework.coing.survey.vo.SurveyVoteVO">
+		<result property="svvoId" column="SVVO_ID" />
+		<result property="svinId" column="SVIN_ID" />
+		<result property="svvoUserId" column="SVVO_USER_ID" />
+		<result property="svvoUserNm" column="SVVO_USER_NM" />
+		<result property="svvoRegDttm" column="SVVO_REG_DTTM" />
+		<result property="svvoRegIp" column="SVVO_REG_IP" />
+	</resultMap>	
+	
+	<sql id="infoListWhere">
+		<if test='svinUseYn != null and svinUseYn != ""'>
+		   AND  A.SVIN_USE_YN = #{svinUseYn}
+		</if>
+		<if test='progress != null and progress != ""'>
+			<choose>
+		    	<when test='progress == "ING"'>AND (DATE_FORMAT(NOW(), '%Y-%m-%d') &gt;= A.SVIN_START_DT AND DATE_FORMAT(NOW(), '%Y-%m-%d') &lt;= A.SVIN_END_DT)</when>
+		    	<when test='progress == "COMPLETE"'>AND (DATE_FORMAT(NOW(), '%Y-%m-%d') &gt; A.SVIN_END_DT)</when>
+		    	<when test='progress == "PRE"'>AND (DATE_FORMAT(NOW(), '%Y-%m-%d') &lt; A.SVIN_START_DT)</when>
+			</choose>
+		</if>
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<if test='searchCondition == "svinTitle"'>AND A.SVIN_TITLE LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
+		</if>
+		AND  A.SVIN_DEL_YN = 'N'
+	</sql>
+	
+	<select id="selectInfoListCnt" parameterType="surveyInfoVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM COING_SURVEY_INFO A
+		 WHERE  1=1
+		   		<include refid="infoListWhere" />
+	</select>
+
+
+	<select id="selectInfoList" parameterType="surveyInfoVO" resultMap="surveyInfo">
+		SELECT  A.SVIN_ID		
+			 ,  A.SVIN_TITLE	
+			 ,  A.SVIN_START_DT	
+			 ,  A.SVIN_END_DT	
+			 ,  A.SVIN_OPEN_YN	
+			 ,  A.SVIN_USE_YN	
+			 ,  A.SVIN_DPLCTN_YN	
+			 ,  A.SVIN_RESOPEN_YN	
+			 ,  A.SVIN_REG_DTTM	
+			 ,  A.SVIN_REG_ID	
+			 ,  A.SVIN_REG_IP	
+			 ,  (
+			 		<![CDATA[			 		
+			 		CASE (CASE WHEN (DATE_FORMAT(NOW(), '%Y-%m-%d') >= A.SVIN_START_DT AND DATE_FORMAT(NOW(), '%Y-%m-%d') <= A.SVIN_END_DT) THEN 'TRUE' ELSE 'FALSE' END)
+			 		WHEN 'TRUE' THEN 'ING'			 		
+			 		ELSE (CASE WHEN (DATE_FORMAT(NOW(), '%Y-%m-%d') > A.SVIN_END_DT) THEN 'COMPLETE' ELSE 'PRE' END)
+			 		END
+			 		]]>
+			 	) AS progress
+			 ,  (
+			 		SELECT  COUNT(SVIN_ID) 
+			 		  FROM  COING_SURVEY_VOTE
+			 		 WHERE  SVIN_ID = A.SVIN_ID
+			 	) AS voteCnt
+		  FROM  COING_SURVEY_INFO A
+		 WHERE  1=1
+		   		<include refid="infoListWhere" />
+	  ORDER BY  A.SVIN_ID DESC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}	
+	</select>
+	
+	<select id="selectInfo" parameterType="surveyInfoVO" resultMap="surveyInfo">
+		SELECT  A.SVIN_ID		
+			 ,  A.SVIN_TITLE	
+			 ,  A.SVIN_CONTENT	
+			 ,  A.SVIN_START_DT	
+			 ,  A.SVIN_END_DT	
+			 ,  A.SVIN_OPEN_YN	
+			 ,  A.SVIN_USE_YN	
+			 ,  A.SVIN_DPLCTN_YN	
+			 ,  A.SVIN_RESOPEN_YN	
+			 ,  A.SVIN_REG_DTTM	
+			 ,  A.SVIN_REG_ID	
+			 ,  A.SVIN_REG_IP	
+			 ,  A.SVIN_UPDT_DTTM	
+			 ,  A.SVIN_UPDT_ID	
+			 ,  A.SVIN_UPDT_IP	
+			 ,  (
+			 		<![CDATA[			 		
+			 		CASE (CASE WHEN (DATE_FORMAT(NOW(), '%Y-%m-%d') >= A.SVIN_START_DT AND DATE_FORMAT(NOW(), '%Y-%m-%d') <= A.SVIN_END_DT) THEN 'TRUE' ELSE 'FALSE' END)
+			 		WHEN 'TRUE' THEN 'ING'			 		
+			 		ELSE (CASE WHEN (DATE_FORMAT(NOW(), '%Y-%m-%d') > A.SVIN_END_DT) THEN 'COMPLETE' ELSE 'PRE' END)
+			 		END
+			 		]]>
+			 	) AS progress
+			 ,  (
+			 		SELECT  COUNT(SVIN_ID) 
+			 		  FROM  COING_SURVEY_VOTE
+			 		 WHERE  SVIN_ID = A.SVIN_ID
+			 	) AS voteCnt
+		  FROM  COING_SURVEY_INFO A
+		 WHERE  A.SVIN_ID = #{svinId}
+		   AND  A.SVIN_DEL_YN = 'N'
+	</select>
+	
+	<insert id="insertInfo">
+		INSERT
+		  INTO  COING_SURVEY_INFO
+		     (  SVIN_ID
+		     ,  SVIN_TITLE
+		     ,  SVIN_CONTENT
+		     ,  SVIN_START_DT
+		     ,  SVIN_END_DT
+		     ,  SVIN_OPEN_YN
+		     ,  SVIN_USE_YN
+		     ,  SVIN_DPLCTN_YN
+		     ,  SVIN_RESOPEN_YN
+		     ,  SVIN_REG_DTTM
+		     ,  SVIN_REG_ID
+		     ,  SVIN_REG_IP
+		     )
+		VALUES
+		     (  #{svinId, jdbcType=VARCHAR}
+			 ,  #{svinTitle, jdbcType=VARCHAR}
+			 ,  #{svinContent, jdbcType=VARCHAR}
+			 ,  #{svinStartDt, jdbcType=VARCHAR}
+			 ,  #{svinEndDt, jdbcType=VARCHAR}
+			 ,  #{svinOpenYn, jdbcType=VARCHAR}
+			 ,  #{svinUseYn, jdbcType=VARCHAR}
+			 ,  #{svinDplctnYn, jdbcType=VARCHAR}
+			 ,  #{svinResopenYn, jdbcType=VARCHAR}
+			 ,  NOW()
+			 ,  #{svinRegId, jdbcType=VARCHAR}
+			 ,  #{svinRegIp, jdbcType=VARCHAR}
+		     )
+	</insert>
+
+
+	<update id="updateInfo">
+		UPDATE  COING_SURVEY_INFO
+		   SET  SVIN_TITLE = #{svinTitle, jdbcType=VARCHAR}
+		     ,  SVIN_CONTENT = #{svinContent, jdbcType=VARCHAR}
+		     ,  SVIN_START_DT = #{svinStartDt, jdbcType=VARCHAR}
+		     ,  SVIN_END_DT = #{svinEndDt, jdbcType=VARCHAR}
+		     ,  SVIN_OPEN_YN = #{svinOpenYn, jdbcType=VARCHAR}
+		     ,  SVIN_USE_YN = #{svinUseYn, jdbcType=VARCHAR}
+		     ,  SVIN_DPLCTN_YN = #{svinDplctnYn, jdbcType=VARCHAR}
+		     ,  SVIN_RESOPEN_YN = #{svinResopenYn, jdbcType=VARCHAR}
+		     ,  SVIN_UPDT_DTTM = NOW()
+		     ,  SVIN_UPDT_ID = #{svinUpdtId, jdbcType=VARCHAR}
+		     ,  SVIN_UPDT_IP = #{svinUpdtIp, jdbcType=VARCHAR}
+		 WHERE  SVIN_ID = #{svinId}
+		   AND  SVIN_DEL_YN = 'N'
+	</update>
+	
+	<update id="deleteInfo">
+		UPDATE  COING_SURVEY_INFO
+		   SET  SVIN_DEL_YN = 'Y'
+			 ,  SVIN_DEL_DTTM = NOW()
+			 ,  SVIN_DEL_ID = #{svinDelId, jdbcType=VARCHAR}
+			 ,  SVIN_DEL_IP = #{svinDelIp, jdbcType=VARCHAR}
+		 WHERE  SVIN_ID = #{svinId}
+		   AND  SVIN_DEL_YN = 'N'	
+	</update>
+	
+	<select id="selectQuestionList" parameterType="surveyQuestionVO" resultMap="surveyQuestion">
+		SELECT  A.SVQU_ID		
+			 ,  A.SVIN_ID		
+			 ,  A.SVQU_TYPE	
+			 ,  A.SVQU_TITLE	
+			 ,  A.SVQU_REQ_YN	
+			 ,  A.SVQU_MINCHK_NUM	
+			 ,  A.SVQU_ORDER_NO	
+			 ,  A.SVQU_REG_DTTM	
+			 ,  A.SVQU_REG_ID	
+			 ,  A.SVQU_REG_IP	
+			 ,  A.SVQU_UPDT_DTTM	
+			 ,  A.SVQU_UPDT_ID	
+			 ,  A.SVQU_UPDT_IP
+			 ,  (
+			 		SELECT  COUNT(*) 
+			 		  FROM  COING_SURVEY_ANSWER
+			 		 WHERE  SVIN_ID = A.SVIN_ID AND SVQU_ID = A.SVQU_ID
+			 	) AS totalAnswerCnt	
+		  FROM  COING_SURVEY_QUESTION A
+		 WHERE  A.SVIN_ID = #{svinId}
+		   AND  A.SVQU_DEL_YN = 'N'
+	  ORDER BY  A.SVQU_ORDER_NO ASC
+	</select>	
+	
+	<select id="selectQuestion" parameterType="surveyQuestionVO" resultMap="surveyQuestion">
+		SELECT  A.SVQU_ID		
+			 ,  A.SVIN_ID		
+			 ,  A.SVQU_TYPE	
+			 ,  A.SVQU_TITLE	
+			 ,  A.SVQU_REQ_YN	
+			 ,  A.SVQU_MINCHK_NUM	
+			 ,  A.SVQU_ORDER_NO	
+			 ,  A.SVQU_REG_DTTM	
+			 ,  A.SVQU_REG_ID	
+			 ,  A.SVQU_REG_IP	
+			 ,  A.SVQU_UPDT_DTTM	
+			 ,  A.SVQU_UPDT_ID	
+			 ,  A.SVQU_UPDT_IP		
+		  FROM  COING_SURVEY_QUESTION A
+		 WHERE  A.SVQU_ID = #{svquId}
+		   AND  A.SVIN_ID = #{svinId}
+		   AND  A.SVQU_DEL_YN = 'N'
+	</select>	
+	
+	<insert id="insertQuestion">
+		INSERT
+		  INTO  COING_SURVEY_QUESTION
+		     (  SVQU_ID
+		     ,  SVIN_ID
+		     ,  SVQU_TYPE
+		     ,  SVQU_TITLE
+		     ,  SVQU_REQ_YN
+		     ,  SVQU_MINCHK_NUM
+		     ,  SVQU_ORDER_NO
+		     ,  SVQU_REG_DTTM
+		     ,  SVQU_REG_ID
+		     ,  SVQU_REG_IP
+		     )
+		VALUES
+		     (  #{svquId, jdbcType=VARCHAR}
+			 ,  #{svinId, jdbcType=VARCHAR}
+			 ,  #{svquType, jdbcType=VARCHAR}
+			 ,  #{svquTitle, jdbcType=VARCHAR}
+			 ,  #{svquReqYn, jdbcType=VARCHAR}
+			 ,  #{svquMinchkNum}
+			 ,  #{svquOrderNo}
+			 ,  NOW()
+			 ,  #{svquRegId, jdbcType=VARCHAR}
+			 ,  #{svquRegIp, jdbcType=VARCHAR}
+		     )
+	</insert>
+
+
+	<update id="updateQuestion">
+		UPDATE  COING_SURVEY_QUESTION
+		   SET  SVQU_TYPE = #{svquType, jdbcType=VARCHAR}
+		     ,  SVQU_TITLE = #{svquTitle, jdbcType=VARCHAR}
+		     ,  SVQU_REQ_YN = #{svquReqYn, jdbcType=VARCHAR}
+		     ,  SVQU_MINCHK_NUM = #{svquMinchkNum}
+		     ,  SVQU_ORDER_NO = #{svquOrderNo}
+		     ,  SVQU_UPDT_DTTM = NOW()
+		     ,  SVQU_UPDT_ID = #{svquUpdtId, jdbcType=VARCHAR}
+		     ,  SVQU_UPDT_IP = #{svquUpdtIp, jdbcType=VARCHAR}
+		 WHERE  SVQU_ID = #{svquId}
+		   AND  SVQU_DEL_YN = 'N'
+	</update>	
+	
+	<update id="deleteQuestion">
+UPDATE  COING_SURVEY_QUESTION
+		   SET  SVQU_DEL_YN = 'Y'
+			 ,  SVQU_DEL_DTTM = NOW()
+			 ,  SVQU_DEL_ID = #{svquDelId, jdbcType=VARCHAR}
+			 ,  SVQU_DEL_IP = #{svquDelIp, jdbcType=VARCHAR}
+		 WHERE  SVQU_ID = #{svquId}
+		   AND  SVQU_DEL_YN = 'N'
+</update>	
+	
+	<select id="selectExampleList" parameterType="surveyExampleVO" resultMap="surveyExample">
+		SELECT  A.SVEX_ID		
+			 ,  A.SVIN_ID		
+			 ,  A.SVQU_ID		
+			 ,  A.SVEX_KEY	
+			 ,  A.SVEX_TITLE	
+			 ,  (
+			 		SELECT  COUNT(*) 
+			 		  FROM  COING_SURVEY_ANSWER
+			 		 WHERE  SVIN_ID = A.SVIN_ID AND SVQU_ID = A.SVQU_ID AND SVEX_ID = A.SVEX_ID
+			 	) AS answerCnt	
+		  FROM  COING_SURVEY_EXAMPLE A
+		 WHERE  A.SVIN_ID = #{svinId}
+		   AND  A.SVQU_ID = #{svquId}
+		   AND  A.SVEX_DEL_YN = 'N'
+	  ORDER BY  A.SVEX_KEY
+	</select>
+
+
+	<select id="selectExample" parameterType="surveyExampleVO" resultMap="surveyExample">
+		SELECT  A.SVEX_ID		
+			 ,  A.SVIN_ID		
+			 ,  A.SVQU_ID		
+			 ,  A.SVEX_KEY	
+			 ,  A.SVEX_TITLE	
+		  FROM  COING_SURVEY_EXAMPLE A
+		 WHERE  A.SVEX_ID = #{svexId}
+		   AND  A.SVEX_DEL_YN = 'N'
+	</select>
+
+
+	<insert id="insertExample">
+		INSERT
+		  INTO  COING_SURVEY_EXAMPLE
+		     (  SVEX_ID
+		     ,  SVIN_ID
+		     ,  SVQU_ID
+		     ,  SVEX_KEY
+		     ,  SVEX_TITLE
+		     )
+		VALUES
+		     (  #{svexId}
+			 ,  #{svinId}
+			 ,  #{svquId}
+			 ,  #{svexKey}
+			 ,  #{svexTitle, jdbcType=VARCHAR}
+		     )
+	</insert>
+
+
+	<update id="updateExample">
+		UPDATE  COING_SURVEY_EXAMPLE
+		   SET  SVEX_KEY = #{svexKey}
+		     ,  SVEX_TITLE = #{svexTitle, jdbcType=VARCHAR}
+		 WHERE  SVEX_ID = #{svexId}
+		   AND  SVEX_DEL_YN = 'N'
+	</update>	
+	
+	<update id="deleteExample">
+		UPDATE  COING_SURVEY_EXAMPLE
+		   SET  SVEX_DEL_YN = 'Y'
+		     ,  SVEX_DEL_DTTM = NOW()
+		     ,  SVEX_DEL_ID = #{svexDelId, jdbcType=VARCHAR}
+		     ,  SVEX_DEL_IP = #{svexDelIp, jdbcType=VARCHAR} 
+		 WHERE  SVEX_ID = #{svexId}
+		   AND  SVEX_DEL_YN = 'N'	
+	</update>	
+	
+    <delete id="deleteExampleNotInKeys">
+		UPDATE  COING_SURVEY_EXAMPLE
+		   SET  SVEX_DEL_YN = 'Y'
+		     ,  SVEX_DEL_DTTM = NOW()
+		     ,  SVEX_DEL_ID = #{svexDelId, jdbcType=VARCHAR}
+		     ,  SVEX_DEL_IP = #{svexDelIp, jdbcType=VARCHAR} 
+		 WHERE  SVIN_ID = #{svinId}
+		   AND	SVQU_ID = #{svquId}
+		   AND	(
+		   			SVEX_ID NOT IN
+					<foreach collection="insertOrUpdateExIds" item="item" index="index" open="(" close=")" separator=",">
+						#{item}		   
+					</foreach>
+				)	
+    </delete>
+    
+	<select id="selectAnswerList" parameterType="surveyAnswerVO" resultMap="surveyAnswer">
+		SELECT  A.SVAN_ID
+			 ,  A.SVIN_ID
+			 ,  A.SVVO_ID
+			 ,  A.SVQU_ID
+			 ,  A.SVEX_ID
+			 ,  A.SVAN_REMARKS
+		  FROM  COING_SURVEY_ANSWER A
+		 WHERE  A.SVIN_ID = #{svinId}
+		   AND	A.SVQU_ID = #{svquId}
+		<if test='svexId > 0'>
+		   AND	A.SVEX_ID = #{svexId}		
+		</if>		   
+	  ORDER BY  A.SVAN_ID DESC
+	</select>    
+	
+	<select id="selectVoteList" parameterType="surveyVoteVO" resultMap="surveyVote">
+		SELECT  A.SVVO_ID
+			 ,  A.SVIN_ID
+			 ,  A.SVVO_REG_DTTM
+			 ,  A.SVVO_REG_IP
+			 ,  A.SVVO_USER_ID
+			 ,  A.SVVO_USER_NM
+		  FROM  COING_SURVEY_VOTE A
+	 LEFT JOIN  COING_SURVEY_INFO B ON (A.SVIN_ID = B.SVIN_ID)
+		 WHERE  A.SVIN_ID = #{svinId}
+	  ORDER BY  A.SVVO_ID ASC
+	</select>      
+    
+	<select id="selectAnswerListBySvvoId" parameterType="surveyAnswerVO" resultMap="surveyAnswer">
+		SELECT  A.SVAN_ID
+			 ,  A.SVIN_ID
+			 ,  A.SVVO_ID
+			 ,  A.SVQU_ID
+			 ,  A.SVEX_ID
+			 ,  (SELECT SVEX_TITLE FROM COING_SURVEY_EXAMPLE WHERE SVEX_ID = A.SVEX_ID) AS svexTitle
+			 ,  A.SVAN_REMARKS
+		  FROM  COING_SURVEY_ANSWER A
+		 WHERE  A.SVIN_ID = #{svinId}
+		   AND	A.SVVO_ID = #{svvoId}
+	  ORDER BY  A.SVAN_ID DESC
+	</select>    	
+	
+	<select id="selectSearchSurveyList" parameterType="searchDocumentVO" resultType="searchDocumentVO">
+		SELECT  A.INDEX_KEY indexKey
+			 ,  A.SITE_ID siteId
+			 ,  A.CODE code
+			 ,  A.TITLE title
+			 ,  A.CONTENT content
+			 ,  A.REG_DATE regDate
+			 ,  A.UPDT_DATE updtDate
+			 ,  A.LINK_URL linkUrl
+			 ,  A.NAVI navi
+		  FROM  VIEW_SEARCH_SITE_CONTENT A
+		 WHERE  1=1
+		 	<if test='siteId != null and siteId != ""'>
+		   AND  A.SITE_ID = #{siteId}
+		    </if>
+	</select>	
+	
+</mapper>
