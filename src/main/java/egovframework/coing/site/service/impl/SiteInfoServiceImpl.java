@@ -21,8 +21,7 @@ public class SiteInfoServiceImpl extends EgovAbstractServiceImpl implements Site
     
     private final SiteInfoMapper siteInfoMapper;
     private final SiteMenuMapper siteMenuMapper;
-    private final SiteContentMapper siteContentMapper;
-    
+
     @Override
     public List<SiteInfoVO> selectSiteInfoListAll(SiteInfoVO vo) throws Exception {
         

@@ -2,7 +2,6 @@ package egovframework.coing.site.web;
 
 import egovframework.coing.cmm.CmsManager;
 import egovframework.coing.cmm.util.MapQuery;
-import egovframework.coing.site.service.SiteContentService;
 import egovframework.coing.site.service.SiteInfoService;
 import egovframework.coing.site.service.SiteMenuService;
 import egovframework.coing.site.vo.SiteContentCommentVO;
@@ -30,25 +29,10 @@ public class SiteContentCommentController {
     
     private final EgovPropertyService propertiesService;
     private final SiteMenuService siteMenuService;
-    private final SiteContentService siteContentService;
     private final SiteInfoService siteInfoService;
     
     private String CONTENT_PATH = String.format("%s/egovframework/coing/site/", CmsManager.getModulePath());
 
-    /*private void checkAdminSinId(HttpServletRequest request, SiteMenuVO searchSiteMenuVO) throws Exception {
-    	
-    	ManagerVO ManagerVO = (ManagerVO)request.getAttribute("MANAGER_VO");
-    	String[] adminSinIdsArr = ManagerVO.getAdminSiteIdArr();
-		if (!EgovUserDetailsHelper.isMasterAdmin()) {
-			if (adminSinIdsArr != null && adminSinIdsArr.length > 0) {
-				if(!Arrays.asList(adminSinIdsArr).contains(searchSiteMenuVO.getSinId())) {
-					ModelAndView mv = new ModelAndView("egovframework/coing/access_denied");
-					throw new ModelAndViewDefiningException(mv);
-				}
-			}
-		}
-    }*/
-    
     @RequestMapping()
     public String write(@ModelAttribute("searchSiteContentCommentVO") SiteContentCommentVO searchSiteContentCommentVO,
                         @ModelAttribute("searchSiteMenuVO") SiteMenuVO searchSiteMenuVO,
@@ -125,21 +109,14 @@ public class SiteContentCommentController {
         param.putAll(paramMap);
         param.put("pageIndex", null);
         String paginationQueryString = MapQuery.urlEncodeUTF8(param);
-        
-        Map<String, Object> map = siteContentService.selectSiteContentCommentList(searchSiteContentCommentVO);
-        int totCnt = Integer.parseInt((String) map.get("resultCnt"));
-        
-        paginationInfo.setTotalRecordCount(totCnt);
-        
+
         model.addAttribute("siteMenuVO", siteMenuVO);
         model.addAttribute("allSiteMenuList", allSiteMenuList);
         model.addAttribute("siteList", siteList);
         
         model.addAttribute("paginationInfo", paginationInfo);
         model.addAttribute("paginationQueryString", paginationQueryString);
-        model.addAttribute("resultList", map.get("resultList"));
-        model.addAttribute("resultCnt", map.get("resultCnt"));
-        
+
         model.addAttribute("CONTENT_FILE", CONTENT_PATH + "content_comment_list.jsp");
         
         return "egovframework/coing/common/admin_view";

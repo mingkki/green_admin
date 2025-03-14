@@ -45,7 +45,6 @@
     <typeAlias alias="siteInfoVO" type="egovframework.coing.site.vo.SiteInfoVO"/>
     <typeAlias alias="siteMenuVO" type="egovframework.coing.site.vo.SiteMenuVO"/>
     <typeAlias alias="siteMenuJsonVO" type="egovframework.coing.site.vo.SiteMenuJsonVO"/>
-    <typeAlias alias="siteContentVO" type="egovframework.coing.site.vo.SiteContentVO"/>
     <typeAlias alias="siteCounterDayVO" type="egovframework.coing.site.vo.SiteCounterDayVO"/>
     <typeAlias alias="siteCounterMenuVO" type="egovframework.coing.site.vo.SiteCounterMenuVO"/>
     <typeAlias alias="siteContentCommentVO" type="egovframework.coing.site.vo.SiteContentCommentVO"/>
