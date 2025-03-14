@@ -56,17 +56,6 @@
     <typeAlias alias="boardCategoryVO" type="egovframework.coing.board.vo.BoardCategoryVO"/>
     <typeAlias alias="boardWriteVO" type="egovframework.coing.board.vo.BoardWriteVO"/>
 
-    <!-- 인터포 -->
-    <!-- 자원데이터 -->
-    <typeAlias alias="resourceVO" type="egovframework.coing.resource.vo.ResourceVO"/>
-    
-    <!-- 교환소 -->
-    <typeAlias alias="exchangeVO" type="egovframework.coing.exchange.vo.ExchangeVO"/>
-    
-    <!-- 포인트 -->
-    <typeAlias alias="pointLogVO" type="egovframework.coing.point.vo.PointLogVO"/>
-    <typeAlias alias="pointExchangeVO" type="egovframework.coing.point.vo.PointExchangeVO"/>
-  
   </typeAliases>
 
 </configuration>

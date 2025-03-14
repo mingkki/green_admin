@@ -4,9 +4,6 @@ import egovframework.coing.cmm.CmsManager;
 import egovframework.coing.cmm.service.CommonService;
 import egovframework.coing.cmm.util.EgovDateUtil;
 import egovframework.coing.cmm.vo.CodeDetailVO;
-import egovframework.coing.exchange.service.ExchangeService;
-import egovframework.coing.exchange.vo.ExchangeVO;
-import egovframework.coing.point.service.PointLogService;
 import egovframework.coing.site.service.SiteCounterService;
 import egovframework.coing.site.service.SiteInfoService;
 import egovframework.coing.site.vo.SiteCounterDayVO;
@@ -27,8 +24,6 @@ public class DashboardController {
     private final String CONTENT_PATH = String.format("%s/egovframework/coing/", CmsManager.getModulePath());
     private final SiteInfoService siteInfoService;
     private final SiteCounterService siteCounterService;
-    private final PointLogService pointLogService;
-    private final ExchangeService exchangeService;
     private final CommonService commonService;
     
     @RequestMapping()
@@ -51,11 +46,7 @@ public class DashboardController {
         
         SiteCounterDayVO searchVO = new SiteCounterDayVO();
         searchVO.setSinId(sinId);
-        
-        model.addAttribute("todayPoint", pointLogService.todayPoint());
-        model.addAttribute("totalPoint", pointLogService.totalPoint());
-        model.addAttribute("totalExchangePoint", pointLogService.totalExchangePoint());
-        
+
         // 전체
         SiteCounterDayVO totalCounterVO = siteCounterService.selectCounterDayTotal(searchVO);
         
@@ -83,15 +74,11 @@ public class DashboardController {
             }
         }
         
-        List<ExchangeVO> exchangeList = exchangeService.select(new ExchangeVO());
-        
         CodeDetailVO codeDetailVO = new CodeDetailVO();
         codeDetailVO.setSearchCodId("EMD");
         List<CodeDetailVO> emdList = commonService.selectCodeDetailList(codeDetailVO);
         
-        
         model.addAttribute("emdList", emdList);
-        model.addAttribute("exchangeList", exchangeList);
         model.addAttribute("today", today);
         model.addAttribute("yesterday", yesterday);
         model.addAttribute("weekAgo", weekAgo);

@@ -247,17 +247,6 @@
 							</c:choose>
 							</div>
 						</div>
-						<div class="form-group">
-							<span class="col-sm-2 text-right"><label for="memExchangeId" class="control-label">담당구역</label></span>
-							<div class="col-sm-10">
-								<form:select path="memExchangeId" id="memExchangeId" class="form-control">
-									<form:option value="">+ 담당구역 선택</form:option>
-									<c:forEach var="result" items="${exchangeList}" varStatus="status">
-										<form:option value="${result.id}"><c:out value="${result.place}"/></form:option>
-									</c:forEach>
-								</form:select>
-							</div>
-						</div>
 
 
 						<div class="form-group layerG" style="display:none;">

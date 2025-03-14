@@ -227,29 +227,6 @@
 
 <div class="row">
   <div class="col-lg-6">
-    <%-- 포인트 적립 및 환전 현황 --%>
-    <jsp:include page="/WEB-INF/jsp/egovframework/coing/chart/point_chart.jsp"/>
-  </div>
-  <div class="col-lg-6">
-    <%-- 재활용품 배출 현황 --%>
-    <jsp:include page="/WEB-INF/jsp/egovframework/coing/chart/recycling_monthly_chart.jsp"/>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-lg-6">
-    <%-- 재활용품 품목별 현황 --%>
-    <jsp:include page="/WEB-INF/jsp/egovframework/coing/chart/recycling_resources_chart.jsp"/>
-  </div>
-  <div class="col-lg-6">
-    <%-- 교환소별 배출 현황 --%>
-    <jsp:include page="/WEB-INF/jsp/egovframework/coing/chart/exchange_recycling_chart.jsp"/>
-  </div>
-</div>
-
-
-<div class="row">
-  <div class="col-lg-6">
     <div class="block" style="min-height:322px;">
       <div class="block-head">
         <h4>방문기록</h4>

@@ -10,8 +10,6 @@ import egovframework.coing.cmm.vo.CodeDetailVO;
 import egovframework.coing.cmm.vo.GroupVO;
 import egovframework.coing.cmm.vo.LevelVO;
 import egovframework.coing.cmm.vo.LoginVO;
-import egovframework.coing.exchange.service.ExchangeService;
-import egovframework.coing.exchange.vo.ExchangeVO;
 import egovframework.coing.member.service.MemberGeneralService;
 import egovframework.coing.member.vo.MemberGeneralVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
@@ -36,8 +34,7 @@ public class MemberGeneralController {
     private final MemberGeneralService memberGeneralService;
     private final CommonService commonService;
     private final UserService userService;
-    private final ExchangeService exchangeService;
-    
+
     private void initParam(MemberGeneralVO searchVO, String memStatus) {
         
         Map<String, Object> param = new HashMap<String, Object>();
@@ -205,8 +202,7 @@ public class MemberGeneralController {
         
         List<LevelVO> levelList = commonService.selectLevelList();
         List<GroupVO> groupList = commonService.selectGroupList("N");
-        List<ExchangeVO> exchangeList = exchangeService.selectExchangeList();
-        
+
         CodeDetailVO codeDetailVO = new CodeDetailVO();
         codeDetailVO.setSearchCodId("USTATUS");
         List<CodeDetailVO> statusList = commonService.selectCodeDetailList(codeDetailVO);
@@ -241,7 +237,6 @@ public class MemberGeneralController {
         
         model.addAttribute("command", command);
         model.addAttribute("writeMemberGeneral", writeMemberGeneralVO);
-        model.addAttribute("exchangeList", exchangeList);
         model.addAttribute("bankList", bankList);
         model.addAttribute("emdList", emdList);
         model.addAttribute("levelList", levelList);
