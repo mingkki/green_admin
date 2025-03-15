@@ -10,6 +10,7 @@
 		<result property="svinEndDt" column="SVIN_END_DT" />
 		<result property="svinOpenYn" column="SVIN_OPEN_YN" />
 		<result property="svinUseYn" column="SVIN_USE_YN" />
+		<result property="svinSignYn" column="SVIN_SIGN_YN" />
 		<result property="svinDplctnYn" column="SVIN_DPLCTN_YN" />
 		<result property="svinResopenYn" column="SVIN_RESOPEN_YN" />
 		<result property="svinRegDttm" column="SVIN_REG_DTTM" />
@@ -126,7 +127,8 @@
 			 ,  A.SVIN_START_DT	
 			 ,  A.SVIN_END_DT	
 			 ,  A.SVIN_OPEN_YN	
-			 ,  A.SVIN_USE_YN	
+			 ,  A.SVIN_USE_YN
+			 ,  A.SVIN_SIGN_YN
 			 ,  A.SVIN_DPLCTN_YN	
 			 ,  A.SVIN_RESOPEN_YN	
 			 ,  A.SVIN_REG_DTTM	
@@ -163,6 +165,7 @@
 		     ,  SVIN_END_DT
 		     ,  SVIN_OPEN_YN
 		     ,  SVIN_USE_YN
+			 ,  SVIN_SIGN_YN
 		     ,  SVIN_DPLCTN_YN
 		     ,  SVIN_RESOPEN_YN
 		     ,  SVIN_REG_DTTM
@@ -177,6 +180,7 @@
 			 ,  #{svinEndDt, jdbcType=VARCHAR}
 			 ,  #{svinOpenYn, jdbcType=VARCHAR}
 			 ,  #{svinUseYn, jdbcType=VARCHAR}
+			 ,  #{svinSignYn, jdbcType=VARCHAR}
 			 ,  #{svinDplctnYn, jdbcType=VARCHAR}
 			 ,  #{svinResopenYn, jdbcType=VARCHAR}
 			 ,  NOW()
@@ -194,6 +198,7 @@
 		     ,  SVIN_END_DT = #{svinEndDt, jdbcType=VARCHAR}
 		     ,  SVIN_OPEN_YN = #{svinOpenYn, jdbcType=VARCHAR}
 		     ,  SVIN_USE_YN = #{svinUseYn, jdbcType=VARCHAR}
+			 ,  SVIN_SIGN_YN = #{svinSignYn, jdbcType=VARCHAR}
 		     ,  SVIN_DPLCTN_YN = #{svinDplctnYn, jdbcType=VARCHAR}
 		     ,  SVIN_RESOPEN_YN = #{svinResopenYn, jdbcType=VARCHAR}
 		     ,  SVIN_UPDT_DTTM = NOW()

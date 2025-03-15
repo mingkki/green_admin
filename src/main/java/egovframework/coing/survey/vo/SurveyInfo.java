@@ -16,6 +16,8 @@ public class SurveyInfo {
 
 	private String svinUseYn;
 
+	private String svinSignYn;
+
 	private String svinDplctnYn;
 
 	private String svinResopenYn;
@@ -35,6 +37,14 @@ public class SurveyInfo {
 	private String svinDelId;
 
 	private String svinDelIp;
+
+	public String getSvinSignYn() {
+		return svinSignYn;
+	}
+
+	public void setSvinSignYn(String svinSignYn) {
+		this.svinSignYn = svinSignYn;
+	}
 
 	public int getSvinId() {
 		return svinId;

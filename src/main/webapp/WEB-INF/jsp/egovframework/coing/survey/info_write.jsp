@@ -68,7 +68,14 @@
 								<label class="radio-inline"><form:radiobutton path="svinUseYn" value="Y" />사용함</label>
 								<label class="radio-inline"><form:radiobutton path="svinUseYn" value="N" />사용안함</label>
 							</div>
-						</div>				
+						</div>
+						<div class="form-group">
+							<span class="col-sm-2 text-right"><label class="control-label">사인 사용여부</label></span>
+							<div class="col-sm-10">
+								<label class="radio-inline"><form:radiobutton path="svinSignYn" value="Y" />사용함</label>
+								<label class="radio-inline"><form:radiobutton path="svinSignYn" value="N" />사용안함</label>
+							</div>
+						</div>
 						<div class="bd-t mg-t-md pd-t-md"></div>	
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-10">
