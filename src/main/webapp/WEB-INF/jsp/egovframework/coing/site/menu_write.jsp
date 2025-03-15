@@ -274,7 +274,7 @@
 						</div>
 					<div class="bd-t pd-t-md"></div>
 						<div class="form-group">
-							<span class="col-sm-2 text-right"><label class="control-label">접근가능 그룹</label></span>
+							<span class="col-sm-2 text-right"><label class="control-label">메뉴표출 그룹</label></span>
 							<div class="col-sm-10">
 								<c:forEach var="result" items="${groupList}" varStatus="status">
 								<label class="checkbox-inline">

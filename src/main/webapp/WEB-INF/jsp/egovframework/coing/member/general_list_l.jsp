@@ -104,22 +104,6 @@
 				</div>
 				<div class="block-footer">
 					<div class="clearfix">
-						<div class="pull-left">
-							선택된 회원을
-							<button type="button" class="btn btn-default" onclick="deleteMembers();">삭제</button> | 
-							<select name="changeLevel" id="changeLevel" class="form-control" onchange="if(this.value) updateLevel(this);">
-							<option value="">회원등급변경</option>
-							<c:forEach var="result" items="${levelList}" varStatus="status">
-							<option value="<c:out value='${result.lvlId}'/>"><c:out value="${result.lvlName}"/></option>
-							</c:forEach>
-							</select>
-							<select name="changeStatus" id="changeStatus" class="form-control" onchange="if(this.value) updateStatus(this);">
-							<option value="">회원상태변경</option>
-							<c:forEach var="result" items="${statusList}" varStatus="status">
-							<option value="<c:out value='${result.cddId}'/>"><c:out value="${result.cddName}"/></option>
-							</c:forEach>
-							</select>
-						</div>
 						<div class="pull-right">
 							<a href="?act=write&amp;<c:out value='${searchMemberGeneralVO.queryString}'/>" class="btn btn-primary">등록</a>
 						</div>

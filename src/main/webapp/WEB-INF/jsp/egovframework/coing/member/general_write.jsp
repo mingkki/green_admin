@@ -234,17 +234,12 @@
 						<div class="form-group">
 							<span class="col-sm-2 text-right"><label for="memGroups">회원구분</label></span>
 							<div class="col-sm-3">
-							<c:choose>
-								<c:when test="${command eq 'insert'}">
-									<label><form:radiobutton path="memGroups" value="GNR" checked="true"/>일반회원</label>
-									<label><form:radiobutton path="memGroups" value="MNG"/>강릉시청 직원</label>
-								</c:when>
-								<c:otherwise>
-									<c:forEach var="result" items="${gubunList}" varStatus="status">
-										<c:if test="${result.cddId eq writeMemberGeneral.memGroups}"><c:out value="${result.cddName}"/></c:if>
-									</c:forEach>
-								</c:otherwise>
-							</c:choose>
+							<form:select path="memGroups" class="form-control">
+								<form:option value="">+ 선택</form:option>
+								<c:forEach var="result" items="${gubunList}" varStatus="status">
+									<form:option value="${result.cddId}"><c:out value="${result.cddName}"/></form:option>
+								</c:forEach>
+							</form:select>
 							</div>
 						</div>
 

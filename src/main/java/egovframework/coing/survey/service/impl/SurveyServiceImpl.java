@@ -203,62 +203,6 @@ public class SurveyServiceImpl extends EgovAbstractServiceImpl implements Survey
 	}
 
 	@Override
-	public void copyInfo(SurveyInfoVO vo) throws Exception {
-						
-		// 설문설정 복사
-		SurveyInfoVO insertSurveyInfoVO = new SurveyInfoVO();		
-		insertSurveyInfoVO.setSvinId(egovSurveyInfoIdGnrService.getNextIntegerId());
-		insertSurveyInfoVO.setSvinTitle(vo.getSvinTitle() + " 복사본");	
-		insertSurveyInfoVO.setSvinContent(vo.getSvinContent());
-		insertSurveyInfoVO.setSvinStartDt(vo.getSvinStartDt());
-		insertSurveyInfoVO.setSvinEndDt(vo.getSvinEndDt());
-		insertSurveyInfoVO.setSvinOpenYn(vo.getSvinOpenYn());
-		insertSurveyInfoVO.setSvinUseYn(vo.getSvinUseYn());
-		insertSurveyInfoVO.setSvinDplctnYn(vo.getSvinDplctnYn());
-		insertSurveyInfoVO.setSvinResopenYn(vo.getSvinResopenYn());		
-		surveyMapper.insertInfo(insertSurveyInfoVO);
-				
-		SurveyQuestionVO searchSurveyQuestionVO = new SurveyQuestionVO();
-		searchSurveyQuestionVO.setSvinId(vo.getSvinId());
-		List<SurveyQuestionVO> questionList = surveyMapper.selectQuestionList(searchSurveyQuestionVO);
-		if (questionList != null && questionList.size() > 0) {
-			SurveyQuestionVO insertSurveyQuestionVO;			
-			List<SurveyExampleVO> exampleList;
-			SurveyExampleVO searchSurveyExampleVO;
-			SurveyExampleVO insertSurveyExampleVO;
-			for (int i = 0; i < questionList.size(); i++) {
-				// 질문복사
-				insertSurveyQuestionVO = new SurveyQuestionVO();
-				insertSurveyQuestionVO.setSvinId(insertSurveyInfoVO.getSvinId());
-				insertSurveyQuestionVO.setSvquId(egovSurveyQuestionIdGnrService.getNextIntegerId());
-				insertSurveyQuestionVO.setSvquType(questionList.get(i).getSvquType());
-				insertSurveyQuestionVO.setSvquTitle(questionList.get(i).getSvquTitle());
-				insertSurveyQuestionVO.setSvquReqYn(questionList.get(i).getSvquReqYn());
-				insertSurveyQuestionVO.setSvquMinchkNum(questionList.get(i).getSvquMinchkNum());
-				insertSurveyQuestionVO.setSvquOrderNo(questionList.get(i).getSvquOrderNo());
-				surveyMapper.insertQuestion(insertSurveyQuestionVO);
-				
-				searchSurveyExampleVO = new SurveyExampleVO();
-				searchSurveyExampleVO.setSvinId(questionList.get(i).getSvinId());
-				searchSurveyExampleVO.setSvquId(questionList.get(i).getSvquId());
-				exampleList = surveyMapper.selectExampleList(searchSurveyExampleVO);
-				if (exampleList != null && exampleList.size() > 0) {
-					for (int j = 0; j < exampleList.size(); j++) {
-						// 예문복사
-						insertSurveyExampleVO = new SurveyExampleVO();
-						insertSurveyExampleVO.setSvinId(insertSurveyInfoVO.getSvinId());
-						insertSurveyExampleVO.setSvquId(insertSurveyQuestionVO.getSvquId());
-						insertSurveyExampleVO.setSvexId(egovSurveyExampleIdGnrService.getNextIntegerId());
-						insertSurveyExampleVO.setSvexKey(exampleList.get(j).getSvexKey());
-						insertSurveyExampleVO.setSvexTitle(exampleList.get(j).getSvexTitle());
-						surveyMapper.insertExample(insertSurveyExampleVO);
-					}
-				}
-			}
-		}
-	}
-
-	@Override
 	public List<SurveyQuestionVO> selectResultList(SurveyQuestionVO vo) throws Exception {
 		
 		List<SurveyQuestionVO> questionList = surveyMapper.selectQuestionList(vo);

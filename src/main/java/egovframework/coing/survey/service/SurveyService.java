@@ -22,10 +22,7 @@ public interface SurveyService {
 	void deleteInfo(SurveyInfoVO vo) 
 			throws Exception;		
 	
-	void copyInfo(SurveyInfoVO vo) 
-			throws Exception;
-	
-	List<SurveyQuestionVO> selectResultList(SurveyQuestionVO vo) 
+	List<SurveyQuestionVO> selectResultList(SurveyQuestionVO vo)
 			throws Exception;
 	
 	List<SurveyQuestionVO> selectQuestionList(SurveyQuestionVO vo) 

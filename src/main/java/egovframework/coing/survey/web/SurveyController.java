@@ -1,6 +1,7 @@
 package egovframework.coing.survey.web;
 
 import egovframework.coing.cmm.CmsManager;
+import egovframework.coing.cmm.Globals;
 import egovframework.coing.cmm.util.EgovStringUtil;
 import egovframework.coing.cmm.util.EgovUserDetailsHelper;
 import egovframework.coing.cmm.util.MapQuery;
@@ -11,32 +12,23 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 
-/**
- * 설문 관리를 위한 컨트롤러  클래스
- * @author 기술개발부 장남종
- * @since 2019.08.15
- * @version 1.0
- * @see
- *
- * <pre>
- * << 개정이력(Modification Information) >>
- *
- *   수정일      수정자          수정내용
- *  -------    --------    ---------------------------
- *  2019.08.15  장남종          최초 생성
- *  2020.01.22  곽민성          수정 및 적용
- *
- *  </pre>
- */
+import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 @Controller
 @RequestMapping(value="/survey.do")
 public class SurveyController {
@@ -258,25 +250,6 @@ public class SurveyController {
     	return CmsManager.alert(CONTENT_PATH + "question_result.jsp", model);	
     }
     
-    @RequestMapping(params="act=copy", method=RequestMethod.POST)
-	public String copy(@ModelAttribute("searchSurveyInfoVO") SurveyInfoVO searchVO,
-			@RequestParam(value="svinId", required=true) int svinId,
-			ModelMap model) throws Exception {
-    	initParam(searchVO);    	
-    	
-		SurveyInfoVO vo = surveyService.selectInfo(searchVO);
-		if (vo == null) {
-			model.addAttribute("message", "survey.info.nodata");
-			return CmsManager.alert(CONTENT_PATH + "copy_result.jsp", model);
-		}    	
-    	
-    	String message = "common.success.process";
-    	surveyService.copyInfo(vo);
-
-    	model.addAttribute("message", message);
-    	return CmsManager.alert(CONTENT_PATH + "info_copy_result.jsp", model);	
-    }
-    
     @RequestMapping(params="act=delete", method=RequestMethod.POST)
 	public String delete(@ModelAttribute("searchSurveyInfoVO") SurveyInfoVO searchVO,
 			@RequestParam(value="svinId", required=true) int svinId,
@@ -326,87 +299,68 @@ public class SurveyController {
     	model.addAttribute("message", "common.success.delete");
     	return CmsManager.alert(CONTENT_PATH + "question_result.jsp", model);
     }
-    
-    @RequestMapping(params="act=excel")
-	public String excel(@ModelAttribute("searchSurveyInfoVO") SurveyInfoVO searchVO,
-			@RequestParam(value="svinId", required=true) int svinId,
-			ModelMap model) throws Exception {
 
-    	initParam(searchVO); 
-    	
-    	SurveyInfoVO surveyInfoVO = surveyService.selectInfo(searchVO);
-		if (surveyInfoVO == null) {
-			model.addAttribute("message", "survey.info.nodata");
-			return CmsManager.alert(CONTENT_PATH + "info_result.jsp", model);    
-		} 
-		
-		SurveyQuestionVO searchQuestionVO = new SurveyQuestionVO();
-		searchQuestionVO.setSvinId(svinId);
-		List<SurveyQuestionVO> surveyQuestionList = surveyService.selectResultList(searchQuestionVO);
-		
-		model.addAttribute("surveyInfoVO", surveyInfoVO);
-		model.addAttribute("surveyQuestionList", surveyQuestionList);	
-		return "egovframework/coing/survey/info_excel";
-    }      
-    
-    @RequestMapping(params="act=excel2")
-	public String excel2(@ModelAttribute("searchSurveyInfoVO") SurveyInfoVO searchVO,
-			@RequestParam(value="svinId", required=true) int svinId,
-			ModelMap model) throws Exception {
-
-       	initParam(searchVO);
-
-    	SurveyInfoVO surveyInfoVO = surveyService.selectInfo(searchVO);
-		if (surveyInfoVO == null) {
-			model.addAttribute("message", "survey.info.nodata");
-			return CmsManager.alert(CONTENT_PATH + "info_result.jsp", model);    
-		} 
-		
-		SurveyQuestionVO searchQuestionVO = new SurveyQuestionVO();
-		searchQuestionVO.setSvinId(svinId);
-		List<SurveyQuestionVO> surveyQuestionList = surveyService.selectQuestionList(searchQuestionVO);
-		
-		SurveyVoteVO searchVoteVO = new SurveyVoteVO();
-		searchVoteVO.setSvinId(svinId);
-		List<SurveyVoteVO> surveyVoteList = surveyService.selectVoteList(searchVoteVO);
-		
-		LinkedHashMap<Integer, HashMap<Integer, String>> surveyVoteResultList = new LinkedHashMap<Integer, HashMap<Integer, String>>();
-		
-		if (surveyVoteList != null && surveyVoteList.size() > 0) {
-			SurveyVoteVO tvo = null;
-			SurveyAnswerVO avo = null;
-			List<SurveyAnswerVO> alist = null;
-			for (int i = 0; i < surveyVoteList.size(); i++) {
-				tvo = surveyVoteList.get(i);
-				avo = new SurveyAnswerVO();
-				avo.setSvinId(svinId);
-				avo.setSvvoId(tvo.getSvvoId());
-				alist = surveyService.selectAnswerListBySvvoId(avo);
-				if (alist != null && alist.size() > 0) {
-					SurveyAnswerVO avo2 = null;
-					HashMap<Integer, String> n = new HashMap<Integer, String>();
-					for (int j = 0; j < alist.size(); j++) {
-						avo2 = alist.get(j);
-						if (avo2.getSvexId() < 1) {
-							n.put(avo2.getSvquId(), avo2.getSvanRemarks());
-						} else {
-							if (!"".equals(EgovStringUtil.nullConvert(avo2.getSvanRemarks()))) {
-								n.put(avo2.getSvquId(), avo2.getSvexTitle()+"|"+avo2.getSvanRemarks());
-							} else {
-								n.put(avo2.getSvquId(), avo2.getSvexTitle()+"");
-							}
-						}
-					}
-					surveyVoteResultList.put(tvo.getSvvoId(), n);
-				}
+	@RequestMapping(params="act=signatures", method=RequestMethod.GET)
+	public void signatures(@RequestParam("svinId") int svinId, HttpServletResponse response) {
+		// 파일 경로 설정
+		String uploadPath = Globals.DISTRIBUTE_UPLOAD_PATH + "/signatures/" + svinId + "/";
+		File folder = new File(uploadPath);
+		// 폴더가 존재하지 않으면 404 응답 후 return
+		if (!folder.exists() || !folder.isDirectory()) {
+			try {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "서명 파일이 존재하지 않습니다.");
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+			return;
 		}
 
-		model.addAttribute("surveyInfoVO", surveyInfoVO);
-		model.addAttribute("surveyQuestionList", surveyQuestionList);
-		model.addAttribute("surveyVoteList", surveyVoteList);
-		model.addAttribute("surveyVoteResultList", surveyVoteResultList);		
-		return "egovframework/coing/survey/info_excel2";
-    }
+		// 서명 이미지 파일 가져오기
+		File[] files = folder.listFiles((dir, name) -> name.startsWith("signature_" + svinId) && name.endsWith(".png"));
+		if (files == null || files.length == 0) {
+			try {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "서명 파일이 존재하지 않습니다.");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
+
+		// ZIP 파일명 설정
+		String zipFileName = "signatures_" + svinId + ".zip";
+
+		// HTTP 응답 설정
+		response.setContentType("application/zip");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + zipFileName + "\"");
+
+		try (ZipOutputStream zos = new ZipOutputStream(response.getOutputStream())) {
+			byte[] buffer = new byte[1024];
+
+			for (File file : files) {
+				try (FileInputStream fis = new FileInputStream(file)) {
+					// ZIP 항목 추가
+					ZipEntry zipEntry = new ZipEntry(file.getName());
+					zos.putNextEntry(zipEntry);
+
+					int bytesRead;
+					while ((bytesRead = fis.read(buffer)) != -1) {
+						zos.write(buffer, 0, bytesRead);
+					}
+					zos.closeEntry();
+				}
+			}
+
+			zos.finish();
+		} catch (IOException e) {
+			e.printStackTrace();
+			try {
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "ZIP 파일 생성 중 오류 발생");
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
+
 
 }

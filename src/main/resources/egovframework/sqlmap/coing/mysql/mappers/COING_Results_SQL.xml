@@ -38,7 +38,7 @@
 			 ,  A.RSIN_NAME
 			 ,  A.RSIN_MODEL
 			 ,  A.RSIN_COUNT
-			 ,  A.RSDT_MONEY
+			 ,  A.RSIN_MONEY
 		  FROM  COING_RESULTS_INFO A
 		 WHERE  1=1
 		   		<include refid="infoListWhere" />
@@ -53,7 +53,7 @@
 			 ,  A.RSIN_NAME
 			 ,  A.RSIN_MODEL
 			 ,  A.RSIN_COUNT
-			 ,  A.RSDT_MONEY
+			 ,  A.RSIN_MONEY
 		  FROM  COING_RESULTS_INFO A
 		 WHERE  A.RSIN_ID = #{rsinId}
 		   AND  A.RSIN_DEL_YN = 'N'
@@ -66,7 +66,7 @@
 			, RSIN_NAME
 			, RSIN_MODEL
 			, RSIN_COUNT
-			, RSDT_MONEY
+			, RSIN_MONEY
 			, RSIN_REG_DTTM
 			, RSIN_REG_IP
 			, RSIN_REG_ID )
@@ -75,8 +75,8 @@
 			, #{rsinCompanyId, jdbcType=VARCHAR}
 			, #{rsinName, jdbcType=VARCHAR}
 			, #{rsinModel, jdbcType=VARCHAR}
-			, #{rsinCount, jdbcType=INTEGER}
-			, #{rsinMoney, jdbcType=INTEGER}
+			, #{rsinCount}
+			, #{rsinMoney}
 			, NOW()
 			, #{rsinRegIp, jdbcType=VARCHAR}
 			, #{rsinRegId, jdbcType=VARCHAR} );
@@ -89,8 +89,8 @@
 		  , RSIN_COMPANY_ID = #{rsinCompanyId, jdbcType=VARCHAR}
 		  , RSIN_NAME = #{rsinName, jdbcType=VARCHAR}
 		  , RSIN_MODEL = #{rsinModel, jdbcType=VARCHAR}
-		  , RSIN_COUNT = #{rsinCount, jdbcType=INTEGER}
-		  , RSDT_MONEY = #{rsinMoney, jdbcType=INTEGER}
+		  , RSIN_COUNT = #{rsinCount}
+		  , RSIN_MONEY = #{rsinMoney}
 		WHERE RSIN_ID = #{rsinId};
 	</update>
 	

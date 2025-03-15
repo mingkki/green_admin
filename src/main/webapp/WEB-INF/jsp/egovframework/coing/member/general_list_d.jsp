@@ -82,10 +82,6 @@
 				</div>
 				<div class="block-footer">
 					<div class="clearfix">
-						<div class="pull-left">
-							선택된 회원을
-							<button type="button" class="btn btn-default" onclick="deleteMembers();">삭제</button>
-						</div>
 						<div class="pull-right">
 						</div>
 					</div>

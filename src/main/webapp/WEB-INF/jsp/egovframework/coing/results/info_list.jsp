@@ -56,12 +56,12 @@
 							<td class="text-center"><c:out value="${paginationInfo.totalRecordCount - (searchResultsInfoVO.pageIndex-1) * searchResultsInfoVO.pageSize - status.index}"/></td>
 							<td class="text-center">
 								<c:forEach var="item" items="${itemList}" varStatus="status">
-									<c:out value="${item.cddName}"/>
+									<c:if test="${result.rsinItemId eq item.cddId}"><c:out value="${item.cddName}"/></c:if>
 								</c:forEach>
 							</td>
 							<td class="text-center">
 								<c:forEach var="company" items="${companyList}" varStatus="status">
-									<c:out value="${company.cddName}"/>
+									<c:if test="${result.rsinCompanyId eq company.cddId}"><c:out value="${company.cddName}"/></c:if>
 								</c:forEach>
 							</td>
 							<td class="text-center"><c:out value='${result.rsinName}'/></td>

@@ -189,34 +189,26 @@
   </div>
 </div>
 
-<!-- 포인트 통계 섹션 추가 -->
 <div class="row">
   <div class="col-lg-12">
     <div class="block">
       <div class="block-head">
-        <h4>포인트 현황</h4>
+        <h4>실적 현황</h4>
       </div>
       <div class="block-content">
         <div class="point-stats">
           <div class="point-box">
-            <h5>일일 적립 포인트</h5>
+            <h5>구매 항목</h5>
             <div class="point-value">
               <span class="counter"><fmt:formatNumber value="${todayPoint}" pattern="#,###"/></span>
               <span class="unit">P</span>
             </div>
           </div>
           <div class="point-box">
-            <h5>누적 적립 포인트</h5>
+            <h5>월별 지출 내역</h5>
             <div class="point-value">
               <span class="counter"><fmt:formatNumber value="${totalPoint}" pattern="#,###"/></span>
               <span class="unit">P</span>
-            </div>
-          </div>
-          <div class="point-box">
-            <h5>누적 환전 금액</h5>
-            <div class="point-value">
-              <span class="counter"><fmt:formatNumber value="${totalExchangePoint}" pattern="#,###"/></span>
-              <span class="unit">￦</span>
             </div>
           </div>
         </div>
