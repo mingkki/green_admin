@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.coing.results.service.impl.ResultsMapper">
+
+	<resultMap id="resultsInfo" type="egovframework.coing.results.vo.ResultsInfoVO">
+		<result property="rsinId" column="RSIN_ID" />
+		<result property="rsinItemId" column="RSIN_ITEM_ID" />
+		<result property="rsinCompanyId" column="RSIN_COMPANY_ID" />
+		<result property="rsinName" column="RSIN_NAME" />
+		<result property="rsinModel" column="RSIN_MODEL" />
+		<result property="rsinCount" column="RSIN_COUNT" />
+		<result property="rsinMoney" column="RSIN_MONEY" />
+		<result property="rsinRegDttm" column="RSIN_REG_DTTM" />
+		<result property="rsinRegId" column="RSIN_REG_ID" />
+		<result property="rsinRegIp" column="RSIN_REG_IP" />
+		<result property="rsinDelYn" column="RSIN_DEL_YN" />
+	</resultMap>
+
+	<sql id="infoListWhere">
+		<if test='searchKeyword != null and searchKeyword != ""'>
+			<if test='searchCondition == "svinTitle"'>AND A.SVIN_TITLE LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
+		</if>
+		AND  A.RSIN_DEL_YN = 'N'
+	</sql>
+	
+	<select id="selectInfoListCnt" parameterType="resultsInfoVO" resultType="int">
+		SELECT  COUNT(*)
+		  FROM  COING_RESULTS_INFO A
+		 WHERE  1=1
+		   		<include refid="infoListWhere" />
+	</select>
+
+
+	<select id="selectInfoList" parameterType="resultsInfoVO" resultMap="resultsInfo">
+		SELECT  A.RSIN_ID
+			 ,  A.RSIN_ITEM_ID
+			 ,  A.RSIN_COMPANY_ID
+			 ,  A.RSIN_NAME
+			 ,  A.RSIN_MODEL
+			 ,  A.RSIN_COUNT
+			 ,  A.RSDT_MONEY
+		  FROM  COING_RESULTS_INFO A
+		 WHERE  1=1
+		   		<include refid="infoListWhere" />
+	  ORDER BY  A.RSIN_ID DESC
+		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectInfo" parameterType="resultsInfoVO" resultMap="resultsInfo">
+		SELECT  A.RSIN_ID
+			 ,  A.RSIN_ITEM_ID
+			 ,  A.RSIN_COMPANY_ID
+			 ,  A.RSIN_NAME
+			 ,  A.RSIN_MODEL
+			 ,  A.RSIN_COUNT
+			 ,  A.RSDT_MONEY
+		  FROM  COING_RESULTS_INFO A
+		 WHERE  A.RSIN_ID = #{rsinId}
+		   AND  A.RSIN_DEL_YN = 'N'
+	</select>
+
+	<insert id="insertInfo">
+		INSERT INTO COING_RESULTS_INFO
+			( RSIN_ITEM_ID
+			, RSIN_COMPANY_ID
+			, RSIN_NAME
+			, RSIN_MODEL
+			, RSIN_COUNT
+			, RSDT_MONEY
+			, RSIN_REG_DTTM
+			, RSIN_REG_IP
+			, RSIN_REG_ID )
+		VALUES
+			( #{rsinItemId, jdbcType=VARCHAR}
+			, #{rsinCompanyId, jdbcType=VARCHAR}
+			, #{rsinName, jdbcType=VARCHAR}
+			, #{rsinModel, jdbcType=VARCHAR}
+			, #{rsinCount, jdbcType=INTEGER}
+			, #{rsinMoney, jdbcType=INTEGER}
+			, NOW()
+			, #{rsinRegIp, jdbcType=VARCHAR}
+			, #{rsinRegId, jdbcType=VARCHAR} );
+
+	</insert>
+
+	<update id="updateInfo">
+		UPDATE COING_RESULTS_INFO
+		SET RSIN_ITEM_ID = #{rsinItemId, jdbcType=VARCHAR}
+		  , RSIN_COMPANY_ID = #{rsinCompanyId, jdbcType=VARCHAR}
+		  , RSIN_NAME = #{rsinName, jdbcType=VARCHAR}
+		  , RSIN_MODEL = #{rsinModel, jdbcType=VARCHAR}
+		  , RSIN_COUNT = #{rsinCount, jdbcType=INTEGER}
+		  , RSDT_MONEY = #{rsinMoney, jdbcType=INTEGER}
+		WHERE RSIN_ID = #{rsinId};
+	</update>
+	
+	<update id="deleteInfo">
+		UPDATE  COING_RESULTS_INFO
+		   SET  RSIN_DEL_YN = 'Y'
+		 WHERE  RSIN_ID = #{rsinId}
+		   AND  RSIN_DEL_YN = 'N'
+	</update>
+
+
+</mapper>

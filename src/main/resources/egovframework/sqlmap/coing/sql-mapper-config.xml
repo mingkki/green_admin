@@ -58,6 +58,8 @@
     <!-- 설문조사 -->
     <package name="egovframework.coing.survey.vo"/>
 
+    <package name="egovframework.coing.results.vo"/>
+
   </typeAliases>
 
 </configuration>
