@@ -102,6 +102,19 @@
 						</div>						
 						<div class="bd-t pd-t-sm"></div>
 						<div class="form-group">
+							<span class="col-sm-2 text-right"><label class="control-label">답글</label></span>
+							<div class="col-sm-4">
+								<label class="radio-inline"><form:radiobutton path="brdReplyYn" value="Y"/>사용</label>
+								<label class="radio-inline"><form:radiobutton path="brdReplyYn" value="N"/>미사용</label>
+							</div>
+							<span class="col-sm-2 text-right"><label class="control-label">비밀글</label></span>
+							<div class="col-sm-4">
+								<label class="radio-inline"><form:radiobutton path="brdSecretAt" value="Y"/>사용</label>
+								<label class="radio-inline"><form:radiobutton path="brdSecretAt" value="N"/>미사용</label>
+								<label class="radio-inline"><form:radiobutton path="brdSecretAt" value="A"/>무조건</label>
+							</div>
+						</div>
+						<div class="form-group">
 							<span class="col-sm-2 text-right"><label class="control-label">카테고리</label></span>
 							<div class="col-sm-4">
 								<label class="radio-inline"><form:radiobutton path="brdCategoryYn" value="Y"/>사용</label>
@@ -183,15 +196,15 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group" style="display: none">
 							<span class="col-sm-2 text-right"><label class="control-label">IP 체크</label></span>
 							<div class="col-sm-10">
 								<label class="radio-inline"><form:radiobutton path="brdIpGubun" value="P"/>내용 허용</label>
 								<label class="radio-inline"><form:radiobutton path="brdIpGubun" value="L"/>내용 차단</label>
-								<label class="radio-inline"><form:radiobutton path="brdIpGubun" value="N"/>사용 안함</label>							
+								<label class="radio-inline"><form:radiobutton path="brdIpGubun" value="N"/>사용 안함</label>
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group" style="display: none">
 							<span class="col-sm-2 text-right"><label class="control-label" for="brd_check_ip">IP 내역</label></span>
 							<div class="col-sm-10">
 								<form:textarea path="brdCheckIp" class="form-control" />
@@ -244,6 +257,28 @@
 							<span class="col-sm-2 text-right"><label class="control-label" for="brdWriteBtnYn">쓰기버튼</label></span>
 							<div class="col-sm-10">
 								<label class="checkbox-inline"><form:checkbox path="brdWriteBtnYn" value="Y"/>권한에 상관없이 쓰기버튼 출력</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<span class="col-sm-2 text-right"><label class="control-label" for="brd_permit_reply">답글가능 권한</label></span>
+							<div class="col-sm-1">
+								<form:select path="brdPermitReply" class="form-control">
+									<form:option value="0">전체</form:option>
+									<c:forEach var="result" items="${levelList}" varStatus="status">
+										<form:option value="${result.lvlId}"><c:out value="${result.lvlName}"/></form:option>
+									</c:forEach>
+								</form:select>
+							</div>
+							<div class="col-sm-1">
+								<label class="checkbox-inline"><form:checkbox path="brdRealnameReplyYn" value="Y"/>실명인증</label>
+							</div>
+							<span class="col-sm-2 text-right"><label class="control-label">답글가능그룹</label></span>
+							<div class="col-sm-6">
+								<c:forEach var="result" items="${groupList}" varStatus="status">
+									<label class="checkbox-inline">
+										<form:checkbox path="brdLimitReplyArr" value="${result.grpId}"/><c:out value="${result.grpName}"/>
+									</label>
+								</c:forEach>
 							</div>
 						</div>
 						<div class="form-group">

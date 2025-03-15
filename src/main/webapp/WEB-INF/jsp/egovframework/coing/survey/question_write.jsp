@@ -29,8 +29,8 @@
 								<label class="radio-inline"><form:radiobutton path="svquType" value="A" />다지선다형(단일선택)</label>
 								<label class="radio-inline"><form:radiobutton path="svquType" value="B" />다지선다형(복수형)</label>
 								<label class="radio-inline"><form:radiobutton path="svquType" value="C" />주관식</label>
-								<label class="radio-inline"><form:radiobutton path="svquType" value="D" />기타형(단일선택,주관식)</label>
-								<label class="radio-inline"><form:radiobutton path="svquType" value="E" />기타형(복수선택,주관식)</label>
+								<%--<label class="radio-inline"><form:radiobutton path="svquType" value="D" />기타형(단일선택,주관식)</label>
+								<label class="radio-inline"><form:radiobutton path="svquType" value="E" />기타형(복수선택,주관식)</label>--%>
 							</div>
 						</div>						
 						<div class="form-group">

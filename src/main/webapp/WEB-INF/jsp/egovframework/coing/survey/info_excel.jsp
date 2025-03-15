@@ -80,7 +80,7 @@
 		<tr>
 			<td>
 				<c:out value='${example.svexTitle}'/>
-				<c:if test="${question.svquType eq 'D' || question.svquType eq 'E'}">
+				<c:if test="${question.svquType eq 'C'}">
 					<c:if test="${fn:length(example.answerList) > 0}">
 					<ul>
 						<c:forEach var="answer" items="${example.answerList}" varStatus="status">

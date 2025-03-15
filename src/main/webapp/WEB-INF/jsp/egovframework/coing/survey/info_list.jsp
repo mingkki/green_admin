@@ -57,7 +57,7 @@
 							<th scope="col" class="text-center">설문제목</th>
 							<th scope="col" class="text-center">시작일/종료일</th>
 							<th scope="col" class="text-center">공개여부</th>
-							<th scope="col" class="text-center">중복투표여부</th>
+							<th scope="col" class="text-center">중복선택여부</th>
 							<th scope="col" class="text-center">결과공개여부</th>
 							<th scope="col" class="text-center">사용여부</th>							
 							<th scope="col" class="text-center">기능</th>
@@ -104,8 +104,6 @@
 							<td class="text-center">
 								<button class="btn btn-default btn-xs" onclick="window.open('?act=qlist&svinId=<c:out value='${result.svinId}'/>', 'qlist', 'width=900, height=1000, scrollbars=auto'); return false;">항목설정</button><br />
 								<a href="?act=excel&amp;svinId=<c:out value='${result.svinId}'/>" class="btn btn-default btn-xs">엑셀다운</a><br />
-								<a href="?act=excel2&amp;svinId=<c:out value='${result.svinId}'/>" class="btn btn-default btn-xs">결과다운</a><br />
-								<button class="btn btn-default btn-xs" onclick="post_url('', 'act=copy&svinId=<c:out value="${result.svinId}" />&<c:out value="${searchSurveyInfoVO.queryString}"/>', '정말로 복사하시겠습니까?');">설문복사</button>
 							</td>
 							<td class="text-center">
 								<a href="?act=write&amp;svinId=<c:out value='${result.svinId}'/>&amp;<c:out value='${searchSurveyInfoVO.queryString}'/>" class="btn btn-default btn-xs"><spring:message code="common.update"/></a>

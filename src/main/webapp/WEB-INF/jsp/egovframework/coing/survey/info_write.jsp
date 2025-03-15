@@ -49,7 +49,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<span class="col-sm-2 text-right"><label class="control-label">중복투표</label></span>
+							<span class="col-sm-2 text-right"><label class="control-label">중복선택</label></span>
 							<div class="col-sm-10">
 								<label class="radio-inline"><form:radiobutton path="svinDplctnYn" value="Y" />허용</label>
 								<label class="radio-inline"><form:radiobutton path="svinDplctnYn" value="N" />허용안함</label>
