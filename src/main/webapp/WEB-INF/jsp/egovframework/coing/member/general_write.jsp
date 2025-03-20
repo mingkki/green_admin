@@ -231,18 +231,26 @@
 								<form:textarea path="memMemo" class="form-control" />
 							</div>
 						</div>
+
 						<div class="form-group">
-							<span class="col-sm-2 text-right"><label for="memGroups">회원구분</label></span>
-							<div class="col-sm-3">
-							<form:select path="memGroups" class="form-control">
-								<form:option value="">+ 선택</form:option>
-								<c:forEach var="result" items="${gubunList}" varStatus="status">
-									<form:option value="${result.cddId}"><c:out value="${result.cddName}"/></form:option>
-								</c:forEach>
-							</form:select>
+							<span class="col-sm-2 text-right"><label for="memLevel" class="control-label">* 게시판 글쓰기등급</label></span>
+							<div class="col-sm-2">
+								<form:select path="memLevel" class="form-control">
+									<c:forEach var="result" items="${levelList}" varStatus="status">
+										<form:option value="${result.lvlId}"><c:out value="${result.lvlName}"/></form:option>
+									</c:forEach>
+								</form:select>
+							</div>
+							<span class="col-sm-2 text-right"><label class="control-label">메뉴표출 등급</label></span>
+							<div class="col-sm-2">
+								<form:select path="memGroups" class="form-control">
+									<form:option value="">+ 선택</form:option>
+									<c:forEach var="result" items="${gubunList}" varStatus="status">
+										<form:option value="${result.cddId}"><c:out value="${result.cddName}"/></form:option>
+									</c:forEach>
+								</form:select>
 							</div>
 						</div>
-
 
 						<div class="form-group layerG" style="display:none;">
 							<span class="col-sm-2 text-right"><label for="memComRegNum">제공인력 고유번호</label></span>

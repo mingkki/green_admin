@@ -18,7 +18,8 @@
 
 	<sql id="infoListWhere">
 		<if test='searchKeyword != null and searchKeyword != ""'>
-			<if test='searchCondition == "svinTitle"'>AND A.SVIN_TITLE LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
+			<if test='searchCondition == "rsinName"'>AND A.RSIN_NAME LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
+			<if test='searchCondition == "rsinModel"'>AND A.RSIN_MODEL LIKE CONCAT ('%', #{searchKeyword}, '%')</if>
 		</if>
 		AND  A.RSIN_DEL_YN = 'N'
 	</sql>

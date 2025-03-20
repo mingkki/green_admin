@@ -16,8 +16,9 @@
 						<legend class="sr-only">검색 폼</legend>
 						<div class="form-group">
 							<select name="searchCondition" id="searchCondition" class="form-control">
-							<option value="" <c:if test="${searchResultsInfoVO.searchCondition eq ''}">selected="selected"</c:if>>타이틀</option>
-							</select> 
+								<option value="rsinName" <c:if test="${searchResultsInfoVO.searchCondition eq 'rsinName'}">selected="selected"</c:if>>항목</option>
+								<option value="rsinModel" <c:if test="${searchResultsInfoVO.searchCondition eq 'rsinModel'}">selected="selected"</c:if>>모델/서비스</option>
+							</select>
 						</div>
 						<div class="input-group">						
 							<input type="text" name="searchKeyword" id="searchKeyword" class="form-control" value="<c:out value='${searchResultsInfoVO.searchKeyword}'/>"/>
