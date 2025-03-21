@@ -5,7 +5,9 @@
 	<resultMap id="resultsInfo" type="egovframework.coing.results.vo.ResultsInfoVO">
 		<result property="rsinId" column="RSIN_ID" />
 		<result property="rsinItemId" column="RSIN_ITEM_ID" />
+		<result property="rsinItemName" column="RSIN_ITEM_NAME" />
 		<result property="rsinCompanyId" column="RSIN_COMPANY_ID" />
+		<result property="rsinCompanyName" column="RSIN_COMPANY_NAME" />
 		<result property="rsinName" column="RSIN_NAME" />
 		<result property="rsinModel" column="RSIN_MODEL" />
 		<result property="rsinCount" column="RSIN_COUNT" />
@@ -35,7 +37,9 @@
 	<select id="selectInfoList" parameterType="resultsInfoVO" resultMap="resultsInfo">
 		SELECT  A.RSIN_ID
 			 ,  A.RSIN_ITEM_ID
+			 ,  A.RSIN_ITEM_NAME
 			 ,  A.RSIN_COMPANY_ID
+			 ,  A.RSIN_COMPANY_NAME
 			 ,  A.RSIN_NAME
 			 ,  A.RSIN_MODEL
 			 ,  A.RSIN_COUNT
@@ -46,34 +50,40 @@
 	  ORDER BY  A.RSIN_ID DESC
 		 LIMIT  #{recordCountPerPage} OFFSET #{firstIndex}
 	</select>
-	
+
 	<select id="selectInfo" parameterType="resultsInfoVO" resultMap="resultsInfo">
 		SELECT  A.RSIN_ID
 			 ,  A.RSIN_ITEM_ID
+			 ,  A.RSIN_ITEM_NAME
 			 ,  A.RSIN_COMPANY_ID
+			 ,  A.RSIN_COMPANY_NAME
 			 ,  A.RSIN_NAME
 			 ,  A.RSIN_MODEL
 			 ,  A.RSIN_COUNT
 			 ,  A.RSIN_MONEY
-		  FROM  COING_RESULTS_INFO A
-		 WHERE  A.RSIN_ID = #{rsinId}
-		   AND  A.RSIN_DEL_YN = 'N'
+		FROM  COING_RESULTS_INFO A
+		WHERE  A.RSIN_ID = #{rsinId}
+		  AND  A.RSIN_DEL_YN = 'N'
 	</select>
 
 	<insert id="insertInfo">
 		INSERT INTO COING_RESULTS_INFO
-			( RSIN_ITEM_ID
-			, RSIN_COMPANY_ID
-			, RSIN_NAME
-			, RSIN_MODEL
-			, RSIN_COUNT
-			, RSIN_MONEY
-			, RSIN_REG_DTTM
-			, RSIN_REG_IP
-			, RSIN_REG_ID )
+		( RSIN_ITEM_ID
+		, RSIN_ITEM_NAME
+		, RSIN_COMPANY_ID
+		, RSIN_COMPANY_NAME
+		, RSIN_NAME
+		, RSIN_MODEL
+		, RSIN_COUNT
+		, RSIN_MONEY
+		, RSIN_REG_DTTM
+		, RSIN_REG_IP
+		, RSIN_REG_ID )
 		VALUES
 			( #{rsinItemId, jdbcType=VARCHAR}
+			, #{rsinItemName, jdbcType=VARCHAR}
 			, #{rsinCompanyId, jdbcType=VARCHAR}
+			, #{rsinCompanyName, jdbcType=VARCHAR}
 			, #{rsinName, jdbcType=VARCHAR}
 			, #{rsinModel, jdbcType=VARCHAR}
 			, #{rsinCount}
@@ -87,7 +97,9 @@
 	<update id="updateInfo">
 		UPDATE COING_RESULTS_INFO
 		SET RSIN_ITEM_ID = #{rsinItemId, jdbcType=VARCHAR}
+		  , RSIN_ITEM_NAME = #{rsinItemName, jdbcType=VARCHAR}
 		  , RSIN_COMPANY_ID = #{rsinCompanyId, jdbcType=VARCHAR}
+		  , RSIN_COMPANY_NAME = #{rsinCompanyName, jdbcType=VARCHAR}
 		  , RSIN_NAME = #{rsinName, jdbcType=VARCHAR}
 		  , RSIN_MODEL = #{rsinModel, jdbcType=VARCHAR}
 		  , RSIN_COUNT = #{rsinCount}

@@ -5,8 +5,10 @@ public class ResultsInfo {
 	private int rsinId;
 
 	private String rsinItemId;
+	private String rsinItemName;
 
 	private String rsinCompanyId;
+	private String rsinCompanyName;
 
 	private String rsinRegDttm;
 
@@ -23,6 +25,22 @@ public class ResultsInfo {
 	private int rsinCount;
 
 	private int rsinMoney;
+
+	public String getRsinItemName() {
+		return rsinItemName;
+	}
+
+	public void setRsinItemName(String rsinItemName) {
+		this.rsinItemName = rsinItemName;
+	}
+
+	public String getRsinCompanyName() {
+		return rsinCompanyName;
+	}
+
+	public void setRsinCompanyName(String rsinCompanyName) {
+		this.rsinCompanyName = rsinCompanyName;
+	}
 
 	public int getRsinMoney() {
 		return rsinMoney;

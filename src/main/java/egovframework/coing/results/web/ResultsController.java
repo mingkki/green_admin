@@ -118,7 +118,9 @@ public class ResultsController {
     			return CmsManager.alert(CONTENT_PATH + "info_result.jsp", model);
     		}
 			writeResultsInfoVO.setRsinItemId(writeResultsInfoVO.getRsinItemId());
+			writeResultsInfoVO.setRsinItemName(writeResultsInfoVO.getRsinItemName());
 			writeResultsInfoVO.setRsinCompanyId(writeResultsInfoVO.getRsinCompanyId());
+			writeResultsInfoVO.setRsinCompanyName(writeResultsInfoVO.getRsinCompanyName());
     	} else {
 
     	}

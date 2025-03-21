@@ -14,6 +14,8 @@
 					<input type="hidden" name="command" value="<c:out value='${command}' />" />
 					<input type="hidden" name="returnQueryString" value="<c:out value='${searchResultsInfoVO.queryString}' escapeXml='false' />"/>
 					<input type="hidden" name="rsinId" value="<c:out value='${searchResultsInfoVO.rsinId}'/>"/>
+					<input type="hidden" name="rsinItemName" id="rsinItemName" value="<c:out value='${searchResultsInfoVO.rsinItemName}'/>" />
+					<input type="hidden" name="rsinCompanyName" id="rsinCompanyName" value="<c:out value='${searchResultsInfoVO.rsinCompanyName}'/>" />
 					<fieldset>
 						<legend class="sr-only">설문 관리 폼</legend>	
 						<div class="form-group">
@@ -79,9 +81,22 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-$(function()
-{
-	$("#writeResultsInfo").validate();
-});
+<script>
+	$(document).ready(function() {
+		var initItemText = $('#rsinItemId option:selected').text();
+		$('#rsinItemName').val(initItemText);
+
+		var initCompanyText = $('#rsinCompanyId option:selected').text();
+		$('#rsinCompanyName').val(initCompanyText);
+
+		$('#rsinItemId').change(function() {
+			var selectedText = $(this).find('option:selected').text();
+			$('#rsinItemName').val(selectedText);
+		});
+
+		$('#rsinCompanyId').change(function() {
+			var selectedText = $(this).find('option:selected').text();
+			$('#rsinCompanyName').val(selectedText);
+		});
+	});
 </script>
