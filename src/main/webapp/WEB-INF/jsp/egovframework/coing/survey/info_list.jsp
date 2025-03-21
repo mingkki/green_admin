@@ -103,7 +103,8 @@
 							</td>
 							<td class="text-center">
 								<button class="btn btn-default btn-xs" onclick="window.open('?act=qlist&svinId=<c:out value='${result.svinId}'/>', 'qlist', 'width=900, height=1000, scrollbars=auto'); return false;">항목설정</button><br />
-								<a href="?act=signatures&svinId=<c:out value='${result.svinId}'/>" class="btn btn-default btn-xs">서명다운</a>
+								<a href="?act=signatures&svinId=<c:out value='${result.svinId}'/>" class="btn btn-default btn-xs">서명다운</a><br />
+								<a href="?act=survey&svinId=<c:out value='${result.svinId}'/>" class="btn btn-default btn-xs">파일다운</a>
 							</td>
 							<td class="text-center">
 								<a href="?act=write&amp;svinId=<c:out value='${result.svinId}'/>&amp;<c:out value='${searchSurveyInfoVO.queryString}'/>" class="btn btn-default btn-xs"><spring:message code="common.update"/></a>

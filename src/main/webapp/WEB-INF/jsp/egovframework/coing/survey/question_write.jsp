@@ -29,10 +29,9 @@
 								<label class="radio-inline"><form:radiobutton path="svquType" value="A" />다지선다형(단일선택)</label>
 								<label class="radio-inline"><form:radiobutton path="svquType" value="B" />다지선다형(복수형)</label>
 								<label class="radio-inline"><form:radiobutton path="svquType" value="C" />주관식</label>
-								<%--<label class="radio-inline"><form:radiobutton path="svquType" value="D" />기타형(단일선택,주관식)</label>
-								<label class="radio-inline"><form:radiobutton path="svquType" value="E" />기타형(복수선택,주관식)</label>--%>
+								<label class="radio-inline"><form:radiobutton path="svquType" value="D" />첨부파일</label>
 							</div>
-						</div>						
+						</div>
 						<div class="form-group">
 							<span class="col-sm-2 text-right"><label for="svquTitle" class="control-label">* 질문내용</label></span>
 							<div class="col-sm-10">
@@ -94,7 +93,7 @@ $(function()
 	{
 		$('#_layer_min_chked_num').hide();
 		$('#_layer_example_list').hide();
-		if (val == 'B' || val == 'E')
+		if (val == 'B')
 		{
 			$('#_layer_min_chked_num').show();
 		}

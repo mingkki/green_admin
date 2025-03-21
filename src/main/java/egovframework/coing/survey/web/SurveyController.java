@@ -361,6 +361,68 @@ public class SurveyController {
 		}
 	}
 
+	@RequestMapping(params="act=survey", method=RequestMethod.GET)
+	public void survey(@RequestParam("svinId") int svinId, HttpServletResponse response) {
+		// 파일 경로 설정
+		String uploadPath = Globals.DISTRIBUTE_UPLOAD_PATH + "/survey/" + svinId + "/";
+		File folder = new File(uploadPath);
+		// 폴더가 존재하지 않으면 404 응답 후 return
+		if (!folder.exists() || !folder.isDirectory()) {
+			try {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "서명 파일이 존재하지 않습니다.");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
+
+		// 첨부 이미지 파일 가져오기
+		File[] files = folder.listFiles((dir, name) -> name.startsWith("survey_" + svinId) && (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg"))
+		);
+		if (files == null || files.length == 0) {
+			try {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "서명 파일이 존재하지 않습니다.");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
+
+		// ZIP 파일명 설정
+		String zipFileName = "survey_" + svinId + ".zip";
+
+		// HTTP 응답 설정
+		response.setContentType("application/zip");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + zipFileName + "\"");
+
+		try (ZipOutputStream zos = new ZipOutputStream(response.getOutputStream())) {
+			byte[] buffer = new byte[1024];
+
+			for (File file : files) {
+				try (FileInputStream fis = new FileInputStream(file)) {
+					// ZIP 항목 추가
+					ZipEntry zipEntry = new ZipEntry(file.getName());
+					zos.putNextEntry(zipEntry);
+
+					int bytesRead;
+					while ((bytesRead = fis.read(buffer)) != -1) {
+						zos.write(buffer, 0, bytesRead);
+					}
+					zos.closeEntry();
+				}
+			}
+
+			zos.finish();
+		} catch (IOException e) {
+			e.printStackTrace();
+			try {
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "ZIP 파일 생성 중 오류 발생");
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
 
 
 }
