@@ -369,7 +369,7 @@ public class SurveyController {
 		// 폴더가 존재하지 않으면 404 응답 후 return
 		if (!folder.exists() || !folder.isDirectory()) {
 			try {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "서명 파일이 존재하지 않습니다.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "첨부파일이 존재하지 않습니다.");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -381,7 +381,7 @@ public class SurveyController {
 		);
 		if (files == null || files.length == 0) {
 			try {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "서명 파일이 존재하지 않습니다.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "첨부파일이 존재하지 않습니다.");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
